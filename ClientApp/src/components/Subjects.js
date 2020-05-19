@@ -1,43 +1,22 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import SubjectList from './dump-components/SubjectList';
 
-const Subjects = props => {
-    //gauti visus subjectus per ajax
-
-    let subjects = [
-        {
-            parent: null,
-            name: "PHP",
-            id: 1
-        },
-        {
-            parent: 1,
-            name: "PHP7",
-            id: 2
-        },
-        {
-            parent: null,
-            name: "WordPress",
-            id: 3
-        },
-        {
-            parent: 1,
-            name: "Laravel",
-            id: 4
-        }
-    ];
+const Subjects = (props) => {
+    const [subjects, setSubjects] = useState([]);
+    
+    useEffect(()=>{
+        fetch("http://localhost:5000/api/GetSubjects")
+            .then(response => response.json())
+            .then(data => setSubjects(data));    
+    });
+    
 
     return (
         <div>
-            <h2>Galimų temų sąrašas:</h2>
+            <h2>Temų sąrašas:</h2>
             <div className="row">
                 <div className="col-8">
-                    <ul>
-                        {subjects.map(subject => (
-                            <li key={subject.id}>
-                                <a href={"subject?id=" + subject.id}>{subject.name}</a>
-                            </li>
-                        ))}
-                    </ul>
+                    {subjects && <SubjectList subjects={subjects}/>}
                 </div>
                 <div className="col-4">
                     <a className="btn btn-success" href="/add-subject">Pridėti naują temą</a>

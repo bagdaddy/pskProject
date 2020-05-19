@@ -7,6 +7,7 @@ import { Counter } from './components/Counter';
 import Employee from './components/Employee';
 import Subjects from './components/Subjects';
 import AddSubject from './components/AddSubject';
+import Subject from './components/Subject';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -20,6 +21,7 @@ export default class App extends Component {
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/subjects' component={Subjects} />
         <Route path='/add-subject' component={AddSubject} />
+        <Route path='/subject' component={Subject} />
       </Layout>
     );
   }

@@ -1,6 +1,6 @@
 ﻿import React from 'react';
-import TeamList from './TeamList';
-import SubjectList from './SubjectList';
+import TeamList from './dump-components/TeamList';
+import SubjectList from './dump-components/SubjectList';
 import * as qs from 'query-string';
 
 //Tures pakeisti api callas
@@ -34,39 +34,43 @@ const user = {
             id: 3
         }
     ]
-  };
+};
 
 const Employee = props => {
     const parsed = qs.parse(window.location.search);
-    let userProfile;
-    if(Object.keys(parsed).length === 0)
-        //gauti prisijungusio userio duomenis per api
-        userProfile = user;
-    else{
-        //gauti userio duomenis per api
-        userProfile = user;
-    }
-
-    if(userProfile){
+    let userProfile = user;
+    
+    if (userProfile) {
         return (
             <div>
                 <h2>Sveiki, {userProfile.name}</h2>
                 <div className="row">
                     <div className="col-lg-6 col-md-6 sidebar right">
-                        <TeamList team={userProfile.team} />
-                        <SubjectList subjects={userProfile.subjects} />
+                        {userProfile.team.length > 0 && (
+                            <div>
+                                <h3>Jūsų komanda:</h3>
+                                <TeamList team={userProfile.team} />
+                            </div>
+                        )}
+                        {userProfile.subjects.length > 0 && (
+                            <div>
+                                <h3>Jūsų išmoktos temos: </h3>
+                                <SubjectList subjects={userProfile.subjects} />
+                            </div>
+                        )}
+
                     </div>
                 </div>
             </div>
         );
-    }else{
-        return(
+    } else {
+        return (
             <div>
                 <h2>Šio profilio matyti negalite</h2>
             </div>
         )
     }
-    
+
 };
 
 // ReactDOM.render(
