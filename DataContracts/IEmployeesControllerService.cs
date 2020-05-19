@@ -8,13 +8,13 @@ namespace TP.DataContracts
 {
     interface IEmployeesControllerService
     {
-        Task<List<Employee>> GetAll();
+        List<Employee> getAll();
 
-        Task<Employee> getById(Guid id);
+        Employee getById(Guid id);
 
-        Task Delete(Guid id);
+        void delete(Guid id);
 
         //TODO: Change Employee param to UpdateEmployeeRequest
-        Task<Employee> UpdateEmployee(Employee request, Guid id);
+        Employee updateEmployee(Employee request, Guid id);
     }
 }

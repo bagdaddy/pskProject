@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TP.Data.Entities;
+using TP.DataContracts;
+using TP.Services;
+using TP.Services.DTOServices.Models;
 
 namespace TP.Controllers
 {
@@ -11,18 +15,24 @@ namespace TP.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
+
+        private readonly IEmployeesControllerService _controllerService = new EmployeesControllerService();
+        private readonly IDTOService _dtoService = new DTOService();
+
         // GET: api/Employees
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<EmployeeDTO> Get()
         {
-            return new string[] { "value1", "value2" };
+            List<Employee> employees = _controllerService.getAll();
+            return _dtoService.EmployeesToDTO(employees);
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public ActionResult<EmployeeDTO> Get(Guid id)
         {
-            return "value";
+            Employee employee = _controllerService.getById(id);
+            return _dtoService.EmployeeToDTO(employee);
         }
 
         // POST: api/Employees

@@ -15,16 +15,16 @@ namespace TP.Data
             return FakeEmployees.getById(id);
         }
 
-        List<Employee> IEmployeesRepository.GetAll()
+        List<Employee> IEmployeesRepository.getAll()
         {
             return FakeEmployees.getAll();
         }
-        void IEmployeesRepository.Delete(Guid id)
+        void IEmployeesRepository.delete(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        Employee IEmployeesRepository.UpdateEmployee(Employee request, Guid id)
+        Employee IEmployeesRepository.updateEmployee(Employee request, Guid id)
         {
             throw new NotImplementedException();
         }

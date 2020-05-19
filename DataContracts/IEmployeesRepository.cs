@@ -8,13 +8,13 @@ namespace TP.DataContracts
 {
     interface IEmployeesRepository
     {
-        List<Employee> GetAll();
+        List<Employee> getAll();
 
         Employee getById(Guid id);
 
-        void Delete(Guid id);
+        void delete(Guid id);
 
         //TODO: Change Employee param to UpdateEmployeeRequest
-        Employee UpdateEmployee(Employee request, Guid id);
+        Employee updateEmployee(Employee request, Guid id);
     }
 }

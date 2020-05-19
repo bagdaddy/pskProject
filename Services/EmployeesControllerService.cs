@@ -10,23 +10,24 @@ namespace TP.Services
 {
     public class EmployeesControllerService : IEmployeesControllerService
     {
-        private static readonly IEmployeesRepository employeesRepository;
-        public Task Delete(Guid id)
+        private readonly IEmployeesRepository employeesRepository = new EmployeesRepository();
+
+        public void delete(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Employee>> GetAll()
+        public List<Employee> getAll()
         {
-            throw new NotImplementedException();
+            return employeesRepository.getAll();
         }
 
-        public Task<Employee> getById(Guid id)
+        public Employee getById(Guid id)
         {
-            throw new NotImplementedException();
+            return employeesRepository.getById(id);
         }
 
-        public Task<Employee> UpdateEmployee(Employee request, Guid id)
+        public Employee updateEmployee(Employee request, Guid id)
         {
             throw new NotImplementedException();
         }
