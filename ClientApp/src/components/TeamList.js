@@ -1,5 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
 const TeamList = props => {
     if(props.team.length > 0){

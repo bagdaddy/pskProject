@@ -3,3 +3,7 @@
     position:fixed;
     left:70%;
 }
+
+input, select{
+    margin: 5px;
+}

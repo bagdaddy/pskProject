@@ -5,6 +5,8 @@ import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
 import Employee from './components/Employee';
+import Subjects from './components/Subjects';
+import AddSubject from './components/AddSubject';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -16,6 +18,8 @@ export default class App extends Component {
         <Route path='/counter' component={Counter} />
         <Route path='/profile' component={Employee} />
         <Route path='/fetch-data' component={FetchData} />
+        <Route path='/subjects' component={Subjects} />
+        <Route path='/add-subject' component={AddSubject} />
       </Layout>
     );
   }
