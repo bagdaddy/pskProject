@@ -1,61 +1,47 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
 import * as qs from 'query-string';
 
-//Tures pakeisti api callas
-const user = {
-    name: "Justas Kondroska",
-    id: 0,
-    team: [
-        {
-            name: "Matas Krivaitis",
-            id: 1
-        },
-        {
-            name: "Efkas Jonas",
-            id: 2
-        }
-    ],
-    subjects: [
-        {
-            parent: null,
-            name: "PHP",
-            id: 1
-        },
-        {
-            parent: 1,
-            name: "PHP7",
-            id: 2
-        },
-        {
-            parent: null,
-            name: "WordPress",
-            id: 3
-        }
-    ]
-};
+let authenticatedUserId = "5a677c6e-56e5-4cf1-9c64-157b483e8eff";
 
 const Employee = props => {
+    const [employee, setEmployee] = useState({});
     const parsed = qs.parse(window.location.search);
-    let userProfile = user;
-    
-    if (userProfile) {
+
+    const fetchData = React.useCallback((id) => {
+        fetch('api/Employees/' + id)
+            .then(response => response.json())
+            .then(data => setEmployee(data))
+            .catch(error => {
+                console.log(error);
+            });
+    });
+
+    useEffect(() => {
+        if (Object.keys(parsed).length > 0) {
+            fetchData(parsed.id);
+        }else{
+            fetchData(authenticatedUserId);
+        }
+    }, []);
+    if (employee) {
         return (
             <div>
-                <h2>Sveiki, {userProfile.name}</h2>
+                <h2>{employee.firstName} {employee.lastName}</h2>
+                <p>El. paštas: <a href={"mailto:" + employee.email}>{employee.email}</a></p>
                 <div className="row">
                     <div className="col-lg-6 col-md-6 sidebar right">
-                        {userProfile.team.length > 0 && (
+                        {employee.hasOwnProperty("team") && employee.team.length > 0 && (
                             <div>
                                 <h3>Jūsų komanda:</h3>
-                                <TeamList team={userProfile.team} />
+                                <TeamList team={employee.team} />
                             </div>
                         )}
-                        {userProfile.subjects.length > 0 && (
+                        {employee.hasOwnProperty("subject") && employee.subjects.length > 0 && (
                             <div>
                                 <h3>Jūsų išmoktos temos: </h3>
-                                <SubjectList subjects={userProfile.subjects} />
+                                <SubjectList subjects={employee.subjects} />
                             </div>
                         )}
 
