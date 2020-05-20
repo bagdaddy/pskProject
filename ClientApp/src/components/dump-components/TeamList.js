@@ -7,14 +7,14 @@ const TeamList = props => {
                 <ul>
                     {props.team.map(employee => (
                         <li key={employee.id}>
-                            <a href={"/profile?id=" + employee.id}>{employee.name}</a>
+                            <a href={"/profile?id=" + employee.id}>{employee.firstName + " " + employee.lastName}</a>
                         </li>
                     ))}
                 </ul>
             </div>
         )
     }else{
-
+        <div></div>
     }
     
 };

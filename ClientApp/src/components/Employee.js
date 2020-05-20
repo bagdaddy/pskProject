@@ -7,6 +7,7 @@ let authenticatedUserId = "5a677c6e-56e5-4cf1-9c64-157b483e8eff";
 
 const Employee = props => {
     const [employee, setEmployee] = useState({});
+    const [allEmployees, setEmployees] = useState([]);
     const parsed = qs.parse(window.location.search);
 
     const fetchData = React.useCallback((id) => {
@@ -18,13 +19,22 @@ const Employee = props => {
             });
     });
 
+    const fetchAllEmployees = React.useCallback(() => {
+        fetch('api/Employees')
+            .then(response => response.json())
+            .then(data => setEmployees(data));
+    });
+
     useEffect(() => {
         if (Object.keys(parsed).length > 0) {
             fetchData(parsed.id);
-        }else{
+        } else {
             fetchData(authenticatedUserId);
         }
+        fetchAllEmployees();
     }, []);
+    console.log(allEmployees);
+
     if (employee) {
         return (
             <div>
@@ -44,7 +54,12 @@ const Employee = props => {
                                 <SubjectList subjects={employee.subjects} />
                             </div>
                         )}
-
+                        {allEmployees.length > 0 && (
+                        <div>
+                            <h5>Visų darbuotojų sąrašas testavimo sumetimais: </h5>
+                            <TeamList team={allEmployees} />
+                        </div>
+                        )}
                     </div>
                 </div>
             </div>
