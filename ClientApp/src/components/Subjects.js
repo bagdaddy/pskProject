@@ -4,11 +4,17 @@ import SubjectList from './dump-components/SubjectList';
 const Subjects = (props) => {
     const [subjects, setSubjects] = useState([]);
     
-    useEffect(()=>{
+    const fetchData = React.useCallback(()=>{
         fetch("http://localhost:5000/api/GetSubjects")
-            .then(response => response.json())
-            .then(data => setSubjects(data));    
-    });
+        .then(response => response.json())
+        .then(data => setSubjects(data))
+        .catch((error)=>{
+            console.log(error);
+        });
+    })
+    useEffect(()=>{
+            fetchData()
+    }, []);
     
 
     return (

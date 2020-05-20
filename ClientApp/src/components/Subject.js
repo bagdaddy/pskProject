@@ -5,13 +5,14 @@ const Subject = props => {
     const [subject, setSubject] = useState({});
     const parsed = qs.parse(window.location.search);
 
-    useEffect(()=>{
+    const fetchData = React.useCallback(()=>{
         fetch("http://localhost:5000/api/GetSubjects/" + parsed.id)
-            .then(response => response.json())
-            .then(data => setSubject(data));
-
-            console.log(subject);
+        .then(response => response.json())
+        .then(data => setSubject(data));
     });
+    useEffect(()=>{
+      fetchData();
+    }, []);
     return(
         <div>
             <h3>{subject.name}</h3>
