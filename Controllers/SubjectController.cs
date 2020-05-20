@@ -22,6 +22,7 @@ namespace TP.Controllers
                 new Subject(new Guid("01bf2aae-3eac-4980-ae73-403c6bffaede"),"totally out of ideas", null, "this is a topic about something"),
                 new Subject(new Guid("bc6cc9f3-a5c2-438e-9eff-593a46918b21"),"im done", null, "this is a topic about something")
             };
+            list[0].ParentSubject = list[1];
         }
         [HttpGet("api/GetSubjects")]
         public async Task <IActionResult> GetSubjects()
