@@ -10,7 +10,7 @@ namespace TP.Services
 {
     public class DTOService : IDTOService
     {
-        public List<EmployeeDTO> EmployeesToDTO(List<Employee> employeeList)
+        public List<EmployeeDTO> employeesToDTO(List<Employee> employeeList)
         {
             return employeeList.Select(employee =>
             new EmployeeDTO()
@@ -22,7 +22,7 @@ namespace TP.Services
             }).ToList();
         }
 
-        public EmployeeDTO EmployeeToDTO(Employee employee)
+        public EmployeeDTO employeeToDTO(Employee employee)
         {
             return new EmployeeDTO()
             {
@@ -30,6 +30,29 @@ namespace TP.Services
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Email = employee.Email
+            };
+        }
+
+        public List<TeamDTO> teamsToDTO(List<Team> teamList)
+        {
+            return teamList.Select(team =>
+            new TeamDTO()
+            {
+                Id = team.Id,
+                Name = team.Name,
+                teamLeader = employeeToDTO(team.teamLeader),
+                teamMembers = employeesToDTO(team.teamMembers)
+            }).ToList();
+        }
+
+        public TeamDTO teamToDTO(Team team)
+        {
+            return new TeamDTO()
+            {
+                Id = team.Id,
+                Name = team.Name,
+                teamLeader = employeeToDTO(team.teamLeader),
+                teamMembers = employeesToDTO(team.teamMembers)
             };
         }
     }
