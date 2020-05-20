@@ -6,16 +6,14 @@ const Subject = props => {
     const parsed = qs.parse(window.location.search);
 
     const fetchData = React.useCallback(() => {
-        fetch("http://localhost:5000/api/GetSubjects/" + parsed.id)
+        fetch("api/GetSubjects/" + parsed.id)
             .then(response => response.json())
             .then(data => setSubject(data));
     });
     useEffect(() => {
         fetchData();
-
     }, []);
 
-    console.log(subject.parentSubject);
     return (
         <div className="row">
             <div className="col-8">
@@ -27,7 +25,7 @@ const Subject = props => {
                 {
                     subject.parentSubject &&
                     (<div>
-                        <h3>Parent:</h3>
+                        <h3>Tėvukas:</h3>
                         <a href={"/subject?id=" + subject.parentSubject.id} className="link">{subject.parentSubject.name}</a>
                     </div>
                     )
