@@ -5,7 +5,7 @@ import * as qs from 'query-string';
 
 let authenticatedUserId = "5a677c6e-56e5-4cf1-9c64-157b483e8eff";
 
-const Employee = props => {
+function Employee () {
     const [employee, setEmployee] = useState({});
     const [allEmployees, setEmployees] = useState([]);
     const parsed = qs.parse(window.location.search);
@@ -33,7 +33,19 @@ const Employee = props => {
         }
         fetchAllEmployees();
     }, []);
-    console.log(allEmployees);
+
+    useEffect(() => {
+        var parse = qs.parse(window.location.search);
+        console.log(parse);
+        if(Object.keys(parse).length > 0 && parse.id !== employee.id){
+            fetchData(parse.id);
+        }else{
+            if(employee.id != authenticatedUserId){
+                fetchData(authenticatedUserId);
+            }
+        }
+    }, [window.location.search])
+
 
     if (employee) {
         return (
@@ -45,7 +57,7 @@ const Employee = props => {
                         {employee.hasOwnProperty("team") && employee.team.length > 0 && (
                             <div>
                                 <h3>Jūsų komanda:</h3>
-                                <TeamList team={employee.team} />
+                                <TeamList team={employee.team}  />
                             </div>
                         )}
                         {employee.hasOwnProperty("subject") && employee.subjects.length > 0 && (
@@ -57,7 +69,7 @@ const Employee = props => {
                         {allEmployees.length > 0 && (
                         <div>
                             <h5>Visų darbuotojų sąrašas testavimo sumetimais: </h5>
-                            <TeamList team={allEmployees} />
+                            <TeamList team={allEmployees}/>
                         </div>
                         )}
                     </div>

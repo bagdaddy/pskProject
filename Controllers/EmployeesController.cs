@@ -21,35 +21,35 @@ namespace TP.Controllers
 
         // GET: api/Employees
         [HttpGet]
-        public IEnumerable<EmployeeDTO> Get()
+        public IEnumerable<EmployeeDTO> GetEmployees()
         {
             List<Employee> employees = _controllerService.getAll();
-            return _dtoService.EmployeesToDTO(employees);
+            return _dtoService.employeesToDTO(employees);
         }
 
         // GET: api/Employees/5
-        [HttpGet("{id}", Name = "Get")]
-        public ActionResult<EmployeeDTO> Get(Guid id)
+        [HttpGet("{id}")]
+        public ActionResult<EmployeeDTO> GetEmployeeById(Guid id)
         {
             Employee employee = _controllerService.getById(id);
-            return _dtoService.EmployeeToDTO(employee);
+            return _dtoService.employeeToDTO(employee);
         }
 
         // POST: api/Employees
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void CreateEmployee([FromBody] string value)
         {
         }
 
         // PUT: api/Employees/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void UpdateEmployee(int id, [FromBody] string value)
         {
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteEmployee(int id)
         {
         }
     }

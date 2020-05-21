@@ -1,7 +1,7 @@
 import React from 'react';
 
 const TeamList = props => {
-    if(props.team.length > 0){
+    if (props.team.length > 0) {
         return (
             <div>
                 <ul>
@@ -13,10 +13,12 @@ const TeamList = props => {
                 </ul>
             </div>
         )
-    }else{
-        <div></div>
+    } else {
+        return (
+            <div></div>
+        )
     }
-    
+
 };
 
 export default TeamList;
