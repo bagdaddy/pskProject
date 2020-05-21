@@ -18,3 +18,43 @@ input, select{
     cursor: pointer;
     text-decoration: underline;
 }
+
+.nodeAttributesBase{
+    display:none;
+}
+
+.myLabelComponentInSvg{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    display:inline-block;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+.myLabelComponentInSvg p {
+    display:inline-block;
+}
+
+.numOfEmployees{
+    border: 1px solid black;
+    border-radius: 50%;
+    display:inline-block;
+    height: 30px;
+    width: 30px;
+    line-height:30px;
+    text-align: center;
+}
+
+.red{
+    background-color: red;
+}
+
+.blue{
+    background-color: blue;
+}
+
+.subjectName{
+    display: inline-block;
+    width: auto;
+}

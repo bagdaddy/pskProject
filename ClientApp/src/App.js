@@ -8,6 +8,7 @@ import Employee from './components/Employee';
 import Subjects from './components/Subjects';
 import AddSubject from './components/AddSubject';
 import Subject from './components/Subject';
+import LearningTree from './components/LearningTree';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -19,6 +20,7 @@ export default class App extends Component {
         <Route path='/counter' component={Counter} />
         <Route path='/profile' component={Employee} />
         <Route path='/fetch-data' component={FetchData} />
+        <Route path='/learningTree' component={LearningTree} />
         <Route path='/subjects' component={Subjects} />
         <Route path='/add-subject' component={AddSubject} />
         <Route path='/subject' component={Subject} />
