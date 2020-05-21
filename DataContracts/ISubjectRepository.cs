@@ -10,7 +10,8 @@ namespace TP.DataContracts
     {
         List<Subject> GetAll();
         Subject GetById(Guid id);
-        void Delete(Guid id);
+        Subject GetByIdWithChild(Guid id);
+        void Delete(Subject subject);
         void AddSubject(Subject subject);
         void SaveChanges();
         void UpdateSubjects(Subject subject);

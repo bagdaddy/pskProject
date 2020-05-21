@@ -20,7 +20,7 @@ namespace TP.Controllers
         }
         [HttpGet("api/GetSubjects")]
         public IActionResult GetSubjects()
-        {
+        {   //Probably gonna need remaking once we figure out what exactly we want to return
             try
             {
                 var subjects = _subjectRepository.GetAll();
@@ -35,10 +35,16 @@ namespace TP.Controllers
         [HttpGet("api/GetSubjects/{id}")]
         public IActionResult GetSubjectsById(Guid id)
         {
-            /*var subjectId = list.Select(x => x.Id).ToList();
-            if (subjectId.Contains(id)) { return Ok(list.First(x => x.Id == id)); }
-            return BadRequest("oopsie");*/
-            return Ok();
+            //Probably gonna need remaking once we figure out what exactly we want to return
+            try
+            {
+                var subject = _subjectRepository.GetByIdWithChild(id);
+                return Ok(subject);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost("api/CreateSubject")]
@@ -94,6 +100,37 @@ namespace TP.Controllers
 
                 subject.UpdateSubject(updateSubjectRequestModel.Name, updateSubjectRequestModel.Description);
                 _subjectRepository.UpdateSubjects(subject);
+                _subjectRepository.SaveChanges();
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpDelete("api/DeleteSubject/{id}")]
+        public IActionResult DeleteSubject(Guid id)
+        {
+            try
+            {
+                var subject = _subjectRepository.GetById(id);
+
+                if(subject == null)
+                {
+                    return BadRequest("Subject not found");
+                }
+                if(subject.ChildSubjects.Any())
+                {
+                    return BadRequest("Cannot remove subject that still has subjects connected to it");
+                }
+                if(subject.ParentSubjectId.HasValue)
+                {
+                    var parentSubject = _subjectRepository.GetById(subject.ParentSubjectId.Value);
+                    parentSubject.DeleteChildSubjects(subject);
+                }
+
+                _subjectRepository.Delete(subject);
                 _subjectRepository.SaveChanges();
 
                 return Ok();

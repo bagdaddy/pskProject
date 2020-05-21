@@ -22,9 +22,9 @@ namespace TP.Data
             _context.Add(subject);
         }
 
-        public void Delete(Guid id)
+        public void Delete(Subject subject)
         {
-            throw new NotImplementedException();
+            _context.Remove(subject);
         }
 
         public List<Subject> GetAll()
@@ -36,6 +36,11 @@ namespace TP.Data
         public Subject GetById(Guid id)
         {
             return _context.Subjects.FirstOrDefault(x => x.Id == id);
+        }
+
+        public Subject GetByIdWithChild(Guid id)
+        {
+            return _context.Subjects.Include(x => x.ChildSubjects).FirstOrDefault(x => x.Id == id);
         }
 
         public void SaveChanges()

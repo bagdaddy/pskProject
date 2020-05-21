@@ -27,6 +27,10 @@ namespace TP.Data.Entities
         {
             _childSubjects.Add(childSubject);
         }
+        public void DeleteChildSubjects(Subject childSubject)
+        {
+            _childSubjects.Remove(childSubject);
+        }
         public void UpdateSubject(string name, string description)
         {
             Name = string.IsNullOrEmpty(name) ? Name : name;

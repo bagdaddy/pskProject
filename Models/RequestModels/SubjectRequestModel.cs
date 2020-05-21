@@ -8,7 +8,8 @@ using TP.Data.Entities;
 namespace TP.Models.RequestModels
 {
     public class SubjectRequestModel
-    {   [MaxLength(50)]
+    {   
+        [MaxLength(50)]
         public string Name { get; set; }
         [MaxLength(200)]
         public string Description { get; set; }
