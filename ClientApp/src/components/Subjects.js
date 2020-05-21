@@ -11,7 +11,8 @@ const Subjects = (props) => {
         .catch((error)=>{
             console.log(error);
         });
-    })
+    });
+    
     useEffect(()=>{
             fetchData()
     }, []);
