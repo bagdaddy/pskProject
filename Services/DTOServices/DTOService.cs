@@ -39,7 +39,6 @@ namespace TP.Services
             new TeamDTO()
             {
                 Id = team.Id,
-                Name = team.Name,
                 teamLeader = employeeToDTO(team.teamLeader),
                 teamMembers = employeesToDTO(team.teamMembers)
             }).ToList();
@@ -50,7 +49,6 @@ namespace TP.Services
             return new TeamDTO()
             {
                 Id = team.Id,
-                Name = team.Name,
                 teamLeader = employeeToDTO(team.teamLeader),
                 teamMembers = employeesToDTO(team.teamMembers)
             };

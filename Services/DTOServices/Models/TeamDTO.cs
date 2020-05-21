@@ -8,7 +8,6 @@ namespace TP.Services.DTOServices.Models
     public class TeamDTO
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
         public EmployeeDTO teamLeader { get; set; }
         public List<EmployeeDTO> teamMembers { get; set; }
 

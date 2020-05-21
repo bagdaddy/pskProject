@@ -9,8 +9,6 @@ namespace TP.Data.Entities
     {
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
-
         public Employee teamLeader { get; set; }
 
         public List<Employee> teamMembers { get; set; }
