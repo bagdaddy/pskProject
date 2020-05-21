@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using TP.Data.Entities;
 
-namespace TP.Models.RequestModels
+namespace TP.Services.DTOServices.Models
 {
-    public class SubjectRequestModel
-    {   [MaxLength(50)]
+    public class SubjectDTO
+    {
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        [MaxLength(200)]
+        public Subject ParentSubject { get; set; }
         public string Description { get; set; }
-        public Guid? ParentSubjectId { get; set; }
+        
     }
 }
