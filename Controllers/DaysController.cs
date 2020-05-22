@@ -63,7 +63,7 @@ namespace TP.Controllers
             return month2;
         }
 
-        //get by worker id and quarter
+        //count days by worker id and quarter
         [HttpGet("{workerId}/{quarter}")]
         public async Task<IActionResult> getDatesThisQuarter(Guid employeeid, int quarter)
         {
