@@ -32,8 +32,8 @@ namespace TP.Controllers
         [HttpGet("{workerId}")]
         public async Task<IActionResult> getAll(Guid employeeid)
         {
-            var workerId = list.Select(x => x.EmployeesId).ToList();
-            if (workerId.Contains(employeeid)) { return Ok(list.First(x => x.EmployeesId == employeeid)); }
+            var workerDays = list.Where(x => x.EmployeesId == employeeid).ToList();
+            if (workerDays.Count != 0) { return Ok(workerDays); }
             return BadRequest("oopsie");
         }
 
@@ -50,7 +50,9 @@ namespace TP.Controllers
         [HttpGet("{workerId}/{date}")]
         public async Task<IActionResult> getSingle(Guid employeeid, DateTime date)
         {
-            
+            var workerId = list.Select(x => x.EmployeesId).ToList();
+            if (workerId.Contains(employeeid)) { return Ok(list.First(x => x.EmployeesId == employeeid && x.Date.Year == date.Year && x.Date.Month == date.Month && x.Date.Day == date.Day)); }
+            return BadRequest("oopsie");
         }
 
         //get by worker id and quarter
