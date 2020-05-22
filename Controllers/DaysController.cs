@@ -65,9 +65,11 @@ namespace TP.Controllers
 
         // DELETE by object id
         [HttpDelete("{id}")]
-        public void deleteDate(int id)
+        public void deleteDate(Guid id)
         {
-            
+            var itemToRemove = list.SingleOrDefault(x => x.Id == id);
+            if (itemToRemove != null)
+                list.Remove(itemToRemove);
         }
     }
 }
