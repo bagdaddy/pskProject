@@ -23,38 +23,121 @@ input, select{
     display:none;
 }
 
+.treeWrapper{
+    position: absolute;
+    left: 0;
+}
+
 .myLabelComponentInSvg{
-    border: 1px solid black;
+    border: 1px solid lightgrey;
     border-radius: 5px;
-    padding: 5px;
-    display:inline-block;
+    /* padding: 5px; */
+    padding-right: 5px;
+    padding-left: 5px;
+    -webkit-box-shadow: lightgrey 0px 2px 5px;
+    box-shadow: lightgrey 0px 2px 2px;
     text-align: center;
     background-color: #FFFFFF;
+    display: inline-block;
 }
 
-.myLabelComponentInSvg p {
-    display:inline-block;
-}
+/* .myLabelComponentInSvg p {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 5px;
+    display: inline-block;
+    box-shadow: lightgrey 0px 2px 5px;
+    text-align: center;
+    background-color: #FFFFFF;
+} */
 
 .numOfEmployees{
-    border: 1px solid black;
+    border: 1px solid #b11010;
     border-radius: 50%;
     display:inline-block;
-    height: 30px;
-    width: 30px;
-    line-height:30px;
+    height: 25px;
+    width: 25px;
+    line-height:25px;
+    color: white;
+    font-size: 10px;
     text-align: center;
 }
 
 .red{
-    background-color: red;
+    background-color: #ec3f3f;
 }
 
 .blue{
-    background-color: blue;
+    background-color: #2832C2;
 }
 
 .subjectName{
     display: inline-block;
     width: auto;
+    font-size: 14px;
+    font-family: 'Calibri';
+    vertical-align: text-bottom;
+}
+
+.subjectName p{
+    margin-bottom: unset;
+}
+
+.subjectInfo{
+    width: 240px;
+    position: absolute;
+    border: 1px black;
+    box-shadow: #bebebe 2px 3px 5px;
+    background-color: white;
+    right: 5rem;
+    border-radius: 8px;
+}
+
+.subjectInfo ul{
+    list-style-type: none;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    display:inline-block;
+}
+
+.subjectInfo .employeeList a{
+    color: #00458f;
+}
+
+.subjectInfo .employeeList a:hover{
+    color: #0099bc;
+    cursor: pointer;
+}
+
+.employeeList li {
+    border-bottom: 1px #eaeaea solid;
+    line-height: 1.8;
+    font-size: 14px;
+    padding-right: 10px;
+}
+
+.subjectInfo p.title{
+    border-bottom: 1px solid lightgrey;
+    box-shadow: lightgrey 1px 0px 5px;
+    padding-top: 15px;
+    font-size: 20px;
+    color: black;
+    padding-left: 20px;
+    padding-right: 30px;
+}
+
+.info p{
+    padding-left: 15px;
+    padding-right: 10px;
+    font-size: 14px;
+}
+
+.employeeList li:last-child{
+    border-bottom: none;
+    box-shadow: none;
+}
+
+nav + .treeWrapper {
+    margin-bottom: 0;
 }
