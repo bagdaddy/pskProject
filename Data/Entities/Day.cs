@@ -13,6 +13,7 @@ namespace TP.Data.Entities
         public Day(Guid employeesid,DateTime date,List<Subject> subjectList)
         {
             Id = Guid.NewGuid();
+            Date = date;
             EmployeesId = employeesid;
             SubjectList = subjectList;
         }
