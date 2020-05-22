@@ -53,7 +53,7 @@ namespace TP.Controllers
             var workerId = list.Select(x => x.EmployeesId).ToList();
             if (workerId.Contains(employeeid)) { return Ok(list.First(x => x.EmployeesId == employeeid && x.Date.Year == date.Year && x.Date.Month == date.Month && x.Date.Day == date.Day)); }
             return BadRequest("oopsie");
-
+            
         }
 
         //get by worker id and quarter
@@ -67,7 +67,7 @@ namespace TP.Controllers
         [HttpDelete("{id}")]
         public void deleteDate(int id)
         {
-
+            //delete
         }
     }
 }
