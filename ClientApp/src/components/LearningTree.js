@@ -83,10 +83,12 @@ class NodeLabel extends React.PureComponent {
 
 const textProps = { x: -20, y: 20 };
 const LearningTree = props => {
-
     const [subjects, setSubjects] = useState([]);
     const [treeData, setTreeData] = useState([]);
     const [displayedNode, setDisplayedNode] = useState({});
+
+    document.body.classList.add("learning-tree");
+
     const fetchData = React.useCallback(() => {
         fetch("api/GetSubjects")
             .then(response => response.json())

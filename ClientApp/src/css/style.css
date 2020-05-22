@@ -90,6 +90,7 @@ input, select{
     box-shadow: #bebebe 2px 3px 5px;
     background-color: white;
     right: 5rem;
+    top: 1rem;
     border-radius: 8px;
 }
 
@@ -138,6 +139,6 @@ input, select{
     box-shadow: none;
 }
 
-nav + .treeWrapper {
-    margin-bottom: 0;
+.learning-tree nav.mb-3{
+    margin-bottom: 0 !important;
 }
