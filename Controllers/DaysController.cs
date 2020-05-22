@@ -63,14 +63,12 @@ namespace TP.Controllers
             return month2;
         }
 
-
         //get by worker id and quarter
         [HttpGet("{workerId}/{quarter}")]
         public async Task<IActionResult> getDatesThisQuarter(Guid employeeid, int quarter)
         {
-            var workerId = list.Select(x => x.EmployeesId).ToList();
-            if (workerId.Contains(employeeid)) { return Ok(list.First(x => x.EmployeesId == employeeid && GetQuarter(x.Date) == quarter)); }
-            return BadRequest("oopsie");
+            var workerDaysThisQuarter = list.Where(x => x.EmployeesId == employeeid && GetQuarter(x.Date) == quarter).ToList();
+            return Ok(workerDaysThisQuarter.Count);
         }
 
         // DELETE by object id
