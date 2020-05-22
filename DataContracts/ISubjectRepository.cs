@@ -15,5 +15,6 @@ namespace TP.DataContracts
         void AddSubject(Subject subject);
         void SaveChanges();
         void UpdateSubjects(Subject subject);
+        List<Subject> GetChildSubjects(Guid id);
     }
 }

@@ -29,7 +29,9 @@ namespace TP.Data
 
         public List<Subject> GetAll()
         {
-            var subjectList = _context.Subjects.AsNoTracking().Include(x => x.ChildSubjects).Where(x => x.ParentSubjectId == null).ToList();
+            var subjectList = _context.Subjects
+                .AsNoTracking()
+                .ToList();
             return subjectList;
         }
 
@@ -51,6 +53,15 @@ namespace TP.Data
         public void UpdateSubjects(Subject subject)
         {
             _context.Subjects.Update(subject);
+        }
+        public List<Subject> GetChildSubjects(Guid id)
+        {
+            var subjectList = _context.Subjects
+                .Include(x => x.ChildSubjects)
+                .Where(x => x.ParentSubjectId.HasValue && x.ParentSubjectId.Value == id)
+                .AsNoTracking()
+                .ToList();
+            return subjectList;
         }
     }
 }

@@ -20,11 +20,20 @@ namespace TP.Controllers
         }
         [HttpGet("api/GetSubjects")]
         public IActionResult GetSubjects()
-        {   //Probably gonna need remaking once we figure out what exactly we want to return
+        {
             try
             {
                 var subjects = _subjectRepository.GetAll();
-                return Ok(subjects);
+                var subjectListHierarchy = new List<Subject>();
+
+                foreach (var subject in subjects)
+                {
+                    if (!subject.ParentSubjectId.HasValue)
+                    {
+                        GetAllSubjects(subject, subjectListHierarchy);
+                    }
+                }
+                return Ok(subjectListHierarchy);
             }
             catch(Exception e)
             {
@@ -35,10 +44,13 @@ namespace TP.Controllers
         [HttpGet("api/GetSubjects/{id}")]
         public IActionResult GetSubjectsById(Guid id)
         {
-            //Probably gonna need remaking once we figure out what exactly we want to return
             try
             {
-                var subject = _subjectRepository.GetByIdWithChild(id);
+                var subject = _subjectRepository.GetById(id);
+                var list = new List<Subject>();
+
+                GetAllSubjects(subject, list);
+
                 return Ok(subject);
             }
             catch(Exception e)
@@ -114,7 +126,7 @@ namespace TP.Controllers
         {
             try
             {
-                var subject = _subjectRepository.GetById(id);
+                var subject = _subjectRepository.GetByIdWithChild(id);
 
                 if(subject == null)
                 {
@@ -139,6 +151,29 @@ namespace TP.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+        private List<Subject> GetAllSubjects(Subject currentSubject, List<Subject> subjectListHierarchy)
+        {
+            var childSubjects = _subjectRepository.GetChildSubjects(currentSubject.Id);
+
+            if (childSubjects.Any())
+            {
+                childSubjects.ForEach(x => x.ClearChildSubjects());
+                foreach (var subject in childSubjects)
+                {
+                    var childSubjectList = new List<Subject>();
+                    var testChildSubjects = GetAllSubjects(subject, childSubjectList);
+
+                    currentSubject.AddChildSubjectsRange(testChildSubjects);
+                }
+                subjectListHierarchy.Add(currentSubject);
+            }
+            else
+            {
+                subjectListHierarchy.Add(currentSubject);
+            }
+
+            return subjectListHierarchy;
         }
     }
 }

@@ -37,5 +37,13 @@ namespace TP.Data.Entities
             Description = string.IsNullOrEmpty(description) ? Description : description;
             
         }
+        public void AddChildSubjectsRange(List<Subject> childSubjects)
+        {
+            _childSubjects.AddRange(childSubjects);
+        }
+        public void ClearChildSubjects()
+        {
+            _childSubjects.Clear();
+        }
     }
 }
