@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TP.Data;
+using TP.Data.Contexts;
+using TP.DataContracts;
 
 namespace TP
 {
@@ -27,6 +31,9 @@ namespace TP
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddDbContext<SubjectContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SubjectContextConnectionString")));
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
