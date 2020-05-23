@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Tree from 'react-d3-tree';
 import { data } from './fakeData.js';
+import TreeLegend from './dump-components/TreeLegend.js';
 
 const circle = {
     shape: 'circle',
@@ -160,6 +161,7 @@ const LearningTree = props => {
 
     return (
         <div className="treeWrapper" style={{ width: "100%", height: "1000px" }}>
+            <TreeLegend />
             <SubjectInfo data={displayedNode} />
             {treeData.length > 0 && <Tree data={treeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
                 render: <NodeLabel className='myLabelComponentInSvg' />,
