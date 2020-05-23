@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-
+import React, { useState } from 'react';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 const AddSubject = props => {
     let subjectName = "";
 
@@ -14,29 +14,27 @@ const AddSubject = props => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>
-                        Temos pavadinimas:
-                    </label>
-                    <input type="text" className="text-field" onChange={handleChange} name="subject_name" />
-                </div>
-                <div className="form-group">
-                    <label>
-                        Tėvinė tema:
-                    </label>
-                    <select name="parent">
+        <div className="form-left">
+            <Form onSubmit={handleSubmit}>
+                <FormGroup>
+                    <Label for="subject_name">Subject name</Label>
+                    <Input type="text" id="subject_name" name="subject_name" placeholder='e.g. "PHP"' />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="parent_subject">Parent</Label>
+                    <Input type="select" name="parent" id="parent">
                         <option value="-1">-</option>
                         <option value="1">PHP</option>
                         <option value="2">C#</option>
-                        <option value="3">Wordpress</option>
-                    </select>
-                </div>
-                <input type="submit" value="Submit" className="btn btn-success" />
-            </form>
-
+                        <option value="3">Java</option>
+                    </Input>
+                </FormGroup>
+                <FormGroup>
+                    <Button className="btn btn-success">Add</Button>
+                </FormGroup>
+            </Form>
         </div>
+        
     );
 
 };
