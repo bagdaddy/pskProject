@@ -59,6 +59,21 @@ namespace TP.Controllers
             }
         }
 
+        [HttpGet("api/GetSubject/{id}")]
+        public IActionResult GetSubjectById(Guid id)
+        {
+            try
+            {
+                var subject = _subjectRepository.GetById(id);
+
+                return Ok(subject);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("api/CreateSubject")]
         public IActionResult CreateSubject([FromBody]SubjectRequestModel subjectRequestModel)
         {
@@ -134,7 +149,7 @@ namespace TP.Controllers
                 }
                 if(subject.ChildSubjects.Any())
                 {
-                    return BadRequest("Cannot remove subject that still has subjects connected to it");
+                    return BadRequest("Cannot remove subject that still has subjects attached to it");
                 }
                 if(subject.ParentSubjectId.HasValue)
                 {
