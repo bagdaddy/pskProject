@@ -9,8 +9,12 @@ namespace TP.DataContracts
 {
     interface IDTOService
     {
-        public List<EmployeeDTO> EmployeesToDTO(List<Employee> employeeList);
+        public List<EmployeeDTO> employeesToDTO(List<Employee> employeeList);
 
-        public EmployeeDTO EmployeeToDTO(Employee employee);
+        public EmployeeDTO employeeToDTO(Employee employee);
+
+        public List<TeamDTO> teamsToDTO(List<Team> teamList);
+
+        public TeamDTO teamToDTO(Team team);
     }
 }

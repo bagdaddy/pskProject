@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TP.Data.Entities;
+using TP.DataContracts;
 using TP.Models.RequestModels;
 
 namespace TP.Controllers
@@ -11,37 +13,167 @@ namespace TP.Controllers
 
     public class SubjectController: ControllerBase
     {
-        private List<Subject> list;
-        public SubjectController()
+        private readonly ISubjectRepository _subjectRepository;
+        public SubjectController(ISubjectRepository subjectRepository)
         {
-
-            list = new List<Subject> {
-                new Subject(new Guid("819df009-1d4d-4a57-ac73-55e79973992a"),"dotnet something", null, "this is a topic about something"),
-                new Subject(new Guid("ba099e58-9194-4841-b047-5d0c4541bba5"),"java something", null, "this is a topic about something else"),
-                new Subject(new Guid("5c478ca2-b93f-4535-adc2-14676398d93e"),"out of ideas", null, "this is a topic about something"),
-                new Subject(new Guid("01bf2aae-3eac-4980-ae73-403c6bffaede"),"totally out of ideas", null, "this is a topic about something"),
-                new Subject(new Guid("bc6cc9f3-a5c2-438e-9eff-593a46918b21"),"im done", null, "this is a topic about something")
-            };
-            list[0].ParentSubject = list[1];
+            _subjectRepository = subjectRepository;
         }
         [HttpGet("api/GetSubjects")]
-        public async Task <IActionResult> GetSubjects()
+        public IActionResult GetSubjects()
         {
-            return Ok(list);
+            try
+            {
+                var subjects = _subjectRepository.GetAll();
+                var subjectListHierarchy = new List<Subject>();
+
+                foreach (var subject in subjects)
+                {
+                    if (!subject.ParentSubjectId.HasValue)
+                    {
+                        GetAllSubjects(subject, subjectListHierarchy);
+                    }
+                }
+                return Ok(subjectListHierarchy);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("api/GetSubjects/{id}")]
-        public async Task <IActionResult> GetSubjectsById(Guid id)
+        public IActionResult GetSubjectsById(Guid id)
         {
-            var subjectId = list.Select(x => x.Id).ToList();
-            if (subjectId.Contains(id)) { return Ok(list.First(x => x.Id == id)); }
-            return BadRequest("oopsie");
+            try
+            {
+                var subject = _subjectRepository.GetById(id);
+                var list = new List<Subject>();
+
+                GetAllSubjects(subject, list);
+
+                return Ok(subject);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost("api/CreateSubject")]
-        public async Task<IActionResult> CreateSubject([FromBody]SubjectRequestModel subjectRequestModel)
+        public IActionResult CreateSubject([FromBody]SubjectRequestModel subjectRequestModel)
         {
-            return Ok();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (subjectRequestModel.ParentSubjectId.HasValue)
+                {
+                    var parentSubject = _subjectRepository.GetById(subjectRequestModel.ParentSubjectId.Value);
+                    if (parentSubject == null)
+                    {
+                        return BadRequest("Parent not found");
+                    }
+                    var subject = new Subject(subjectRequestModel.Name, subjectRequestModel.ParentSubjectId.Value , subjectRequestModel.Description);
+
+                    parentSubject.AddChildSubjects(subject);
+                    _subjectRepository.AddSubject(subject);
+                    _subjectRepository.UpdateSubjects(parentSubject);
+                }
+                else
+                {
+                    var subject = new Subject(subjectRequestModel.Name, null, subjectRequestModel.Description);
+                    _subjectRepository.AddSubject(subject);
+                }
+                _subjectRepository.SaveChanges();
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpPut("api/UpdateSubject")]
+        public IActionResult UpdateSubject([FromBody]UpdateSubjectRequestModel updateSubjectRequestModel)
+        {
+            try
+            {
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var subject = _subjectRepository.GetById(updateSubjectRequestModel.Id);
+
+                if (subject == null)
+                {
+                    return BadRequest("Subject not found");
+                }
+
+                subject.UpdateSubject(updateSubjectRequestModel.Name, updateSubjectRequestModel.Description);
+                _subjectRepository.UpdateSubjects(subject);
+                _subjectRepository.SaveChanges();
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpDelete("api/DeleteSubject/{id}")]
+        public IActionResult DeleteSubject(Guid id)
+        {
+            try
+            {
+                var subject = _subjectRepository.GetByIdWithChild(id);
+
+                if(subject == null)
+                {
+                    return BadRequest("Subject not found");
+                }
+                if(subject.ChildSubjects.Any())
+                {
+                    return BadRequest("Cannot remove subject that still has subjects connected to it");
+                }
+                if(subject.ParentSubjectId.HasValue)
+                {
+                    var parentSubject = _subjectRepository.GetById(subject.ParentSubjectId.Value);
+                    parentSubject.DeleteChildSubjects(subject);
+                }
+
+                _subjectRepository.Delete(subject);
+                _subjectRepository.SaveChanges();
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        private List<Subject> GetAllSubjects(Subject currentSubject, List<Subject> subjectListHierarchy)
+        {
+            var childSubjects = _subjectRepository.GetChildSubjects(currentSubject.Id);
+
+            if (childSubjects.Any())
+            {
+                childSubjects.ForEach(x => x.ClearChildSubjects());
+                foreach (var subject in childSubjects)
+                {
+                    var childSubjectList = new List<Subject>();
+                    var testChildSubjects = GetAllSubjects(subject, childSubjectList);
+
+                    currentSubject.AddChildSubjectsRange(testChildSubjects);
+                }
+                subjectListHierarchy.Add(currentSubject);
+            }
+            else
+            {
+                subjectListHierarchy.Add(currentSubject);
+            }
+
+            return subjectListHierarchy;
         }
     }
 }

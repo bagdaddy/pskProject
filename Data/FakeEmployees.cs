@@ -24,7 +24,7 @@ namespace TP.Data
                 Id = Guid.Parse("b96f7695-c9d9-4b5c-849e-4219083d6220"),
                 FirstName = "Mantas",
                 LastName = "Bagdonas",
-                Email = "bagzdiuglis@gmail.com"
+                Email = "bagzdiuglis_admin@gmail.com"
             },
         new Employee
             {
@@ -50,10 +50,39 @@ namespace TP.Data
             new Employee
             {
                 Id = Guid.Parse("69ca4eef-df2a-4d04-87eb-c0e2f31c0708"),
-                FirstName = "Petras",
-                LastName = "Gardziulas",
+                FirstName = "Petras ntr",
+                LastName = "komandos Gardziulas",
                 Email = "bapetrasglis@gmail.com"
+            },
+            new Employee
+            {
+                Id = Guid.Parse("ca595500-ac9b-4d55-a887-7ec28bad3983"),
+                FirstName = "Algis",
+                LastName = "Greitullas",
+                Email = "bapalgislis@gmail.com"
+            },
+            new Employee
+            {
+                Id = Guid.Parse("4cce91af-6898-4b09-9d8d-043bbdc4e654"),
+                FirstName = "Nartumanas",
+                LastName = "Karbovskis",
+                Email = "bkarbouskis@gmail.com"
+            },
+            new Employee
+            {
+                Id = Guid.Parse("c85d09e8-8658-456c-8595-502076661f41"),
+                FirstName = "Lobanas",
+                LastName = "Jovalas",
+                Email = "Jobanasjovalas@gmail.com"
+            },
+            new Employee
+            {
+                Id = Guid.Parse("e214ea22-5d39-4cea-bf71-3749806e7bdd"),
+                FirstName = "Zemaiciu",
+                LastName = "Blynai",
+                Email = "mm.su.grietinyte@gmail.com"
             }
+
         };
     }
 }
