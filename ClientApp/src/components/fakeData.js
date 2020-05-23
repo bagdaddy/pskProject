@@ -1,27 +1,3 @@
-const circle = {
-    shape: 'circle',
-    shapeProps: {
-        r: 10,
-        fill: 'grey',
-    }
-};
-
-const circleLearntByYou = {
-    shape: 'circle',
-    shapeProps: {
-        r: 10,
-        fill: '#3CB043',
-    }
-};
-
-const circleLearntByTeam = {
-    shape: 'circle',
-    shapeProps: {
-        r: 10,
-        fill: '#2832C2',
-    }
-}
-
 export const data = [
     {
         name: 'PHP',
