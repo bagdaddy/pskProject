@@ -59,6 +59,21 @@ namespace TP.Controllers
             }
         }
 
+        [HttpGet("api/GetSubject/{id}")]
+        public IActionResult GetSubjectById(Guid id)
+        {
+            try
+            {
+                var subject = _subjectRepository.GetById(id);
+
+                return Ok(subject);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("api/CreateSubject")]
         public IActionResult CreateSubject([FromBody]SubjectRequestModel subjectRequestModel)
         {
@@ -73,7 +88,7 @@ namespace TP.Controllers
                     var parentSubject = _subjectRepository.GetById(subjectRequestModel.ParentSubjectId.Value);
                     if (parentSubject == null)
                     {
-                        return BadRequest("Parent not found");
+                        return BadRequest("Parent not found.");
                     }
                     var subject = new Subject(subjectRequestModel.Name, subjectRequestModel.ParentSubjectId.Value , subjectRequestModel.Description);
 
@@ -107,7 +122,7 @@ namespace TP.Controllers
 
                 if (subject == null)
                 {
-                    return BadRequest("Subject not found");
+                    return BadRequest("Subject not found.");
                 }
 
                 subject.UpdateSubject(updateSubjectRequestModel.Name, updateSubjectRequestModel.Description);
@@ -130,11 +145,11 @@ namespace TP.Controllers
 
                 if(subject == null)
                 {
-                    return BadRequest("Subject not found");
+                    return BadRequest("Subject not found.");
                 }
                 if(subject.ChildSubjects.Any())
                 {
-                    return BadRequest("Cannot remove subject that still has subjects connected to it");
+                    return BadRequest("Cannot remove subject that still has subjects attached to it.");
                 }
                 if(subject.ParentSubjectId.HasValue)
                 {
