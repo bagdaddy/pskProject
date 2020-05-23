@@ -88,7 +88,7 @@ namespace TP.Controllers
                     var parentSubject = _subjectRepository.GetById(subjectRequestModel.ParentSubjectId.Value);
                     if (parentSubject == null)
                     {
-                        return BadRequest("Parent not found");
+                        return BadRequest("Parent not found.");
                     }
                     var subject = new Subject(subjectRequestModel.Name, subjectRequestModel.ParentSubjectId.Value , subjectRequestModel.Description);
 
@@ -122,7 +122,7 @@ namespace TP.Controllers
 
                 if (subject == null)
                 {
-                    return BadRequest("Subject not found");
+                    return BadRequest("Subject not found.");
                 }
 
                 subject.UpdateSubject(updateSubjectRequestModel.Name, updateSubjectRequestModel.Description);
@@ -145,11 +145,11 @@ namespace TP.Controllers
 
                 if(subject == null)
                 {
-                    return BadRequest("Subject not found");
+                    return BadRequest("Subject not found.");
                 }
                 if(subject.ChildSubjects.Any())
                 {
-                    return BadRequest("Cannot remove subject that still has subjects attached to it");
+                    return BadRequest("Cannot remove subject that still has subjects attached to it.");
                 }
                 if(subject.ParentSubjectId.HasValue)
                 {
