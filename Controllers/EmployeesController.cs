@@ -15,10 +15,14 @@ namespace TP.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-
-        private readonly IEmployeesControllerService _controllerService = new EmployeesControllerService();
+        private readonly IEmployeesControllerService _controllerService;
         private readonly IDTOService _dtoService = new DTOService();
 
+        public EmployeesController(IEmployeesControllerService controllerService, IDTOService dtoService)
+        {
+            this._controllerService = controllerService;
+            this._dtoService = dtoService;
+        }
         // GET: api/Employees
         [HttpGet]
         public IEnumerable<EmployeeDTO> GetEmployees()

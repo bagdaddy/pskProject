@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using TP.Data.Contexts;
 using TP.Data.Entities;
 using TP.DataContracts;
 
@@ -8,26 +11,33 @@ namespace TP.Data
     public class EmployeesRepository : IEmployeesRepository
     {
 
-        //TODO: Inject appDbContext(Factory)
-
-        Employee IEmployeesRepository.getById(Guid id)
+        private readonly EmployeeContext _context;
+        public EmployeesRepository(EmployeeContext context)
         {
-            return FakeEmployees.getById(id);
+            _context = context;
         }
 
-        List<Employee> IEmployeesRepository.getAll()
+        public Employee getById(Guid id)
         {
-            return FakeEmployees.getAll();
-        }
-        void IEmployeesRepository.delete(Guid id)
-        {
-            throw new NotImplementedException();
+            return _context.Employees
+                .FirstOrDefault(x => x.Id == id);
         }
 
-        Employee IEmployeesRepository.updateEmployee(Employee request, Guid id)
+        public List<Employee> getAll()
         {
-            throw new NotImplementedException();
+            var employeeList = _context.Employees
+                .AsNoTracking()
+                .ToList();
+            return employeeList;
+        }
+        public void delete(Employee employee)
+        {
+            _context.Remove(employee);
         }
 
+        public void updateEmployee(Employee employee)
+        {
+            _context.Employees.Update(employee);
+        }
     }
 }

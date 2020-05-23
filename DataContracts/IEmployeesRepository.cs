@@ -12,9 +12,10 @@ namespace TP.DataContracts
 
         Employee getById(Guid id);
 
-        void delete(Guid id);
+        void delete(Employee employee);
 
         //TODO: Change Employee param to UpdateEmployeeRequest
-        Employee updateEmployee(Employee request, Guid id);
+        void updateEmployee(Employee employee);
+
     }
 }

@@ -7,7 +7,7 @@ using TP.Services.DTOServices.Models;
 
 namespace TP.DataContracts
 {
-    interface IDTOService
+    public interface IDTOService
     {
         public List<EmployeeDTO> employeesToDTO(List<Employee> employeeList);
 

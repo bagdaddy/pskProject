@@ -13,5 +13,6 @@ namespace TP.Data.Entities
         public string FirstName { get; set; }
         [MaxLength(50)]
         public string LastName { get; set; }
+        public List<Subject> LearnedSubjects { get; set; }
     }
 }
