@@ -28,7 +28,7 @@ namespace TP.Controllers
         [HttpGet]
         public IEnumerable<EmployeeDTO> GetEmployees()
         {
-            List<Employee> employees = _controllerService.getAll();
+            List<Employee> employees = _controllerService.GetAll();
             return _dtoService.employeesToDTO(employees);
         }
 
@@ -36,7 +36,7 @@ namespace TP.Controllers
         [HttpGet("{id}")]
         public ActionResult<EmployeeDTO> GetEmployeeById(Guid id)
         {
-            Employee employee = _controllerService.getById(id);
+            Employee employee = _controllerService.GetById(id);
             return _dtoService.employeeToDTO(employee);
         }
 
