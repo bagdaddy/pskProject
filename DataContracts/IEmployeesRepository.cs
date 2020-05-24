@@ -13,7 +13,7 @@ namespace TP.DataContracts
         Task<Employee> GetById(Guid id);
         Task CreateEmployee(Employee employee);
         Task Delete(Guid employeeId);
-        Task UpdateEmployee(UpdateEmployeeRequestModel request);
+        Task<Employee> UpdateEmployee(UpdateEmployeeRequestModel request);
 
     }
 }

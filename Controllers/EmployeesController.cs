@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TP.Data.Entities;
 using TP.DataContracts;
 using TP.Models.RequestModels;
@@ -16,47 +17,76 @@ namespace TP.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly IEmployeesControllerService _controllerService;
+        private readonly IEmployeesRepository _repository;
         private readonly IDTOService _dtoService = new DTOService();
 
-        public EmployeesController(IEmployeesControllerService controllerService, IDTOService dtoService)
+        public EmployeesController(IEmployeesRepository repository, IDTOService dtoService)
         {
-            this._controllerService = controllerService;
+            this._repository = repository;
             this._dtoService = dtoService;
         }
         // GET: api/Employees
         [HttpGet]
-        public IEnumerable<EmployeeDTO> GetEmployees()
+        public async Task <ActionResult<List<EmployeeDTO>>> GetEmployees()
         {
-            List<Employee> employees = _controllerService.GetAll();
+            List<Employee> employees = await _repository.GetAll();
             return _dtoService.employeesToDTO(employees);
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
-        public ActionResult<EmployeeDTO> GetEmployeeById(Guid id)
+        public async Task<ActionResult<EmployeeDTO>> GetEmployeeById(Guid id)
         {
-            Employee employee = _controllerService.GetById(id);
+            Employee employee = await _repository.GetById(id);
             return _dtoService.employeeToDTO(employee);
         }
 
         // POST: api/Employees
         [HttpPost]
-        public void CreateEmployee([FromBody] EmployeeRequestModel model)
+        public async Task<ActionResult> CreateEmployee([FromBody] EmployeeRequestModel model)
         {
-
+            Employee employee = new Employee()
+            {
+                Id = Guid.NewGuid(),
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                LearnedSubjects = new List<EmployeeSubject>()
+            };
+            try
+            {
+                await _repository.CreateEmployee(employee);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            
         }
 
         // PUT: api/Employees/5
         [HttpPut("{id}")]
-        public void UpdateEmployee(int id, [FromBody] string value)
+        public async Task<ActionResult<EmployeeDTO>> UpdateEmployee([FromBody] UpdateEmployeeRequestModel request)
         {
+            try
+            {
+                Employee employee = await _repository.UpdateEmployee(request);
+
+                return _dtoService.employeeToDTO(employee);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest("Failed to update employee");
+            }
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void DeleteEmployee(int id)
+        public async Task<ActionResult> DeleteEmployee(Guid id)
         {
+            await _repository.Delete(id);
+            return Ok("Deleted maybe");
         }
     }
 }

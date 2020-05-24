@@ -16,6 +16,6 @@ namespace TP.Models.RequestModels
         public string LastName { get; set; }
         [EmailAddress]
         public string Email { get; set; }
-        public List<Subject> LearnedSubjects
+        public List<Subject> LearnedSubjects { get; set; }
     }
 }

@@ -40,17 +40,17 @@ namespace TP.Data
         {
             using (var appDbContext = _context)
             {
-                var employeeToDelete = await GetEmployee(appDbContext, employeeId);
+                Employee employeeToDelete = await GetEmployee(appDbContext, employeeId);
                 appDbContext.Employees.Remove(employeeToDelete);
                 await appDbContext.SaveChangesAsync();
             }
         }
 
-        public async Task UpdateEmployee(UpdateEmployeeRequestModel request)
+        public async Task<Employee> UpdateEmployee(UpdateEmployeeRequestModel request)
         {
             using (var appDbContext = _context)
             {
-                var employee = await GetEmployee(appDbContext, request.Id);
+                Employee employee = await GetEmployee(appDbContext, request.Id);
                 appDbContext.Entry(employee).CurrentValues.SetValues(
                     new
                     {
@@ -58,22 +58,48 @@ namespace TP.Data
                         LastName = request.LastName ?? employee.LastName,
                         Email = request.Email ?? employee.Email
                     });
+                if(request.LearnedSubjects != null)
+                {
+                    UpdateEmployeeSubjects(appDbContext, request, employee);
+                }
+
+                await appDbContext.SaveChangesAsync();
+                return employee;
             }
         }
 
-        public void CreateEmployee(Employee employee)
+        public async Task CreateEmployee(Employee employee)
         {
             _context.Add(employee);
+            await _context.SaveChangesAsync();
         }
 
         private async Task<Employee> GetEmployee(AppDbContext context, Guid id)
         {
-            var employee = await context.Employees.FirstOrDefaultAsync(x => x.Id == id);
+            Employee employee = await context.Employees.FirstOrDefaultAsync(x => x.Id == id);
             if (employee == null)
             {
                 throw new Exception("Employee not found");
             }
             return employee;
+        }
+
+        private void UpdateEmployeeSubjects(AppDbContext context, UpdateEmployeeRequestModel request, Employee employee)
+        {
+            List<EmployeeSubject> employeeSubjectList = new List<EmployeeSubject>();
+            foreach (Subject subject in request.LearnedSubjects)
+            {
+
+                EmployeeSubject employeeSubject = new EmployeeSubject()
+                {
+                    Employee = employee,
+                    EmployeeId = employee.Id,
+                    Subject = subject,
+                    SubjectId = subject.Id
+                };
+                employeeSubjectList.Add(employeeSubject);
+            }
+            employee.LearnedSubjects = employeeSubjectList;
         }
     }
 }
