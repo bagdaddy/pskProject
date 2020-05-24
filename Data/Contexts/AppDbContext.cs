@@ -11,11 +11,13 @@ namespace TP.Data.Contexts
     public class AppDbContext : DbContext
     {
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public AppDbContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
+            builder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
         }
 
     }

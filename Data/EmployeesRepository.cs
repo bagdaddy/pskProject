@@ -10,8 +10,8 @@ namespace TP.Data
 {
     public class EmployeesRepository : IEmployeesRepository
     {
-        private readonly EmployeeContext _context;
-        public EmployeesRepository(EmployeeContext context)
+        private readonly AppDbContext _context;
+        public EmployeesRepository(AppDbContext context)
         {
             _context = context;
         }
