@@ -8,7 +8,7 @@ using TP.Data.Contexts;
 
 namespace TP.Migrations
 {
-    [DbContext(typeof(SubjectContext))]
+    [DbContext(typeof(AppDbContext))]
     partial class SubjectContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

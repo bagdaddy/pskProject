@@ -11,8 +11,8 @@ namespace TP.Data
 {
     public class SubjectRepository : ISubjectRepository
     {
-        private readonly SubjectContext _context;
-        public SubjectRepository(SubjectContext context)
+        private readonly AppDbContext _context;
+        public SubjectRepository(AppDbContext context)
         {
             _context = context;
         }

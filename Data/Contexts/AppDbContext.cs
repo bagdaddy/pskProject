@@ -8,10 +8,10 @@ using TP.Data.EntityTypeConfiguration;
 
 namespace TP.Data.Contexts
 {
-    public class SubjectContext : DbContext
+    public class AppDbContext : DbContext
     {
         public DbSet<Subject> Subjects { get; set; }
-        public SubjectContext(DbContextOptions options) : base(options) { }
+        public AppDbContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

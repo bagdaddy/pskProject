@@ -33,7 +33,7 @@ namespace TP
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddDbContext<SubjectContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ContextConnectionString")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ContextConnectionString")));
             services.AddScoped<IDTOService, DTOService>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
