@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
 using TP.DataContracts;
+using TP.Models.RequestModels;
 using TP.Services;
 using TP.Services.DTOServices.Models;
 
@@ -41,8 +42,9 @@ namespace TP.Controllers
 
         // POST: api/Employees
         [HttpPost]
-        public void CreateEmployee([FromBody] string value)
+        public void CreateEmployee([FromBody] EmployeeRequestModel model)
         {
+
         }
 
         // PUT: api/Employees/5

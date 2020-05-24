@@ -6,7 +6,7 @@ using TP.Data.Entities;
 
 namespace TP.DataContracts
 {
-    interface IEmployeesRepository
+    public interface IEmployeesRepository
     {
         List<Employee> getAll();
 

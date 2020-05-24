@@ -10,7 +10,12 @@ namespace TP.Services
 {
     public class EmployeesControllerService : IEmployeesControllerService
     {
-        private readonly IEmployeesRepository employeesRepository = new EmployeesRepository();
+        private readonly IEmployeesRepository _employeesRepository;
+
+        public EmployeesControllerService(IEmployeesRepository employeesRepository)
+        {
+            _employeesRepository = employeesRepository;
+        }
 
         public void delete(Guid id)
         {
@@ -19,12 +24,12 @@ namespace TP.Services
 
         public List<Employee> getAll()
         {
-            return employeesRepository.getAll();
+            return _employeesRepository.getAll();
         }
 
         public Employee getById(Guid id)
         {
-            return employeesRepository.getById(id);
+            return _employeesRepository.getById(id);
         }
 
         public Employee updateEmployee(Employee request, Guid id)
