@@ -9,12 +9,9 @@ namespace TP.DataContracts
     public interface IEmployeesRepository
     {
         List<Employee> getAll();
-
         Employee getById(Guid id);
 
         void delete(Employee employee);
-
-        //TODO: Change Employee param to UpdateEmployeeRequest
         void updateEmployee(Employee employee);
 
     }

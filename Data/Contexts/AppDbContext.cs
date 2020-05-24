@@ -13,11 +13,23 @@ namespace TP.Data.Contexts
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public AppDbContext(DbContextOptions options) : base(options) { }
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
-            builder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
-            builder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
+
+            modelBuilder.Entity<EmployeeSubject>()
+                .HasKey(t => new { t.EmployeeId, t.SubjectId });
+
+            modelBuilder.Entity<EmployeeSubject>()
+                .HasOne(es => es.Employee)
+                .WithMany(e => e.LearnedSubjects)
+                .HasForeignKey(es => es.EmployeeId);
+            modelBuilder.Entity<EmployeeSubject>()
+                .HasOne(es => es.Subject)
+                .WithMany(s => s.EmployeesWhoLearnedIt)
+                .HasForeignKey(es => es.SubjectId);
         }
 
     }
