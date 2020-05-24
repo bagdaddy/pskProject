@@ -24,12 +24,22 @@ namespace TP.Services
 
         public EmployeeDTO employeeToDTO(Employee employee)
         {
+            List<SubjectWithoutParentDTO> subjectList = new List<SubjectWithoutParentDTO>();
+            if (employee.LearnedSubjects != null)
+            {
+                foreach (var subject in employee.LearnedSubjects)
+                {
+                    subjectList.Add(subjectToDTOWithoutParent(subject.Subject));
+                }
+            }
+            
             return new EmployeeDTO()
             {
                 Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Email = employee.Email
+                Email = employee.Email,
+                Subjects = subjectList
             };
         }
 
@@ -51,6 +61,16 @@ namespace TP.Services
                 Id = team.Id,
                 teamLeader = employeeToDTO(team.TeamLeader),
                 teamMembers = employeesToDTO(team.TeamMembers)
+            };
+        }
+
+        private SubjectWithoutParentDTO subjectToDTOWithoutParent(Subject subject)
+        {
+            return new SubjectWithoutParentDTO()
+            {
+                Name = subject.Name,
+                Id = subject.Id,
+                Description = subject.Description
             };
         }
     }

@@ -17,29 +17,32 @@ namespace TP.Data
                 return; // DB has been seeded
             }
 
-            var employees = new Employee[]
-            {
-                new Employee
+            var emp1 = new Employee
             {
                 Id = Guid.Parse("b96f7695-c9d9-4b5c-849e-4219083d6220"),
                 FirstName = "Mantas",
                 LastName = "Bagdonas",
                 Email = "bagzdiuglis_admin@gmail.com"
-            },
-        new Employee
+            };
+            var emp2 = new Employee
             {
                 Id = Guid.Parse("1c8c9ce0-2251-4ef3-ab0b-cfc7dd7a2949"),
                 FirstName = "Evaldas",
                 LastName = "Jonaitis",
                 Email = "jonasEvladaitis@gmail.com"
-            },
-        new Employee
+            };
+            var emp3 = new Employee
             {
                 Id = Guid.Parse("5a677c6e-56e5-4cf1-9c64-157b483e8eff"),
                 FirstName = "Justinas",
                 LastName = "Kondroska",
                 Email = "jsutiniukas@gmail.com"
-            },
+            };
+            var employees = new Employee[]
+            {
+                emp1,
+                emp2,
+                emp3,
         new Employee
             {
                 Id = Guid.Parse("63f4e537-cb7b-4fe0-beca-cc080e42552d"),
@@ -103,28 +106,40 @@ namespace TP.Data
             var employeeSubjects = new EmployeeSubject[]
             {
                 new EmployeeSubject{
-                    EmployeeId = Guid.Parse("b96f7695-c9d9-4b5c-849e-4219083d6220"),
-                    SubjectId = parentSubject.Id
+                    EmployeeId = emp1.Id,
+                    Employee = emp1,
+                    SubjectId = parentSubject.Id,
+                    Subject = parentSubject
                 },
                 new EmployeeSubject{
-                    EmployeeId = Guid.Parse("b96f7695-c9d9-4b5c-849e-4219083d6220"),
-                    SubjectId = childOne.Id
+                    EmployeeId = emp1.Id,
+                    Employee = emp1,
+                    SubjectId = childOne.Id,
+                    Subject = childOne
                 },
                 new EmployeeSubject{
-                    EmployeeId = Guid.Parse("b96f7695-c9d9-4b5c-849e-4219083d6220"),
-                    SubjectId = childTwo.Id
+                    EmployeeId = emp1.Id,
+                    Employee = emp1,
+                    SubjectId = childTwo.Id,
+                    Subject = childTwo
                 },
                 new EmployeeSubject{
-                    EmployeeId = Guid.Parse("1c8c9ce0-2251-4ef3-ab0b-cfc7dd7a2949"),
-                    SubjectId = parentSubject.Id
+                    EmployeeId = emp2.Id,
+                    Employee = emp2,
+                    SubjectId = parentSubject.Id,
+                    Subject = parentSubject
                 },
                 new EmployeeSubject{
-                    EmployeeId = Guid.Parse("1c8c9ce0-2251-4ef3-ab0b-cfc7dd7a2949"),
-                    SubjectId = childOne.Id
+                    EmployeeId = emp2.Id,
+                    Employee = emp2,
+                    SubjectId = childOne.Id,
+                    Subject = childOne
                 },
                 new EmployeeSubject{
-                    EmployeeId = Guid.Parse("5a677c6e-56e5-4cf1-9c64-157b483e8eff"),
-                    SubjectId = childTwo.Id
+                    EmployeeId = emp3.Id,
+                    Employee = emp3,
+                    SubjectId = childTwo.Id,
+                    Subject = childTwo
                 },
                 new EmployeeSubject{
                     EmployeeId = Guid.Parse("63f4e537-cb7b-4fe0-beca-cc080e42552d"),
