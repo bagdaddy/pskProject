@@ -11,8 +11,8 @@ namespace TP.Data
 {
     public class SubjectRepository : ISubjectRepository
     {
-        private readonly SubjectContext _context;
-        public SubjectRepository(SubjectContext context)
+        private readonly AppDbContext _context;
+        public SubjectRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -30,6 +30,8 @@ namespace TP.Data
         public List<Subject> GetAll()
         {
             var subjectList = _context.Subjects
+                /*.Include(s => s.EmployeesWhoLearnedIt)
+                .ThenInclude(es => es.Employee)*/
                 .AsNoTracking()
                 .ToList();
             return subjectList;
@@ -37,12 +39,20 @@ namespace TP.Data
 
         public Subject GetById(Guid id)
         {
-            return _context.Subjects.FirstOrDefault(x => x.Id == id);
+            return _context.Subjects
+                .Include(s => s.EmployeesWhoLearnedIt)
+                .ThenInclude(es => es.Employee)
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public Subject GetByIdWithChild(Guid id)
         {
-            return _context.Subjects.Include(x => x.ChildSubjects).FirstOrDefault(x => x.Id == id);
+            return _context.Subjects
+                .Include(x => x.ChildSubjects)
+                /*.Include(s => s.EmployeesWhoLearnedIt)
+                .ThenInclude(es => es.Employee)*/
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public void SaveChanges()

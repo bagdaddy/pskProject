@@ -4,10 +4,6 @@
     left:70%;
 }
 
-input, select{
-    margin: 5px;
-}
-
 .link{
     font-weight: 400;
     color: #007bff;
@@ -168,4 +164,19 @@ input, select{
     font-size: 15px;
     vertical-align: text-top;
     font-family: 'Calibri'; 
+}
+.login-form{
+    position: absolute;
+    padding: 20px;
+    width: 350px;
+    border-radius: 5px;
+    border: 1px solid #bfbfbf;
+    box-shadow: 4px 4px 16px 0px lightgrey;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.form-left{
+    width: 350px;
 }
