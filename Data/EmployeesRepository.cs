@@ -76,7 +76,11 @@ namespace TP.Data
 
         private async Task<Employee> GetEmployee(AppDbContext context, Guid id)
         {
-            Employee employee = await context.Employees.FirstOrDefaultAsync(x => x.Id == id);
+            Employee employee = await context.Employees
+                .Include(e => e.LearnedSubjects)
+                .ThenInclude(es => es.Subject)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (employee == null)
             {
                 throw new Exception("Employee not found");
