@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace TP.Services.DTOServices.Models
 {
-    public class EmployeeDTO
+    public class EmployeeWithoutSubjectsDTO
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public List<SubjectWithoutParentDTO> Subjects { get; set; }
     }
 }

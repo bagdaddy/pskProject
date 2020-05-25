@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using TP.Data;
 using TP.Data.Contexts;
 using TP.DataContracts;
+using TP.Services;
 
 namespace TP
 {
@@ -32,8 +33,10 @@ namespace TP
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddDbContext<SubjectContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SubjectContextConnectionString")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ContextConnectionString")));
+            services.AddScoped<IDTOService, DTOService>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
+            services.AddScoped<IEmployeesRepository, EmployeesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

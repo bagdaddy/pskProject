@@ -14,9 +14,11 @@ namespace TP.Controllers
     public class SubjectController: ControllerBase
     {
         private readonly ISubjectRepository _subjectRepository;
-        public SubjectController(ISubjectRepository subjectRepository)
+        private readonly IDTOService _dtoService;
+        public SubjectController(ISubjectRepository subjectRepository, IDTOService dtoService)
         {
             _subjectRepository = subjectRepository;
+            _dtoService = dtoService;
         }
         [HttpGet("api/GetSubjects")]
         public IActionResult GetSubjects()
@@ -33,6 +35,7 @@ namespace TP.Controllers
                         GetAllSubjects(subject, subjectListHierarchy);
                     }
                 }
+                //return Ok(_dtoService.SubjectsToDTO(subjectListHierarchy));
                 return Ok(subjectListHierarchy);
             }
             catch(Exception e)
@@ -66,7 +69,7 @@ namespace TP.Controllers
             {
                 var subject = _subjectRepository.GetById(id);
 
-                return Ok(subject);
+                return Ok(_dtoService.SubjectToDTO(subject));
             }
             catch(Exception e)
             {

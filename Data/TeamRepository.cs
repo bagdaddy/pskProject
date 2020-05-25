@@ -18,12 +18,12 @@ namespace TP.Data
 
         public List<Team> getAll()
         {
-            return FakeTeams.getAll();
+            throw new NotImplementedException();
         }
 
         public Team getById(Guid id)
         {
-            return FakeTeams.getById(id);
+            throw new NotImplementedException();
         }
 
         public Team updateTeam(Team request, Guid id)
