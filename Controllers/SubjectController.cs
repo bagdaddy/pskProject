@@ -6,7 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using TP.Data.Entities;
 using TP.DataContracts;
+using TP.Mappings.EntityToResponse;
 using TP.Models.RequestModels;
+using TP.Models.ResponseModels;
 
 namespace TP.Controllers
 {
@@ -15,10 +17,12 @@ namespace TP.Controllers
     {
         private readonly ISubjectRepository _subjectRepository;
         private readonly IDTOService _dtoService;
-        public SubjectController(ISubjectRepository subjectRepository, IDTOService dtoService)
+        private readonly ISubjectControllerService _subjectControllerService;
+        public SubjectController(ISubjectRepository subjectRepository, IDTOService dtoService, ISubjectControllerService subjectControllerService)
         {
             _subjectRepository = subjectRepository;
             _dtoService = dtoService;
+            _subjectControllerService = subjectControllerService;
         }
         [HttpGet("api/GetSubjects")]
         public IActionResult GetSubjects()
@@ -27,15 +31,16 @@ namespace TP.Controllers
             {
                 var subjects = _subjectRepository.GetAll();
                 var subjectListHierarchy = new List<Subject>();
+                var test = new List<Subject>();
 
                 foreach (var subject in subjects)
                 {
                     if (!subject.ParentSubjectId.HasValue)
                     {
-                        GetAllSubjects(subject, subjectListHierarchy);
+                        _subjectControllerService.GetAllSubjects(subject, subjectListHierarchy);
                     }
                 }
-                //return Ok(_dtoService.SubjectsToDTO(subjectListHierarchy));
+                
                 return Ok(subjectListHierarchy);
             }
             catch(Exception e)
@@ -44,6 +49,20 @@ namespace TP.Controllers
             }
         }
 
+        [HttpGet("api/GetAllSubjects")]
+        public IActionResult GetAllSubjects()
+        {
+            try
+            {
+                var subjects = _subjectRepository.GetAll();
+
+                return Ok(subjects.MapToResponse());
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
         [HttpGet("api/GetSubjects/{id}")]
         public IActionResult GetSubjectsById(Guid id)
         {
@@ -52,9 +71,9 @@ namespace TP.Controllers
                 var subject = _subjectRepository.GetById(id);
                 var list = new List<Subject>();
 
-                GetAllSubjects(subject, list);
+                _subjectControllerService.GetAllSubjects(subject, list);
 
-                return Ok(subject);
+                return Ok(list);
             }
             catch(Exception e)
             {
@@ -69,7 +88,7 @@ namespace TP.Controllers
             {
                 var subject = _subjectRepository.GetById(id);
 
-                return Ok(_dtoService.SubjectToDTO(subject));
+                return Ok(subject);
             }
             catch(Exception e)
             {
@@ -169,29 +188,6 @@ namespace TP.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }
-        private List<Subject> GetAllSubjects(Subject currentSubject, List<Subject> subjectListHierarchy)
-        {
-            var childSubjects = _subjectRepository.GetChildSubjects(currentSubject.Id);
-
-            if (childSubjects.Any())
-            {
-                childSubjects.ForEach(x => x.ClearChildSubjects());
-                foreach (var subject in childSubjects)
-                {
-                    var childSubjectList = new List<Subject>();
-                    var testChildSubjects = GetAllSubjects(subject, childSubjectList);
-
-                    currentSubject.AddChildSubjectsRange(testChildSubjects);
-                }
-                subjectListHierarchy.Add(currentSubject);
-            }
-            else
-            {
-                subjectListHierarchy.Add(currentSubject);
-            }
-
-            return subjectListHierarchy;
         }
     }
 }
