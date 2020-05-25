@@ -6,10 +6,8 @@ using TP.Data.Entities;
 
 namespace TP.DataContracts
 {
-    interface ISubjectControllerService
+    public interface ISubjectControllerService
     {
-        List<Subject> getAll();
-        Subject getById(Guid id);
-        void delete(Guid id);
+        List<Subject> GetAllSubjects(Subject currentSubject, List<Subject> subjectListHierarchy);
     }
 }

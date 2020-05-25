@@ -30,8 +30,6 @@ namespace TP.Data
         public List<Subject> GetAll()
         {
             var subjectList = _context.Subjects
-                /*.Include(s => s.EmployeesWhoLearnedIt)
-                .ThenInclude(es => es.Employee)*/
                 .AsNoTracking()
                 .ToList();
             return subjectList;
@@ -40,8 +38,6 @@ namespace TP.Data
         public Subject GetById(Guid id)
         {
             return _context.Subjects
-                .Include(s => s.EmployeesWhoLearnedIt)
-                .ThenInclude(es => es.Employee)
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == id);
         }
@@ -50,8 +46,6 @@ namespace TP.Data
         {
             return _context.Subjects
                 .Include(x => x.ChildSubjects)
-                /*.Include(s => s.EmployeesWhoLearnedIt)
-                .ThenInclude(es => es.Employee)*/
                 .FirstOrDefault(x => x.Id == id);
         }
 
