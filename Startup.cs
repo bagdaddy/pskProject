@@ -37,6 +37,7 @@ namespace TP
             services.AddScoped<IDTOService, DTOService>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+            services.AddScoped<ISubjectControllerService, SubjectControllerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
