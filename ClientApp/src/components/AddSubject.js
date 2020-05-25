@@ -5,7 +5,7 @@ const AddSubject = props => {
     const [insertedSubject, setInsertedSubject] = useState({});
 
     const fetchSubjects = React.useCallback(() => {
-        fetch('api/GetSubjects')
+        fetch('api/GetAllSubjects')
             .then(response => response.json())
             .then(data => setSubjects(data));
     });
@@ -34,8 +34,6 @@ const AddSubject = props => {
         event.preventDefault();
         insertSubject();
     };
-
-
 
     return (
         <div className="form-left">

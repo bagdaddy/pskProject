@@ -2,7 +2,7 @@ import React from 'react';
 
 const SubjectList = props => {
     return (
-        <div>
+        <div className={props.wrapperClass}>
             <ul>
                 {props.subjects.map(subject => (
                     <li key={subject.id}>

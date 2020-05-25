@@ -8,11 +8,12 @@ const Subject = props => {
     const fetchData = React.useCallback(() => {
         fetch("api/GetSubjects/" + parsed.id)
             .then(response => response.json())
-            .then(data => setSubject(data));
+            .then(data => setSubject(data[0]));
     });
     useEffect(() => {
         fetchData();
     }, []);
+    console.log(subject);
 
     return (
         <div className="row">
