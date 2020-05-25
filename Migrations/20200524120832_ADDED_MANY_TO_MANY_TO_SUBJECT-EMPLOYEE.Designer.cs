@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP.Data.Contexts;
 
 namespace TP.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class SubjectContextModelSnapshot : ModelSnapshot
+    [Migration("20200524120832_ADDED_MANY_TO_MANY_TO_SUBJECT-EMPLOYEE")]
+    partial class ADDED_MANY_TO_MANY_TO_SUBJECTEMPLOYEE
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

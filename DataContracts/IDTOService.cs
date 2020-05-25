@@ -7,14 +7,18 @@ using TP.Services.DTOServices.Models;
 
 namespace TP.DataContracts
 {
-    interface IDTOService
+    public interface IDTOService
     {
-        public List<EmployeeDTO> employeesToDTO(List<Employee> employeeList);
+        public List<EmployeeDTO> EmployeesToDTO(List<Employee> employeeList);
 
-        public EmployeeDTO employeeToDTO(Employee employee);
+        public EmployeeDTO EmployeeToDTO(Employee employee);
 
-        public List<TeamDTO> teamsToDTO(List<Team> teamList);
+        public List<TeamDTO> TeamsToDTO(List<Team> teamList);
 
-        public TeamDTO teamToDTO(Team team);
+        public TeamDTO TeamToDTO(Team team);
+
+        public SubjectDTO SubjectToDTO(Subject subject);
+
+        public List<SubjectDTO> SubjectsToDTO(List<Subject> subjectList);
     }
 }

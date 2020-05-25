@@ -14,6 +14,7 @@ namespace TP.Data.Entities
         public string Name { get; private set; }
         public Guid? ParentSubjectId { get; private set; }
         public string Description { get; private set; }
+        public List<EmployeeSubject> EmployeesWhoLearnedIt { get; set; }
         private readonly List<Subject> _childSubjects = new List<Subject>();
         public IReadOnlyList<Subject> ChildSubjects => _childSubjects;
         public Subject(string name, Guid? parentSubjectId, string description)

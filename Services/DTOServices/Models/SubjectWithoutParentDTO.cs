@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TP.Data.Entities;
 
 namespace TP.Services.DTOServices.Models
 {
-    public class SubjectDTO
+    public class SubjectWithoutParentDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public Subject ParentSubject { get; set; }
         public string Description { get; set; }
-        
-        public List<EmployeeWithoutSubjectsDTO> Employees { get; set; }
     }
 }

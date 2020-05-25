@@ -10,8 +10,8 @@ using TP.Data.Contexts;
 namespace TP.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200520174552_Initial")]
-    partial class Initial
+    [Migration("20200524110441_REMOVED_EMPLOYEE_IDENTITY")]
+    partial class REMOVED_EMPLOYEE_IDENTITY
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,31 @@ namespace TP.Migrations
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("TP.Data.Entities.Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employee");
+                });
 
             modelBuilder.Entity("TP.Data.Entities.Subject", b =>
                 {
@@ -30,6 +55,9 @@ namespace TP.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -39,6 +67,8 @@ namespace TP.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId");
+
                     b.HasIndex("ParentSubjectId");
 
                     b.ToTable("Subject");
@@ -46,6 +76,10 @@ namespace TP.Migrations
 
             modelBuilder.Entity("TP.Data.Entities.Subject", b =>
                 {
+                    b.HasOne("TP.Data.Entities.Employee", null)
+                        .WithMany("LearnedSubjects")
+                        .HasForeignKey("EmployeeId");
+
                     b.HasOne("TP.Data.Entities.Subject", null)
                         .WithMany("ChildSubjects")
                         .HasForeignKey("ParentSubjectId");
