@@ -49,7 +49,7 @@ const SubjectInfo = props => {
                 <p className="title">{subjectData.name}</p>
                 <ul className="employeeList">
                     {subjectData.attributes.employees.map(employee => (
-                        <li><a href={"/profile?id=" + employee.id}>{employee.name}</a></li>
+                        <li><a href={"/profile?id=" + employee.id}>{ employee.firstName } { employee.lastName }</a></li>
                     ))}
                 </ul>
             </div>
@@ -85,6 +85,7 @@ class NodeLabel extends React.PureComponent {
 const textProps = { x: -20, y: 20 };
 const LearningTree = props => {
     const [subjects, setSubjects] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [treeData, setTreeData] = useState([]);
     const [displayedNode, setDisplayedNode] = useState({});
 
@@ -99,71 +100,85 @@ const LearningTree = props => {
             });
     });
 
+    const fetchEmployeesData = React.useCallback(() => {
+        fetch('api/Employees')
+            .then(response => response.json())
+            .then(data => setEmployees(data));
+    });
+
     useEffect(() => {
         fetchData();
-        let myFakeTreeData = [
-            {
-                name: "Top level",
-                nodeSvgShape: circle,
-                attributes: {
-                    subjectId: "-1"
-                },
-                children: []
-            }
-        ];
-
-        function formSubjectObj(subject) {
-            let selectedNodeSvgShape = circle;
-            if (subject.employees.length > 0) {
-                if (subject.employees.filter(e => e.id === authenticatedUserId).length > 0) {
-                    selectedNodeSvgShape = circleLearntByYou;
-                } else {
-                    selectedNodeSvgShape = circleLearntByTeam;
-                }
-            }
-
-            let subjectToPush = {
-                name: subject.name,
-                nodeSvgShape: selectedNodeSvgShape,
-                attributes: {
-                    subjectId: subject.id,
-                    employees: subject.employees
-                },
-                children: getChildren(subject)
-            };
-            return subjectToPush;
-        }
-
-        function getChildren(subjectData) {
-            let children = [];
-            subjectData.subjects.forEach(subject => {
-                let subjectToPush = formSubjectObj(subject);
-                children.push(subjectToPush);
-            });
-            return children;
-        }
-
-        data.forEach(subject => {
-            let subjectToPush = formSubjectObj(subject);
-            myFakeTreeData[0].children.push(subjectToPush);
-        });
+        fetchEmployeesData();        
         setTreeData(myFakeTreeData);
     }, []);
 
-    console.log(treeData);
-
-
     const handleClick = React.useCallback((event, node) => {
-        console.log('handle click ', event);
-        console.log('handle click node', node);
         setDisplayedNode(event);
+    });
+
+    let myFakeTreeData = [
+        {
+            name: "Top level",
+            nodeSvgShape: circle,
+            attributes: {
+                subjectId: "-1"
+            },
+            children: []
+        }
+    ];
+
+    const getEmployeesForSubject = (subject) => {
+        let employeeArr = [];
+        employees.forEach(employee => {
+            if(employee.subjects.filter(function(e) { return e.id === subject.id; }).length > 0){
+                employeeArr.push(employee);
+            }
+        });
+        return employeeArr;
+    };
+
+    function formSubjectObj(subject) {
+        let selectedNodeSvgShape = circle;
+        subject.employees = getEmployeesForSubject(subject);
+        if (subject.employees.length > 0) {
+            if (subject.employees.filter(e => e.id === authenticatedUserId).length > 0) {
+                selectedNodeSvgShape = circleLearntByYou;
+            } else {
+                selectedNodeSvgShape = circleLearntByTeam;
+            }
+        }
+
+        let subjectToPush = {
+            name: subject.name,
+            nodeSvgShape: selectedNodeSvgShape,
+            attributes: {
+                subjectId: subject.id,
+                employees: subject.employees
+            },
+            children: getChildren(subject)
+        };
+        return subjectToPush;
+    }
+
+    function getChildren(subjectData) {
+        let children = [];
+        subjectData.childSubjects.forEach(subject => {
+            let subjectToPush = formSubjectObj(subject);
+            children.push(subjectToPush);
+        });
+        return children;
+    }
+
+    subjects.forEach(subject => {
+        let subjectToPush = formSubjectObj(subject);
+        myFakeTreeData[0].children.push(subjectToPush);
     });
 
     return (
         <div className="treeWrapper" style={{ width: "100%", height: "1000px" }}>
             <TreeLegend />
             <SubjectInfo data={displayedNode} />
-            {treeData.length > 0 && <Tree data={treeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
+            {treeData.length > 0 && <Tree data={myFakeTreeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
                 render: <NodeLabel className='myLabelComponentInSvg' />,
                 foreignObjectWrapper: {
                     y: 0,
