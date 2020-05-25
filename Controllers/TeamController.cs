@@ -16,30 +16,54 @@ namespace TP.Controllers
     public class TeamController : ControllerBase
     {
 
-        private readonly ITeamControllerService _controllerService = new TeamControllerService();
-        private readonly IDTOService _dtoService = new DTOService();
+        private readonly ITeamRepository _teamRepository;
+        private readonly IDTOService _dtoService;
+
+        public TeamController(ITeamRepository teamRepository, IDTOService dtoService)
+        {
+            _teamRepository = teamRepository;
+            _dtoService = dtoService;
+        }
 
         // GET: api/Team
         [HttpGet]
-        public ActionResult<List<TeamDTO>> GetTeams()
+        public async Task<ActionResult<List<TeamDTO>>> GetTeams()
         {
-            List<Team> teams = _controllerService.getAll();
-            return _dtoService.TeamsToDTO(teams);
+            List<Team> teams = _teamRepository.getAll();
+            //return _dtoService.TeamsToDTO(teams);
+            return Ok(teams);
         }
 
         // GET: api/Team/5
         [HttpGet("{id}")]
-        public ActionResult<TeamDTO> GetTeamById(Guid id)
+        public async Task<ActionResult<TeamDTO>> GetTeamById(Guid id)
         {
-            Team team = _controllerService.getById(id);
-            return _dtoService.TeamToDTO(team);
+            Team team = _teamRepository.getById(id);
+            //return _dtoService.TeamToDTO(team);
+            return Ok(team);
         }
 
-        // POST: api/Team
+        /*// POST: api/Team
         [HttpPost]
-        public void CreateTeam([FromBody] string value)
+        public async Task<ActionResult> CreateTeam([FromBody] TeamRequestModel model)
         {
-        }
+            Team team = new Team()
+            {
+                Id = Guid.NewGuid(),
+                ChildTeams = new List<Team>(),
+                TeamLeader = model.
+            };
+            try
+            {
+                await _repository.CreateEmployee(employee);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }*/
 
         // PUT: api/Team/5
         [HttpPut("{id}")]

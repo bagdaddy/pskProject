@@ -21,8 +21,8 @@ namespace TP.Controllers
 
         public EmployeesController(IEmployeesRepository repository, IDTOService dtoService)
         {
-            this._repository = repository;
-            this._dtoService = dtoService;
+            _repository = repository;
+            _dtoService = dtoService;
         }
         // GET: api/Employees
         [HttpGet]
