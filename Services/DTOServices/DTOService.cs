@@ -18,28 +18,20 @@ namespace TP.Services
                 Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Email = employee.Email
+                Email = employee.Email,
+                Subjects = GetSubjectListWithoutParent(employee.LearnedSubjects)
             }).ToList();
         }
 
         public EmployeeDTO EmployeeToDTO(Employee employee)
         {
-            List<SubjectWithoutParentDTO> subjectList = new List<SubjectWithoutParentDTO>();
-            if (employee.LearnedSubjects != null)
-            {
-                foreach (var subject in employee.LearnedSubjects)
-                {
-                    subjectList.Add(subjectToDTOWithoutParent(subject.Subject));
-                }
-            }
-            
             return new EmployeeDTO()
             {
                 Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Email = employee.Email,
-                Subjects = subjectList
+                Subjects = GetSubjectListWithoutParent(employee.LearnedSubjects)
             };
         }
 
@@ -61,7 +53,7 @@ namespace TP.Services
             {
                 foreach (var employee in subject.EmployeesWhoLearnedIt)
                 {
-                    employeeList.Add(employeeToDTOWithoutSubjects(employee.Employee));
+                    employeeList.Add(GetEmployeeDTOWithoutSubjects(employee.Employee));
                 }
             }
             return new SubjectDTO
@@ -94,7 +86,20 @@ namespace TP.Services
             };
         }
 
-        private SubjectWithoutParentDTO subjectToDTOWithoutParent(Subject subject)
+        private List<SubjectWithoutParentDTO> GetSubjectListWithoutParent(List<EmployeeSubject> subjectList)
+        {
+            List<SubjectWithoutParentDTO> subjects = new List<SubjectWithoutParentDTO>();
+            if (subjectList != null)
+            {
+                foreach (var subject in subjectList)
+                {
+                    subjects.Add(SubjectToDTOWithoutParent(subject.Subject));
+                }
+            }
+            return subjects;
+        }
+
+        private SubjectWithoutParentDTO SubjectToDTOWithoutParent(Subject subject)
         {
             return new SubjectWithoutParentDTO()
             {
@@ -104,7 +109,19 @@ namespace TP.Services
             };
         }
 
-        private EmployeeWithoutSubjectsDTO employeeToDTOWithoutSubjects(Employee employee)
+        private List<EmployeeWithoutSubjectsDTO> GetEmployeeListWithoutSubjects(List<EmployeeSubject> employeeList)
+        {
+            List<EmployeeWithoutSubjectsDTO> employees = new List<EmployeeWithoutSubjectsDTO>();
+            if (employeeList != null)
+            {
+                foreach (var employee in employeeList)
+                {
+                    employees.Add(GetEmployeeDTOWithoutSubjects(employee.Employee));
+                }
+            }
+            return employees;
+        }
+        private EmployeeWithoutSubjectsDTO GetEmployeeDTOWithoutSubjects(Employee employee)
         {
             return new EmployeeWithoutSubjectsDTO
             {

@@ -35,6 +35,7 @@ namespace TP.Controllers
                         GetAllSubjects(subject, subjectListHierarchy);
                     }
                 }
+                //return Ok(_dtoService.SubjectsToDTO(subjectListHierarchy));
                 return Ok(subjectListHierarchy);
             }
             catch(Exception e)
