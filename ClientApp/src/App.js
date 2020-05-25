@@ -9,6 +9,7 @@ import Subjects from './components/Subjects';
 import AddSubject from './components/AddSubject';
 import Subject from './components/Subject';
 import LearningTree from './components/LearningTree';
+import Login from './components/Login';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -23,6 +24,7 @@ export default class App extends Component {
         <Route path='/learningTree' component={LearningTree} />
         <Route path='/subjects' component={Subjects} />
         <Route path='/add-subject' component={AddSubject} />
+        <Route path='/login' component={Login} />
         <Route path='/subject' component={Subject} />
       </Layout>
     );
