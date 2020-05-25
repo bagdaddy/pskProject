@@ -29,7 +29,7 @@ namespace TP.Controllers
         public async Task <ActionResult<List<EmployeeDTO>>> GetEmployees()
         {
             List<Employee> employees = await _repository.GetAll();
-            return _dtoService.employeesToDTO(employees);
+            return _dtoService.EmployeesToDTO(employees);
         }
 
         // GET: api/Employees/5
@@ -37,7 +37,7 @@ namespace TP.Controllers
         public async Task<ActionResult<EmployeeDTO>> GetEmployeeById(Guid id)
         {
             Employee employee = await _repository.GetById(id);
-            return _dtoService.employeeToDTO(employee);
+            return _dtoService.EmployeeToDTO(employee);
         }
 
         // POST: api/Employees
@@ -72,7 +72,7 @@ namespace TP.Controllers
             {
                 Employee employee = await _repository.UpdateEmployee(request);
 
-                return _dtoService.employeeToDTO(employee);
+                return _dtoService.EmployeeToDTO(employee);
             }
             catch (Exception exception)
             {

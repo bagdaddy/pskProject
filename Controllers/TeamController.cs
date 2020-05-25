@@ -24,7 +24,7 @@ namespace TP.Controllers
         public ActionResult<List<TeamDTO>> GetTeams()
         {
             List<Team> teams = _controllerService.getAll();
-            return _dtoService.teamsToDTO(teams);
+            return _dtoService.TeamsToDTO(teams);
         }
 
         // GET: api/Team/5
@@ -32,7 +32,7 @@ namespace TP.Controllers
         public ActionResult<TeamDTO> GetTeamById(Guid id)
         {
             Team team = _controllerService.getById(id);
-            return _dtoService.teamToDTO(team);
+            return _dtoService.TeamToDTO(team);
         }
 
         // POST: api/Team

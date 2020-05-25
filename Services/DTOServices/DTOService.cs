@@ -10,7 +10,7 @@ namespace TP.Services
 {
     public class DTOService : IDTOService
     {
-        public List<EmployeeDTO> employeesToDTO(List<Employee> employeeList)
+        public List<EmployeeDTO> EmployeesToDTO(List<Employee> employeeList)
         {
             return employeeList.Select(employee =>
             new EmployeeDTO()
@@ -22,7 +22,7 @@ namespace TP.Services
             }).ToList();
         }
 
-        public EmployeeDTO employeeToDTO(Employee employee)
+        public EmployeeDTO EmployeeToDTO(Employee employee)
         {
             List<SubjectWithoutParentDTO> subjectList = new List<SubjectWithoutParentDTO>();
             if (employee.LearnedSubjects != null)
@@ -43,24 +43,54 @@ namespace TP.Services
             };
         }
 
-        public List<TeamDTO> teamsToDTO(List<Team> teamList)
+        public List<SubjectDTO> SubjectsToDTO(List<Subject> subjectList)
+        {
+            return subjectList.Select(subject =>
+            new SubjectDTO
+            {
+                Id = subject.Id,
+                Name = subject.Name,
+                Description = subject.Description
+            }).ToList();
+        }
+
+        public SubjectDTO SubjectToDTO(Subject subject)
+        {
+            List<EmployeeWithoutSubjectsDTO> employeeList = new List<EmployeeWithoutSubjectsDTO>();
+            if (subject.EmployeesWhoLearnedIt != null)
+            {
+                foreach (var employee in subject.EmployeesWhoLearnedIt)
+                {
+                    employeeList.Add(employeeToDTOWithoutSubjects(employee.Employee));
+                }
+            }
+            return new SubjectDTO
+            {
+                Id = subject.Id,
+                Name = subject.Name,
+                Description = subject.Description,
+                Employees = employeeList
+            };
+        }
+
+        public List<TeamDTO> TeamsToDTO(List<Team> teamList)
         {
             return teamList.Select(team =>
             new TeamDTO()
             {
                 Id = team.Id,
-                teamLeader = employeeToDTO(team.TeamLeader),
-                teamMembers = employeesToDTO(team.TeamMembers)
+                teamLeader = EmployeeToDTO(team.TeamLeader),
+                teamMembers = EmployeesToDTO(team.TeamMembers)
             }).ToList();
         }
 
-        public TeamDTO teamToDTO(Team team)
+        public TeamDTO TeamToDTO(Team team)
         {
             return new TeamDTO()
             {
                 Id = team.Id,
-                teamLeader = employeeToDTO(team.TeamLeader),
-                teamMembers = employeesToDTO(team.TeamMembers)
+                teamLeader = EmployeeToDTO(team.TeamLeader),
+                teamMembers = EmployeesToDTO(team.TeamMembers)
             };
         }
 
@@ -71,6 +101,17 @@ namespace TP.Services
                 Name = subject.Name,
                 Id = subject.Id,
                 Description = subject.Description
+            };
+        }
+
+        private EmployeeWithoutSubjectsDTO employeeToDTOWithoutSubjects(Employee employee)
+        {
+            return new EmployeeWithoutSubjectsDTO
+            {
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                Id = employee.Id
             };
         }
     }

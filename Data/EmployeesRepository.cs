@@ -31,6 +31,8 @@ namespace TP.Data
             using (var appDbContext = _context)
             {
                 return await _context.Employees
+                    .Include(e => e.LearnedSubjects)
+                    .ThenInclude(es => es.Subject)
                     .AsNoTracking()
                     .ToListAsync();
             }

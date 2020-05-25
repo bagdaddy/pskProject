@@ -38,9 +38,9 @@ namespace TP.Data
         public Subject GetById(Guid id)
         {
             return _context.Subjects
-                /*.Include(s => s.EmployeesWhoLearnedIt)
+                .Include(s => s.EmployeesWhoLearnedIt)
                 .ThenInclude(es => es.Employee)
-                .AsNoTracking()*/
+                .AsNoTracking()
                 .FirstOrDefault(x => x.Id == id);
         }
 

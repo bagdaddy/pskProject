@@ -13,5 +13,6 @@ namespace TP.Services.DTOServices.Models
         public Subject ParentSubject { get; set; }
         public string Description { get; set; }
         
+        public List<EmployeeWithoutSubjectsDTO> Employees { get; set; }
     }
 }
