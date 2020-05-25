@@ -21,7 +21,6 @@ const AddSubject = props => {
                 ParentSubjectId: parentSubjetcId
             })
         };
-        console.log(requestOptions);
         fetch('api/CreateSubject', requestOptions)
             .then(response => response.text())
             .then(data => setInsertedSubject(data));
@@ -36,13 +35,6 @@ const AddSubject = props => {
         insertSubject();
     };
 
-    const getChildren = (subject) => {
-        return(
-            <
-        )
-    }
-
-    console.log(subjects);
 
 
     return (
