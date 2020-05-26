@@ -180,3 +180,39 @@
 .form-left{
     width: 350px;
 }
+
+.subjectsList ul{
+    list-style-type: none;
+    font-size: 20px;
+    padding-left: 0;
+}
+
+.subjectsList ul li a {
+    color: #7f7c7c;
+}
+
+.subjectsList ul li {
+    line-height: 2.5;
+    border-bottom: 1px solid #ede7e7;
+    padding-right: 100px;
+}
+
+.subjectsList ul {
+    display: inline-block;
+}
+
+.subjects > h1{
+    display:inline-block;
+}
+
+.addSubjectBtn {
+    font-size: 11px;
+    vertical-align: text-bottom;
+    margin-left: 20px;
+}
+
+.successMsg{
+    font-size: 12px;
+    margin-bottom: 0;
+    margin-top: 5px;
+}
