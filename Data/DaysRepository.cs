@@ -48,10 +48,8 @@ namespace TP.Data
         public async Task<int> GetThisQuarter(Guid employeeid, int quarter)
         {
             var workerDaysThisQuarter = _context.Days
-                .Where(x => x.EmployeesId == employeeid && GetQuarter(x.Date) == quarter)
-                .AsNoTracking()
-                .ToListAsync();
-            //return workerDaysThisQuarter.();
+                .CountAsync(x => x.EmployeesId == employeeid && GetQuarter(x.Date) == quarter);
+            return await workerDaysThisQuarter;
             
         }
 
