@@ -14,9 +14,9 @@ namespace TP.Services
         {
             _subjectRepository = subjectRepository;
         }
-        public List<Subject> GetAllSubjects( Subject currentSubject, List<Subject> subjectListHierarchy)
+        public async Task<List<Subject>> GetAllSubjects( Subject currentSubject, List<Subject> subjectListHierarchy)
         {
-            var childSubjects = _subjectRepository.GetChildSubjects(currentSubject.Id);
+            var childSubjects = await _subjectRepository.GetChildSubjects(currentSubject.Id);
 
             if (childSubjects.Any())
             {
@@ -25,7 +25,7 @@ namespace TP.Services
                 {
                     Subject subject = childSubjects[i];
                     var childSubjectList = new List<Subject>();
-                    var testChildSubjects = GetAllSubjects(subject, childSubjectList);
+                    var testChildSubjects = await GetAllSubjects(subject, childSubjectList);
 
                     currentSubject.AddChildSubjectsRange(testChildSubjects);
                 }
