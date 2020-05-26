@@ -49,7 +49,7 @@ const SubjectInfo = props => {
                 <p className="title">{subjectData.name}</p>
                 <ul className="employeeList">
                     {subjectData.attributes.employees.map(employee => (
-                        <li><a href={"/profile?id=" + employee.id}>{ employee.firstName } { employee.lastName }</a></li>
+                        <li><a href={"/profile/" + employee.id}>{ employee.firstName } { employee.lastName }</a></li>
                     ))}
                 </ul>
             </div>
