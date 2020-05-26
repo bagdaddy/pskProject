@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -58,13 +59,19 @@ namespace TP.Controllers
         public async Task<ActionResult<string>> GetRole()
         {
             //if (User.Identity.IsAuthenticated == true)
-           // {
-                var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+           try {
+                // var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await _userManager.GetUserAsync(User);
                 var roles = await _userManager.GetRolesAsync(user);
 
                 return roles.FirstOrDefault();
-           // }
-            return StatusCode((int)HttpStatusCode.Unauthorized, "User ir not logged in");
+            } catch (Exception exception)
+            {
+                //Log.Error(exception, "Failed to get role");
+                return StatusCode((int)HttpStatusCode.Unauthorized, "User ir not logged in.");
+            }
+            
         }
 
         [HttpPost("register")]
