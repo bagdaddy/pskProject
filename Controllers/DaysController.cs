@@ -15,6 +15,11 @@ namespace TP.Controllers
     {
         private readonly IDaysRepository _repository;
         private readonly IDTOService _dtoService = new DTOService();
+        public DaysController(IDaysRepository repository, IDTOService dtoService)
+        {
+            this._repository = repository;
+            this._dtoService = dtoService;
+        }
 
         [HttpGet("{workerId}")]
         public async Task<IActionResult> getAll(Guid employeeid)
