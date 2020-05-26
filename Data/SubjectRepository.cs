@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,44 +28,44 @@ namespace TP.Data
             _context.Remove(subject);
         }
 
-        public List<Subject> GetAll()
+        public Task<List<Subject>> GetAll()
         {
             var subjectList = _context.Subjects
-                .AsNoTracking()
-                .ToList();
+                                .AsNoTracking()
+                                .ToListAsync();
             return subjectList;
         }
 
-        public Subject GetById(Guid id)
+        public Task<Subject> GetById(Guid id)
         {
-            return _context.Subjects
-                .AsNoTracking()
-                .FirstOrDefault(x => x.Id == id);
+            return  _context.Subjects
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Subject GetByIdWithChild(Guid id)
+        public Task<Subject> GetByIdWithChild(Guid id)
         {
             return _context.Subjects
                 .Include(x => x.ChildSubjects)
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public void UpdateSubjects(Subject subject)
         {
             _context.Subjects.Update(subject);
         }
-        public List<Subject> GetChildSubjects(Guid id)
+        public Task<List<Subject>> GetChildSubjects(Guid id)
         {
             var subjectList = _context.Subjects
                 .Include(x => x.ChildSubjects)
                 .Where(x => x.ParentSubjectId.HasValue && x.ParentSubjectId.Value == id)
                 .AsNoTracking()
-                .ToList();
+                .ToListAsync();
             return subjectList;
         }
     }

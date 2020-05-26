@@ -8,13 +8,13 @@ namespace TP.DataContracts
 {
     public interface ISubjectRepository
     {
-        List<Subject> GetAll();
-        Subject GetById(Guid id);
-        Subject GetByIdWithChild(Guid id);
+        Task<List<Subject>> GetAll();
+        Task<Subject> GetById(Guid id);
+        Task<Subject> GetByIdWithChild(Guid id);
         void Delete(Subject subject);
         void AddSubject(Subject subject);
-        void SaveChanges();
+        Task SaveChanges();
         void UpdateSubjects(Subject subject);
-        List<Subject> GetChildSubjects(Guid id);
+        Task<List<Subject>> GetChildSubjects(Guid id);
     }
 }
