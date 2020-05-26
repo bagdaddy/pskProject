@@ -45,11 +45,20 @@ namespace TP.Data
             int month2 = Math.Abs(month / 3) + 1;
             return month2;
         }
+        //count days by worker id and quarter
         public async Task<int> GetThisQuarter(Guid employeeid, int quarter)
         {
             var workerDaysThisQuarter = _context.Days
                 .CountAsync(x => x.EmployeesId == employeeid && GetQuarter(x.Date) == quarter);
             return await workerDaysThisQuarter;
+        }
+        //PRIDETI i IDaysRepository // isveda darbuotoju id sarasa pagal subject id
+        public async Task<List<Guid>> GetEmployeesBySubject(Guid subjectId)
+        {
+            var employeesList = _context.Days
+                .Where(x => x.SubjectList.Any(y => y.Id == subjectId)).Select(x => x.EmployeesId)
+                .ToListAsync();
+            return await employeesList;
         }
 
         public async Task Delete(Guid id)
