@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
 using TP.DataContracts;
@@ -17,12 +18,14 @@ namespace TP.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeesRepository _repository;
-        private readonly IDTOService _dtoService = new DTOService();
+        private readonly IDTOService _dtoService;
+        private readonly UserManager<Employee> _userManager;
 
-        public EmployeesController(IEmployeesRepository repository, IDTOService dtoService)
+        public EmployeesController(IEmployeesRepository repository, IDTOService dtoService, UserManager<Employee> userManager)
         {
-            this._repository = repository;
-            this._dtoService = dtoService;
+            _repository = repository;
+            _dtoService = dtoService;
+            _userManager = userManager;
         }
         // GET: api/Employees
         [HttpGet]
@@ -66,11 +69,16 @@ namespace TP.Controllers
 
         // PUT: api/Employees/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<EmployeeDTO>> UpdateEmployee([FromBody] UpdateEmployeeRequestModel request)
+        public async Task<ActionResult<EmployeeDTO>> UpdateEmployee(Guid id, [FromBody] UpdateEmployeeRequestModel request)
         {
             try
             {
-                Employee employee = await _repository.UpdateEmployee(request);
+                Employee employee = await _repository.UpdateEmployee(id, request);
+
+                if (request.Email != null && request.Email.ToUpperInvariant() != employee.Email.ToUpperInvariant())
+                {
+                    employee = await UpdateCredentials(employee, request.Email);
+                }
 
                 return _dtoService.EmployeeToDTO(employee);
             }
@@ -80,12 +88,19 @@ namespace TP.Controllers
             }
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteEmployee(Guid id)
+        private async Task<Employee> UpdateCredentials(Employee employee, string updatedEmail)
         {
-            await _repository.Delete(id);
-            return Ok("Deleted maybe");
+            //Update username too
+            string updatedName = updatedEmail.Replace("@", "").Replace(".", "").Replace("-", "");
+            employee.UserName = updatedName;
+            employee.Email = updatedEmail;
+            var response = await _userManager.UpdateAsync(employee);
+
+            if (!response.Succeeded)
+            {
+                throw new InvalidOperationException("Employee email could not be updated.");
+            }
+            return employee;
         }
     }
 }

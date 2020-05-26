@@ -9,7 +9,6 @@ namespace TP.Models.RequestModels
 {
     public class UpdateEmployeeRequestModel
     {
-        public Guid Id { get; set; }
         [MaxLength(25)]
         public string FirstName { get; set; }
         [MaxLength(25)]

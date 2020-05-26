@@ -30,7 +30,7 @@ namespace TP.Data
         {
             using (var appDbContext = _context)
             {
-                return await _context.Employees
+                return await _context.Users
                     .Include(e => e.LearnedSubjects)
                     .ThenInclude(es => es.Subject)
                     .AsNoTracking()
@@ -43,16 +43,16 @@ namespace TP.Data
             using (var appDbContext = _context)
             {
                 Employee employeeToDelete = await GetEmployee(appDbContext, employeeId);
-                appDbContext.Employees.Remove(employeeToDelete);
+                appDbContext.Users.Remove(employeeToDelete);
                 await appDbContext.SaveChangesAsync();
             }
         }
 
-        public async Task<Employee> UpdateEmployee(UpdateEmployeeRequestModel request)
+        public async Task<Employee> UpdateEmployee(Guid id, UpdateEmployeeRequestModel request)
         {
             using (var appDbContext = _context)
             {
-                Employee employee = await GetEmployee(appDbContext, request.Id);
+                Employee employee = await GetEmployee(appDbContext, id);
                 appDbContext.Entry(employee).CurrentValues.SetValues(
                     new
                     {
@@ -78,7 +78,7 @@ namespace TP.Data
 
         private async Task<Employee> GetEmployee(AppDbContext context, Guid id)
         {
-            Employee employee = await context.Employees
+            Employee employee = await context.Users
                 .Include(e => e.LearnedSubjects)
                 .ThenInclude(es => es.Subject)
                 .AsNoTracking()
