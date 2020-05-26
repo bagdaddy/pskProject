@@ -54,6 +54,7 @@ namespace TP.Controllers
 
         // POST: api/Employees
         [HttpPost]
+        [Consumes("application/json")]
         public async Task<ActionResult> CreateEmployee([FromBody] EmployeeRequestModel model)
         {
             Employee employee = new Employee()
@@ -78,6 +79,7 @@ namespace TP.Controllers
 
         // PUT: api/Employees/5
         [HttpPut("{id}")]
+        [Consumes("application/json")]
         public async Task<ActionResult<EmployeeDTO>> UpdateEmployee(Guid id, [FromBody] UpdateEmployeeRequestModel request)
         {
             try

@@ -26,6 +26,7 @@ namespace TP.Controllers
         }
 
         [HttpPost("login")]
+        [Consumes("application/json")]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
             try
@@ -63,6 +64,7 @@ namespace TP.Controllers
         }
 
         [HttpPost("register")]
+        [Consumes("application/json")]
         public async Task<IActionResult> Register([FromBody] RegisterAccountRequest registerAccount)
         {
             // username = email without special symbols
