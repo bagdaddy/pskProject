@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using TP.Data.Entities;
 using TP.DataContracts;
 using TP.Services;
@@ -29,7 +30,7 @@ namespace TP.Controllers
         [HttpGet]
         public async Task<ActionResult<List<TeamDTO>>> GetTeams()
         {
-            List<Team> teams = _teamRepository.getAll();
+            List<Team> teams = await _teamRepository.GetAllTeams();
             //return _dtoService.TeamsToDTO(teams);
             return Ok(teams);
         }
@@ -38,7 +39,7 @@ namespace TP.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> GetTeamById(Guid id)
         {
-            Team team = _teamRepository.getById(id);
+            Team team = await _teamRepository.GetTeamById(id);
             //return _dtoService.TeamToDTO(team);
             return Ok(team);
         }
@@ -55,7 +56,7 @@ namespace TP.Controllers
             };
             try
             {
-                await _repository.CreateEmployee(employee);
+                await _repository.CreateTeam(team);
                 return Ok();
             }
             catch (Exception exception)
@@ -67,14 +68,16 @@ namespace TP.Controllers
 
         // PUT: api/Team/5
         [HttpPut("{id}")]
-        public void UpdateTeam(int id, [FromBody] string value)
+        public void UpdateTeam(Guid id, [FromBody] string value)
         {
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void DeleteTeam(int id)
+        public async Task<ActionResult> DeleteTeam(Guid id)
         {
+            await _teamRepository.DeleteTeam(id);
+            return Ok();
         }
     }
 }

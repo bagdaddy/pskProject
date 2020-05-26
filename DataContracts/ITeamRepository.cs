@@ -6,14 +6,14 @@ using TP.Data.Entities;
 
 namespace TP.DataContracts
 {
-    interface ITeamRepository
+    public interface ITeamRepository
     {
-        List<Team> getAll();
+        Task<List<Team>> GetAllTeams();
 
-        Team getById(Guid id);
+        Task<Team> GetTeamById(Guid id);
 
-        void delete(Guid id);
+        Task DeleteTeam(Guid id);
 
-        Team updateTeam(Team request, Guid id);
+        Task<Team> UpdateTeam(Team request, Guid id);
     }
 }

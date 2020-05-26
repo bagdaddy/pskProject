@@ -76,7 +76,7 @@ namespace TP.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest("Failed to update employee");
+                return BadRequest("Failed to update employee. Message: " + exception.Message);
             }
         }
 
