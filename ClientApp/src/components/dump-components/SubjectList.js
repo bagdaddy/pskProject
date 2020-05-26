@@ -6,7 +6,7 @@ const SubjectList = props => {
             <ul>
                 {props.subjects.map(subject => (
                     <li key={subject.id}>
-                        <a href={"/subject?id=" + subject.id}>{subject.name}</a>
+                        <a href={"/subject/" + subject.id}>{subject.name}</a>
                     </li>
                 ))}
             </ul>

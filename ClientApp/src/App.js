@@ -25,7 +25,7 @@ export default class App extends Component {
         <Route path='/subjects' component={Subjects} />
         <Route path='/add-subject' component={AddSubject} />
         <Route path='/login' component={Login} />
-        <Route path='/subject' component={Subject} />
+        <Route path='/subject/:id' component={Subject} />
       </Layout>
     );
   }
