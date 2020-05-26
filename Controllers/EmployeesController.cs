@@ -39,7 +39,7 @@ namespace TP.Controllers
                 return _dtoService.EmployeesToDTO(employees);
             } catch (Exception exception)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed getting employees");
+                return StatusCode((int)HttpStatusCode.InternalServerError, exception.Message);
             }
             
         }
@@ -95,7 +95,7 @@ namespace TP.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest("Failed to update employee");
+                return BadRequest(exception.Message);
             }
         }
 

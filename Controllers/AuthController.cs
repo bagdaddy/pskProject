@@ -40,27 +40,31 @@ namespace TP.Controllers
                 {
                     Console.WriteLine("User -> " + login.Email + "  login failed.");
                     //Log.Information("Login failed");
-                    return Conflict();
+                    return Conflict("Login failed");
                 }
 
                 Console.WriteLine("User -> " + login.Email + "  logged in successfully!");
                 //Log.Information("Logged in successfully");
-                return NoContent();
+                return Ok("Success");
             }
             catch (Exception exception)
             {
                 //Log.Error(exception, "Failed to login");
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to update");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to log in" + exception.Message);
             }
         }
 
         [HttpGet("role")]
         public async Task<ActionResult<string>> GetRole()
         {
-            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
-            var roles = await _userManager.GetRolesAsync(user);
+            //if (User.Identity.IsAuthenticated == true)
+           // {
+                var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+                var roles = await _userManager.GetRolesAsync(user);
 
-            return roles.FirstOrDefault();
+                return roles.FirstOrDefault();
+           // }
+            return StatusCode((int)HttpStatusCode.Unauthorized, "User ir not logged in");
         }
 
         [HttpPost("register")]
@@ -84,17 +88,17 @@ namespace TP.Controllers
                 {
                     Console.WriteLine("User -> " + registerAccount.Email + "  registration failed.");
                     //Log.Information("Registering user was unsuccessfull");
-                    return Conflict();
+                    return Conflict(result.Errors);
                 }
 
                 Console.WriteLine("User -> " + registerAccount.Email + "  registered successfully!");
                 //Log.Information("Registration succeeded");
-                return NoContent();
+                return Ok(result.Succeeded);
             }
             catch (Exception exception)
             {
                 //Log.Error(exception, "Failed to register user");
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to register user");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to register user. Message: " + exception.Message);
             }
         }
 
@@ -112,7 +116,7 @@ namespace TP.Controllers
             catch (Exception exception)
             {
                 //Log.Error(exception, "Log out failed");
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Log out failed");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Log out failed. Message: " + exception.Message);
             }
         }
     }
