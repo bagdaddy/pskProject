@@ -25,19 +25,18 @@ namespace TP.Controllers
             _subjectControllerService = subjectControllerService;
         }
         [HttpGet("api/GetSubjects")]
-        public IActionResult GetSubjects()
+        public async Task<IActionResult> GetSubjects()
         {
             try
             {
-                var subjects = _subjectRepository.GetAll();
+                var subjects = await _subjectRepository.GetAll();
                 var subjectListHierarchy = new List<Subject>();
-                var test = new List<Subject>();
 
                 foreach (var subject in subjects)
                 {
                     if (!subject.ParentSubjectId.HasValue)
                     {
-                        _subjectControllerService.GetAllSubjects(subject, subjectListHierarchy);
+                        await _subjectControllerService.GetAllSubjects(subject, subjectListHierarchy);
                     }
                 }
                 
@@ -50,11 +49,11 @@ namespace TP.Controllers
         }
 
         [HttpGet("api/GetAllSubjects")]
-        public IActionResult GetAllSubjects()
+        public async Task<IActionResult> GetAllSubjects()
         {
             try
             {
-                var subjects = _subjectRepository.GetAll();
+                var subjects = await _subjectRepository.GetAll();
 
                 return Ok(subjects.MapToResponse());
             }
@@ -64,14 +63,14 @@ namespace TP.Controllers
             }
         }
         [HttpGet("api/GetSubjects/{id}")]
-        public IActionResult GetSubjectsById(Guid id)
+        public async Task<IActionResult> GetSubjectsById(Guid id)
         {
             try
             {
-                var subject = _subjectRepository.GetById(id);
+                var subject = await _subjectRepository.GetById(id);
                 var list = new List<Subject>();
 
-                _subjectControllerService.GetAllSubjects(subject, list);
+                await _subjectControllerService.GetAllSubjects(subject, list);
 
                 return Ok(list);
             }
@@ -82,11 +81,11 @@ namespace TP.Controllers
         }
 
         [HttpGet("api/GetSubject/{id}")]
-        public IActionResult GetSubjectById(Guid id)
+        public async Task<IActionResult> GetSubjectById(Guid id)
         {
             try
             {
-                var subject = _subjectRepository.GetById(id);
+                var subject = await _subjectRepository.GetById(id);
 
                 return Ok(subject);
             }
@@ -97,7 +96,7 @@ namespace TP.Controllers
         }
 
         [HttpPost("api/CreateSubject")]
-        public IActionResult CreateSubject([FromBody]SubjectRequestModel subjectRequestModel)
+        public async Task<IActionResult> CreateSubject([FromBody]SubjectRequestModel subjectRequestModel)
         {
             try
             {
@@ -107,7 +106,7 @@ namespace TP.Controllers
                 }
                 if (subjectRequestModel.ParentSubjectId.HasValue)
                 {
-                    var parentSubject = _subjectRepository.GetById(subjectRequestModel.ParentSubjectId.Value);
+                    var parentSubject = await _subjectRepository.GetById(subjectRequestModel.ParentSubjectId.Value);
                     if (parentSubject == null)
                     {
                         return BadRequest("Parent not found.");
@@ -123,7 +122,7 @@ namespace TP.Controllers
                     var subject = new Subject(subjectRequestModel.Name, null, subjectRequestModel.Description);
                     _subjectRepository.AddSubject(subject);
                 }
-                _subjectRepository.SaveChanges();
+                await _subjectRepository.SaveChanges();
                 return Ok();
             }
             catch(Exception e)
@@ -132,7 +131,7 @@ namespace TP.Controllers
             }
         }
         [HttpPut("api/UpdateSubject")]
-        public IActionResult UpdateSubject([FromBody]UpdateSubjectRequestModel updateSubjectRequestModel)
+        public async Task<IActionResult> UpdateSubject([FromBody]UpdateSubjectRequestModel updateSubjectRequestModel)
         {
             try
             {
@@ -140,7 +139,7 @@ namespace TP.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var subject = _subjectRepository.GetById(updateSubjectRequestModel.Id);
+                var subject = await _subjectRepository.GetById(updateSubjectRequestModel.Id);
 
                 if (subject == null)
                 {
@@ -149,7 +148,7 @@ namespace TP.Controllers
 
                 subject.UpdateSubject(updateSubjectRequestModel.Name, updateSubjectRequestModel.Description);
                 _subjectRepository.UpdateSubjects(subject);
-                _subjectRepository.SaveChanges();
+                await _subjectRepository.SaveChanges();
 
                 return Ok();
             }
@@ -159,11 +158,11 @@ namespace TP.Controllers
             }
         }
         [HttpDelete("api/DeleteSubject/{id}")]
-        public IActionResult DeleteSubject(Guid id)
+        public async Task<IActionResult> DeleteSubject(Guid id)
         {
             try
             {
-                var subject = _subjectRepository.GetByIdWithChild(id);
+                var subject = await _subjectRepository.GetByIdWithChild(id);
 
                 if(subject == null)
                 {
@@ -175,12 +174,12 @@ namespace TP.Controllers
                 }
                 if(subject.ParentSubjectId.HasValue)
                 {
-                    var parentSubject = _subjectRepository.GetById(subject.ParentSubjectId.Value);
+                    var parentSubject = await _subjectRepository.GetById(subject.ParentSubjectId.Value);
                     parentSubject.DeleteChildSubjects(subject);
                 }
 
                 _subjectRepository.Delete(subject);
-                _subjectRepository.SaveChanges();
+                await _subjectRepository.SaveChanges();
 
                 return Ok();
             }

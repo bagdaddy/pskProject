@@ -8,6 +8,6 @@ namespace TP.DataContracts
 {
     public interface ISubjectControllerService
     {
-        List<Subject> GetAllSubjects(Subject currentSubject, List<Subject> subjectListHierarchy);
+        Task<List<Subject>> GetAllSubjects(Subject currentSubject, List<Subject> subjectListHierarchy);
     }
 }
