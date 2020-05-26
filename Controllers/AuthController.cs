@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
+using TP.DataContracts;
 using TP.Models.RequestModels;
 
 namespace TP.Controllers
@@ -19,11 +20,13 @@ namespace TP.Controllers
     {
         private readonly UserManager<Employee> _userManager;
         private readonly SignInManager<Employee> _signInManager;
+        private readonly IDTOService _dtoService;
 
-        public AuthController(SignInManager<Employee> signInManager, UserManager<Employee> userManager)
+        public AuthController(SignInManager<Employee> signInManager, UserManager<Employee> userManager, IDTOService dtoService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _dtoService = dtoService;
         }
 
         [HttpPost("login")]
@@ -55,14 +58,12 @@ namespace TP.Controllers
             }
         }
 
-        [HttpGet("role")]
-        public async Task<ActionResult<string>> GetRole()
+        [HttpGet("self")]
+        public async Task<ActionResult<string>> GetSelf()
         {
            try {
                 var user = await _userManager.GetUserAsync(User);
-                var roles = await _userManager.GetRolesAsync(user);
-
-                return Ok("Logged in as: " + roles.FirstOrDefault());
+                return Ok(_dtoService.EmployeeToDTO(user));
             } catch (Exception exception)
             {
                 //Log.Error(exception, "Failed to get role");
