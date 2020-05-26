@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
@@ -15,6 +16,7 @@ namespace TP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeesRepository _repository;
@@ -31,8 +33,15 @@ namespace TP.Controllers
         [HttpGet]
         public async Task <ActionResult<List<EmployeeDTO>>> GetEmployees()
         {
-            List<Employee> employees = await _repository.GetAll();
-            return _dtoService.EmployeesToDTO(employees);
+            try
+            {
+                List<Employee> employees = await _repository.GetAll();
+                return _dtoService.EmployeesToDTO(employees);
+            } catch (Exception exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed getting employees");
+            }
+            
         }
 
         // GET: api/Employees/5
