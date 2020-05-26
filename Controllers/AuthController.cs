@@ -35,7 +35,7 @@ namespace TP.Controllers
                 // username = email without special symbols
                 string username = login.Email.Replace("@", "").Replace(".", "").Replace("-", "");
 
-                var result = await _signInManager.PasswordSignInAsync(username, login.Password, login.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(username, login.Password, false, false);
 
                 if (!result.Succeeded)
                 {
@@ -58,17 +58,11 @@ namespace TP.Controllers
         [HttpGet("role")]
         public async Task<ActionResult<string>> GetRole()
         {
-            //if (User.Identity.IsAuthenticated == true)
            try {
-                // var user = await _userManager.FindByEmailAsync(User.Identity.Name);
-               // var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-               // var userId2 = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var user = await _userManager.GetUserAsync(User);
-                //var user2 = await _userManager.GetUserAsync(HttpContext.User);
                 var roles = await _userManager.GetRolesAsync(user);
-                
 
-                return roles.FirstOrDefault();
+                return Ok("Logged in as: " + roles.FirstOrDefault());
             } catch (Exception exception)
             {
                 //Log.Error(exception, "Failed to get role");
