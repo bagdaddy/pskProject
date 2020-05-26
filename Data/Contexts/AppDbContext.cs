@@ -10,6 +10,7 @@ namespace TP.Data.Contexts
 {
     public class AppDbContext : DbContext
     {
+        public DbSet<Day> Days { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeSubject> EmployeeSubjects { get; set; }
@@ -17,6 +18,7 @@ namespace TP.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new DayEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
 
