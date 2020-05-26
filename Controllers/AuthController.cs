@@ -61,9 +61,12 @@ namespace TP.Controllers
             //if (User.Identity.IsAuthenticated == true)
            try {
                 // var user = await _userManager.FindByEmailAsync(User.Identity.Name);
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+               // var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+               // var userId2 = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var user = await _userManager.GetUserAsync(User);
+                //var user2 = await _userManager.GetUserAsync(HttpContext.User);
                 var roles = await _userManager.GetRolesAsync(user);
+                
 
                 return roles.FirstOrDefault();
             } catch (Exception exception)
