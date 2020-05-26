@@ -1,14 +1,12 @@
 ﻿import React, { useEffect, useState } from 'react';
 import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
-import * as qs from 'query-string';
 
-let authenticatedUserId = "5a677c6e-56e5-4cf1-9c64-157b483e8eff";
+sessionStorage.setItem('userId', '5a677c6e-56e5-4cf1-9c64-157b483e8eff');
 
-function Employee () {
+function Employee (props) {
     const [employee, setEmployee] = useState({});
     const [allEmployees, setEmployees] = useState([]);
-    const parsed = qs.parse(window.location.search);
 
     const fetchData = React.useCallback((id) => {
         fetch('api/Employees/' + id)
@@ -26,25 +24,15 @@ function Employee () {
     });
 
     useEffect(() => {
-        if (Object.keys(parsed).length > 0) {
-            fetchData(parsed.id);
+        console.log("nice");
+        if (props.match.params.id) {
+            fetchData(props.match.params.id);
         } else {
-            fetchData(authenticatedUserId);
+            console.log("haha");
+            fetchData(sessionStorage.getItem('userId'));
         }
         fetchAllEmployees();
     }, []);
-
-    useEffect(() => {
-        var parse = qs.parse(window.location.search);
-        console.log(parse);
-        if(Object.keys(parse).length > 0 && parse.id !== employee.id){
-            fetchData(parse.id);
-        }else{
-            if(employee.id != authenticatedUserId){
-                fetchData(authenticatedUserId);
-            }
-        }
-    }, [window.location.search])
 
 
     if (employee) {
