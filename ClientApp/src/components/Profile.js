@@ -1,10 +1,10 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
 
 sessionStorage.setItem('userId', '5a677c6e-56e5-4cf1-9c64-157b483e8eff');
 
-function Employee (props) {
+function Profile(props) {
     const [employee, setEmployee] = useState({});
     const [allEmployees, setEmployees] = useState([]);
 
@@ -47,13 +47,13 @@ function Employee (props) {
                     <div className="col-lg-4 col-md-4 sidebar">
                         {employee.hasOwnProperty("team") && employee.team.length > 0 && (
                             <div>
-                                <h3>{employee.firstName} team:</h3>
+                                <h3>Your team:</h3>
                                 <TeamList team={employee.team} />
                             </div>
                         )}
                         {employee.hasOwnProperty("subjects") && employee.subjects.length > 0 && (
-                            <div className="subjects">
-                                <h3>{employee.firstName} has learned: </h3>
+                            <div>
+                                <h3>Your subjects: </h3>
                                 <SubjectList subjects={employee.subjects} />
                             </div>
                         )}
@@ -67,20 +67,7 @@ function Employee (props) {
                 </div>
             </div>
         );
-    } else {
-        return (
-            <div>
-                <h2>Šio profilio matyti negalite</h2>
-            </div>
-        )
     }
-
 };
 
-// ReactDOM.render(
-//     <Employee/>,
-//     document.getElementById("profile")
-// );
-
-export default Employee;
-
+export default Profile;
