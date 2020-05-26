@@ -50,7 +50,6 @@ namespace TP.Data
             var workerDaysThisQuarter = _context.Days
                 .CountAsync(x => x.EmployeesId == employeeid && GetQuarter(x.Date) == quarter);
             return await workerDaysThisQuarter;
-            
         }
 
         public async Task Delete(Guid id)
