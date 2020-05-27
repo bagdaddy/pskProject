@@ -3,30 +3,43 @@ import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
 import Employee from './components/Employee';
 import Subjects from './components/Subjects';
 import AddSubject from './components/AddSubject';
 import Subject from './components/Subject';
 import LearningTree from './components/LearningTree';
 import Login from './components/Login';
+import Profile from './components/Profile';
+import Logout from './components/Logout';
+import { ProtectedRoute, UnauthenticatedRoute } from './components/routes/Routes';
 import Invitation from './components/Invitation';
 
 export default class App extends Component {
-  static displayName = App.name;
+  static displayName = "Mokymosi dienu kalendorius";
   
   render () {
     return (
       <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/profile/:id?' component={Employee} />
-        <Route path='/fetch-data' component={FetchData} />
+        <Route path="/login" component={Login} />
+        <Route path="/logout" component={Logout} />
+        <Route path='/me' component={Profile} />
+        <Route path='/employee/:id' component={Employee} />
         <Route path='/learningTree/:id?' component={LearningTree} />
         <Route path='/subjects' component={Subjects} />
         <Route path='/add-subject' component={AddSubject} />
-        <Route path='/login' component={Login} />
         <Route path='/subject/:id' component={Subject} />
+
+        {/*Kol kas paliekam uzkomentuota, kad nereiktu prisijungti kiekviena karta kai padarom kazkokiu pakeitimu*/ }
+        {/* <ProtectedRoute exact path='/' component={Home} />
+        <UnauthenticatedRoute path="/login" component={Login} />
+        <ProtectedRoute path="/logout" component={Logout} />
+        <ProtectedRoute path='/me' component={Profile} />
+        <ProtectedRoute path='/employee/:id' component={Employee} />
+        <ProtectedRoute path='/learningTree/:id?' component={LearningTree} />
+        <ProtectedRoute path='/subjects' component={Subjects} />
+        <ProtectedRoute path='/add-subject' component={AddSubject} />
+        <ProtectedRoute path='/subject/:id' component={Subject} /> */}
         <Route path='/invitation' component={Invitation} />
       </Layout>
     );

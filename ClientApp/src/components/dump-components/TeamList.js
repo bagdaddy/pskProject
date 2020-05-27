@@ -7,7 +7,7 @@ const TeamList = props => {
                 <ul>
                     {props.team.map(employee => (
                         <li key={employee.id}>
-                            <a href={"/profile/" + employee.id}>{employee.firstName + " " + employee.lastName}</a>
+                            <a href={"/employee/" + employee.id}>{employee.firstName + " " + employee.lastName}</a>
                         </li>
                     ))}
                 </ul>
