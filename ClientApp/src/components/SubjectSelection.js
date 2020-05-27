@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
-import subjects from './testSubjects'
+import subjects from './testSubjects';
 
 const SubjectSelection = forwardRef((props, ref) => {
   
@@ -45,32 +45,22 @@ const SubjectSelection = forwardRef((props, ref) => {
     } 
 
     useEffect(() => {  
-        var n;
         var i;
         if(props.dates.length){
             for(i = 0; i<props.dates.length; ++i){
                 if(props.dates[i].date.getTime() === date.getTime()){
-                    setSubjectsSelected(props.dates[i].subjects)
-                    setComment(props.dates[i].comment)
-                    setNum(i)
-                    n = i
+                    setSubjectsSelected(props.dates[i].subjects);
+                    setComment(props.dates[i].comment);
+                    setNum(i);
                 }
             }
         }
-        if(!n){
-            newDateOpened()
-        }
         return function cleanup() {
+            setSubjectsSelected([null, null, null, null]);
+            setComment("");
             setNum(null);
           };
-      
     },[date]);
-
-    const newDateOpened = () => {
-        setSubjectsSelected([null, null, null, null]);
-        setComment("");
-        setNum(null);
-    }
 
     const onDeleteButtonClick = () => {
         if(subjectsSelected[0]){
@@ -108,6 +98,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     function IsDateDeletable(){
         return !HasDayPassed() && num? 1:0
     }
+
     function IsDateAddableAndChangable(){
         if(num){
             return !HasDayPassed()? 1:0
