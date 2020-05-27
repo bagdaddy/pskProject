@@ -225,3 +225,7 @@
 .subjects ul li a{
     color: gray;
 }
+
+.text-red{
+    color: #df6767 !important;
+}

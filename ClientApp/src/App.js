@@ -19,7 +19,17 @@ export default class App extends Component {
   render () {
     return (
       <Layout>
-        <ProtectedRoute exact path='/' component={Home} />
+        <Route exact path='/' component={Home} />
+        <Route path="/login" component={Login} />
+        <Route path="/logout" component={Logout} />
+        <Route path='/me' component={Profile} />
+        <Route path='/employee/:id' component={Employee} />
+        <Route path='/learningTree/:id?' component={LearningTree} />
+        <Route path='/subjects' component={Subjects} />
+        <Route path='/add-subject' component={AddSubject} />
+        <Route path='/subject/:id' component={Subject} />
+        {/*Kol kas paliekam uzkomentuota, kad nereiktu prisijungti kiekviena karta kai padarom kazkokiu pakeitimu*/ }
+        {/* <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />
         <ProtectedRoute path="/logout" component={Logout} />
         <ProtectedRoute path='/me' component={Profile} />
@@ -27,7 +37,7 @@ export default class App extends Component {
         <ProtectedRoute path='/learningTree/:id?' component={LearningTree} />
         <ProtectedRoute path='/subjects' component={Subjects} />
         <ProtectedRoute path='/add-subject' component={AddSubject} />
-        <ProtectedRoute path='/subject/:id' component={Subject} />
+        <ProtectedRoute path='/subject/:id' component={Subject} /> */}
       </Layout>
     );
   }

@@ -32,7 +32,7 @@ export class NavMenu extends Component {
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
-                {auth.isAuthenticated() &&
+                {auth.isAuthenticated() || !auth.isAuthenticated() &&
                   <React.Fragment>
                     <NavItem>
                       <NavLink tag={Link} className="text-dark" to="/">Calendar</NavLink>
@@ -46,13 +46,16 @@ export class NavMenu extends Component {
                     <NavItem>
                       <NavLink tag={Link} className="text-dark" to="/learningTree">Your learning</NavLink>
                     </NavItem>
+                    <NavItem>
+                      <NavLink tag={Link} className="text-red" to="/logout">Log out</NavLink>
+                    </NavItem>
                   </React.Fragment>}
-                {
+                {/* {
                   !auth.isAuthenticated() &&
                   <NavItem>
                     <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
                   </NavItem>
-                }
+                } */}
 
               </ul>
             </Collapse>
