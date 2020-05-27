@@ -39,6 +39,12 @@ namespace TP
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
             services.AddScoped<ISubjectControllerService, SubjectControllerService>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<ITeamControllerService, TeamControllerService>();
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddControllers();
             //SWAGGER

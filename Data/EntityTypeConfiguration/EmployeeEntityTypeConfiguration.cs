@@ -18,7 +18,7 @@ namespace TP.Data.EntityTypeConfiguration
             builder.Property(x => x.FirstName).IsRequired();
             builder.Property(x => x.LastName).IsRequired();
             builder.Property(x => x.Email).IsRequired();
-
+            builder.HasMany(x => x.Subordinates).WithOne().HasForeignKey(x => x.BossId);
         }
     }
 }

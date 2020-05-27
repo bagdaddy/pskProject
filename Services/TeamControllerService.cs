@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TP.Data;
 using TP.Data.Entities;
 using TP.DataContracts;
 
@@ -10,26 +9,35 @@ namespace TP.Services
 {
     public class TeamControllerService : ITeamControllerService
     {
-
-        private readonly ITeamRepository teamRepository = new TeamRepository();
-        public void delete(Guid id)
+        private readonly ITeamRepository _teamRepository;
+        public TeamControllerService(ITeamRepository teamRepository)
         {
-            throw new NotImplementedException();
+            _teamRepository = teamRepository;
         }
-
-        public List<Team> getAll()
+        public async Task<List<Employee>> GetAllTeams(Employee currentEmployee, List<Employee> employeeListHierarchy)
         {
-            return teamRepository.getAll();
-        }
+            var subordinates = await _teamRepository.GetSubordinates(currentEmployee.Id);
 
-        public Team getById(Guid id)
-        {
-            return teamRepository.getById(id);
-        }
+            if (subordinates.Any())
+            {
+                subordinates.ForEach(x => x.Subordinates.Clear());
+                for (int i = 0; i < subordinates.Count; i++)
+                {
+                    Employee employee = subordinates[i];
+                    var subordinateList = new List<Employee>();
+                    var testSubordinates = await GetAllTeams(employee, subordinateList);
 
-        public Team updateEmployee(Team request, Guid id)
-        {
-            throw new NotImplementedException();
+                    currentEmployee.Subordinates.AddRange(testSubordinates);
+                }
+
+                employeeListHierarchy.Add(currentEmployee);
+            }
+            else
+            {
+                employeeListHierarchy.Add(currentEmployee);
+            }
+
+            return employeeListHierarchy;
         }
     }
 }

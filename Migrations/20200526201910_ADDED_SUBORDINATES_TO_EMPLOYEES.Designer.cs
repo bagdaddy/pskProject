@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP.Data.Contexts;
 
 namespace TP.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class SubjectContextModelSnapshot : ModelSnapshot
+    [Migration("20200526201910_ADDED_SUBORDINATES_TO_EMPLOYEES")]
+    partial class ADDED_SUBORDINATES_TO_EMPLOYEES
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -6,51 +6,120 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
 using TP.DataContracts;
+using TP.Models.RequestModels;
+using TP.Models.ResponseModels;
 using TP.Services;
 using TP.Services.DTOServices.Models;
 
 namespace TP.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class TeamController : ControllerBase
     {
-
-        private readonly ITeamControllerService _controllerService = new TeamControllerService();
-        private readonly IDTOService _dtoService = new DTOService();
-
-        // GET: api/Team
-        [HttpGet]
-        public ActionResult<List<TeamDTO>> GetTeams()
+        private readonly ITeamRepository _teamRepository;
+        private readonly ITeamControllerService _teamControllerService;
+        public TeamController(ITeamRepository teamRepository, ITeamControllerService teamControllerService)
         {
-            List<Team> teams = _controllerService.getAll();
-            return _dtoService.TeamsToDTO(teams);
+            _teamRepository = teamRepository;
+            _teamControllerService = teamControllerService;
         }
-
-        // GET: api/Team/5
-        [HttpGet("{id}")]
-        public ActionResult<TeamDTO> GetTeamById(Guid id)
+        [HttpGet("api/GetTeams")]
+        public async Task<IActionResult> GetTeams()
         {
-            Team team = _controllerService.getById(id);
-            return _dtoService.TeamToDTO(team);
+            try
+            {
+                var teams = await _teamRepository.GetAll();
+                var teamListHierarchy = new List<Employee>();
+
+                foreach (var team in teams)
+                {
+                    if (!team.BossId.HasValue)
+                    {
+                        await _teamControllerService.GetAllTeams(team, teamListHierarchy);
+                    }
+                }
+
+                return Ok(teamListHierarchy);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
-
-        // POST: api/Team
-        [HttpPost]
-        public void CreateTeam([FromBody] string value)
+        [HttpGet("api/GetTeams/{id}")]
+        public async Task<IActionResult> GetTeamsById(Guid id)
         {
+            try
+            {
+                var team = await _teamRepository.GetById(id);
+                var list = new List<Employee>();
+
+                await _teamControllerService.GetAllTeams(team, list);
+
+                return Ok(list);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
-
-        // PUT: api/Team/5
-        [HttpPut("{id}")]
-        public void UpdateTeam(int id, [FromBody] string value)
+        [HttpPut("api/UpdateTeamMember")]
+        public async Task<IActionResult> UpdateTeamMember([FromBody]UpdateTeamRequestModel teamRequestModel)
         {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var employee = await _teamRepository.GetById(teamRequestModel.Id);
+
+                if(employee == null)
+                {
+                    return BadRequest("Employee does not exist");
+                }
+
+                var boss = await _teamRepository.GetById(teamRequestModel.BossId);
+
+                if(boss == null)
+                {
+                    return BadRequest("Given new boss does not exist");
+                }
+
+                await _teamRepository.UpdateTeam(teamRequestModel);
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void DeleteTeam(int id)
+        [HttpDelete("api/DeleteFromTeam/{id}")]
+        public async Task<IActionResult> DeleteFromTeam(Guid id)
         {
+            try
+            {
+                var employee = await _teamRepository.GetById(id);
+
+                if(employee == null)
+                {
+                    return BadRequest("No employee found");
+                }
+                if(employee.Subordinates.Any())
+                {
+                    return BadRequest("Cannot remove employee that has subordinates");
+                }
+
+                _teamRepository.Delete(employee);
+                await _teamRepository.SaveChanges();
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ namespace TP.Data.Entities
     {
    
         public Guid Id { get; set; }
+        public Guid? BossId { get; set; }
         [MaxLength(50)]
         public string FirstName { get; set; }
         [MaxLength(50)]
@@ -18,5 +19,6 @@ namespace TP.Data.Entities
         [EmailAddress]
         public string Email { get; set; }
         public List<EmployeeSubject> LearnedSubjects { get; set; }
+        public List<Employee> Subordinates { get; set; } = new List<Employee>();
     }
 }
