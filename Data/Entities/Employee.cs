@@ -9,14 +9,11 @@ namespace TP.Data.Entities
 {
     public class Employee  : IdentityUser<Guid>
     {
-   
-        public Guid Id { get; set; }
         public Guid? BossId { get; set; }
         [MaxLength(50)]
         public string FirstName { get; set; }
         [MaxLength(50)]
         public string LastName { get; set; }
-        [EmailAddress]
         public List<EmployeeSubject> LearnedSubjects { get; set; }
         public List<Employee> Subordinates { get; set; } = new List<Employee>();
     }

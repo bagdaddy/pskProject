@@ -20,7 +20,7 @@ namespace TP.Data
 
         public Task<List<Employee>> GetAll()
         {
-            var teamList = _context.Employees
+            var teamList = _context.Users
                             .Include(x => x.LearnedSubjects)
                             .ThenInclude(xx => xx.Subject)
                             .AsNoTracking()
@@ -31,7 +31,7 @@ namespace TP.Data
 
         public Task<Employee> GetById(Guid id)
         {
-            return _context.Employees
+            return _context.Users
                     .Include(x => x.LearnedSubjects)
                     .ThenInclude(xx => xx.Subject)
                     .AsNoTracking()
@@ -40,7 +40,7 @@ namespace TP.Data
 
         public Task<Employee> GetByIdWithSubordinates(Guid id)
         {
-            return _context.Employees
+            return _context.Users
                     .Include(x => x.Subordinates)
                     .FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -55,7 +55,7 @@ namespace TP.Data
         }
         public Task<List<Employee>> GetSubordinates(Guid id)
         {
-            var subordinateList = _context.Employees
+            var subordinateList = _context.Users
                 .Include(x => x.LearnedSubjects)
                 .ThenInclude(xx => xx.Subject)
                 .Include(x => x.Subordinates)
