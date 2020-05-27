@@ -84,6 +84,10 @@ namespace TP
                 options.SlidingExpiration = true;
             });
 
+            services.AddHttpContextAccessor();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IEmailSender, EmailSender>();
+
             services.AddControllers();
             //SWAGGER
             services.AddSwaggerGen(c =>

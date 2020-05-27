@@ -10,6 +10,7 @@ import AddSubject from './components/AddSubject';
 import Subject from './components/Subject';
 import LearningTree from './components/LearningTree';
 import Login from './components/Login';
+import Invitation from './components/Invitation';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -26,6 +27,7 @@ export default class App extends Component {
         <Route path='/add-subject' component={AddSubject} />
         <Route path='/login' component={Login} />
         <Route path='/subject/:id' component={Subject} />
+        <Route path='/invitation' component={Invitation} />
       </Layout>
     );
   }
