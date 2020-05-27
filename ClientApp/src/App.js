@@ -12,6 +12,7 @@ import Login from './components/Login';
 import Profile from './components/Profile';
 import Logout from './components/Logout';
 import { ProtectedRoute, UnauthenticatedRoute } from './components/routes/Routes';
+import Invitation from './components/Invitation';
 
 export default class App extends Component {
   static displayName = "Mokymosi dienu kalendorius";
@@ -28,6 +29,7 @@ export default class App extends Component {
         <Route path='/subjects' component={Subjects} />
         <Route path='/add-subject' component={AddSubject} />
         <Route path='/subject/:id' component={Subject} />
+
         {/*Kol kas paliekam uzkomentuota, kad nereiktu prisijungti kiekviena karta kai padarom kazkokiu pakeitimu*/ }
         {/* <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />
@@ -38,6 +40,7 @@ export default class App extends Component {
         <ProtectedRoute path='/subjects' component={Subjects} />
         <ProtectedRoute path='/add-subject' component={AddSubject} />
         <ProtectedRoute path='/subject/:id' component={Subject} /> */}
+        <Route path='/invitation' component={Invitation} />
       </Layout>
     );
   }
