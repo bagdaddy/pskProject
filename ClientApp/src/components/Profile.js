@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
 
-sessionStorage.setItem('userId', '5a677c6e-56e5-4cf1-9c64-157b483e8eff');
 
 function Profile(props) {
     const [employee, setEmployee] = useState({});
     const [allEmployees, setEmployees] = useState([]);
 
-    const fetchData = React.useCallback((id) => {
-        fetch('api/Employees/' + id)
+    const fetchData = React.useCallback(() => {
+        fetch('api/Auth/self')
             .then(response => response.json())
             .then(data => setEmployee(data))
             .catch(error => {
@@ -24,13 +23,7 @@ function Profile(props) {
     });
 
     useEffect(() => {
-        console.log("nice");
-        if (props.match.params.id) {
-            fetchData(props.match.params.id);
-        } else {
-            console.log("haha");
-            fetchData(sessionStorage.getItem('userId'));
-        }
+        fetchData();
         fetchAllEmployees();
     }, []);
 

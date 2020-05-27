@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import auth from './Auth';
 
 const Login = props => {
 
@@ -17,8 +18,9 @@ const Login = props => {
             })
         };
 
-        fetch('api/Auth/login', requestOptions)
-            .then(response => response.ok ? window.location = "/" : response.json());
+        auth.login(requestOptions, ()=>{
+            props.history.push("/me");
+        })
     };
 
     return (
