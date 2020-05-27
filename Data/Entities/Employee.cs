@@ -7,16 +7,14 @@ using System.Threading.Tasks;
 
 namespace TP.Data.Entities
 {
-    public class Employee // : IdentityUser<Guid>
+    public class Employee  : IdentityUser<Guid>
     {
    
-        public Guid Id { get; set; }
         [MaxLength(50)]
         public string FirstName { get; set; }
         [MaxLength(50)]
         public string LastName { get; set; }
         [EmailAddress]
-        public string Email { get; set; }
         public List<EmployeeSubject> LearnedSubjects { get; set; }
     }
 }

@@ -1,13 +1,17 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using Microsoft.OpenApi.Models;
 using TP.Data;
 using TP.Data.Contexts;
+using TP.Data.Entities;
 using TP.DataContracts;
 using TP.Services;
 
@@ -40,11 +44,52 @@ namespace TP
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
             services.AddScoped<ISubjectControllerService, SubjectControllerService>();
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            services.AddIdentity<Employee, Role>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                //PASSWORD SETTINGS
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+
+                //LOCKOUT SETTINGS
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                options.User.RequireUniqueEmail = true;
+            }
+            );
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings 
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                // If the LoginPath isn't set, ASP.NET Core defaults  
+                // the path to /Account/Login. 
+                options.LoginPath = "/Account/Login";
+                // If the AccessDeniedPath isn't set, ASP.NET Core defaults  
+                // the path to /Account/AccessDenied. 
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
             services.AddControllers();
             //SWAGGER
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
             });
         }
 
@@ -76,6 +121,7 @@ namespace TP
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>
