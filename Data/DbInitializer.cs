@@ -12,7 +12,7 @@ namespace TP.Data
         public static void Initialize(AppDbContext context)
         {
             context.Database.EnsureCreated();
-            if (context.Employees.Any() && context.Subjects.Any())
+            if (context.Users.Any() && context.Subjects.Any())
             {
                 return; // DB has been seeded
             }
@@ -105,7 +105,7 @@ namespace TP.Data
                 Email = "mm.su.grietinyte@gmail.com"
             }
             };
-            context.Employees.AddRange(employees);
+            context.Users.AddRange(employees);
             context.SaveChanges();
 
             var parentSubject = new Subject("Programming", null, "description description text");
