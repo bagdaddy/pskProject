@@ -5,8 +5,20 @@ const Login = props => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        let email = document.getElementById("email");
-        let password = document.getElementById("password");
+        let userEmail = document.getElementById("email").value;
+        let userPw = document.getElementById("password").value;
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: userEmail,
+                password: userPw
+            })
+        };
+
+        fetch('api/Auth/login', requestOptions)
+            .then(response => response.ok ? window.location = "/" : response.json());
     };
 
     return (
