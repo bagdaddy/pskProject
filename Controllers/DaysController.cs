@@ -25,6 +25,7 @@ namespace TP.Controllers
         public async Task<IActionResult> getAll(Guid employeeid)
         {
             List<Day> days = await _repository.GetAll(employeeid);
+            return Ok();
         }
 
         //get signle by object id
@@ -32,6 +33,7 @@ namespace TP.Controllers
         public async Task<IActionResult> getSingle(Guid id)
         {
             Day day = await _repository.GetSingle(id);
+            return Ok();
         }
 
         //get signle by worker id and date
@@ -39,6 +41,7 @@ namespace TP.Controllers
         public async Task<IActionResult> getSingle(Guid employeeid, DateTime date)
         {
             Day day = await _repository.GetSingle(employeeid,date);
+            return Ok();
         }
 
         //count days by worker id and quarter
@@ -46,11 +49,14 @@ namespace TP.Controllers
         public async Task<IActionResult> getDatesThisQuarter(Guid employeeid, int quarter)
         {
             int dayCount = await _repository.GetThisQuarter(employeeid,quarter);
+            return Ok();
         }
-        [HttpGet("{workerId}/{quarter}")]
+        // isveda darbuotoju id sarasa pagal subject id
+        [HttpGet("{subjectId}")]
         public async Task<IActionResult> GetEmployeesBySubject(Guid subjectId)
         {
             List<Guid> employeesId = await _repository.GetEmployeesBySubject(subjectId);
+            return Ok();
         }
 
         // DELETE by object id
