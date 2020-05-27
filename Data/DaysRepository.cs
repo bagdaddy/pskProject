@@ -52,7 +52,7 @@ namespace TP.Data
                 .CountAsync(x => x.EmployeesId == employeeid && GetQuarter(x.Date) == quarter);
             return await workerDaysThisQuarter;
         }
-        //PRIDETI i IDaysRepository // isveda darbuotoju id sarasa pagal subject id
+        // isveda darbuotoju id sarasa pagal subject id
         public async Task<List<Guid>> GetEmployeesBySubject(Guid subjectId)
         {
             var employeesList = _context.Days

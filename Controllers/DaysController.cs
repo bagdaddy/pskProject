@@ -47,6 +47,11 @@ namespace TP.Controllers
         {
             int dayCount = await _repository.GetThisQuarter(employeeid,quarter);
         }
+        [HttpGet("{workerId}/{quarter}")]
+        public async Task<IActionResult> GetEmployeesBySubject(Guid subjectId)
+        {
+            List<Guid> employeesId = await _repository.GetEmployeesBySubject(subjectId);
+        }
 
         // DELETE by object id
         [HttpDelete("{id}")]

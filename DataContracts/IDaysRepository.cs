@@ -11,6 +11,7 @@ namespace TP.DataContracts
         Task<Day> GetSingle(Guid id);
         Task<Day> GetSingle(Guid employeeid, DateTime date);
         Task<int> GetThisQuarter(Guid employeeid, int quarter);
+        Task<List<Guid>> GetEmployeesBySubject(Guid subjectId);
         Task Delete(Guid id);
     }
 }
