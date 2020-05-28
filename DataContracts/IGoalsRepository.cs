@@ -10,5 +10,6 @@ namespace TP.DataContracts
         Task<List<Goal>> GetAll(Guid employeeId);
         Task<Goal> GetById(Guid id);
         Task AddGoal(Goal goal);
+        Task Delete(Guid id);
     }
 }

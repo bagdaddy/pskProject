@@ -33,5 +33,15 @@ namespace TP.Data
                     .ToListAsync();
             return await goalList;
         }
+
+        public async Task Delete(Guid id)
+        {
+            using (var appDbContext = _context)
+            {
+                Goal goalToDelete = await GetById(id);
+                appDbContext.Goals.Remove(goalToDelete);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

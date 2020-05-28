@@ -62,6 +62,13 @@ namespace TP.Controllers
             }
 
         }
+        // DELETE by object id
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            await _repository.Delete(id);
+            return Ok("Deleted maybe");
+        }
     }
 
 }
