@@ -63,7 +63,11 @@ namespace TP.Controllers
         {
            try {
                 var user = await _userManager.GetUserAsync(User);
-                return Ok(_dtoService.EmployeeToDTO(user));
+                if (user != null)
+                {
+                    return Ok(_dtoService.EmployeeToDTO(user));
+                }
+                return NotFound();
             } catch (Exception exception)
             {
                 //Log.Error(exception, "Failed to get role");

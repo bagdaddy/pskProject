@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
 using TP.DataContracts;
+using TP.Models.RequestModels;
 using TP.Services;
 
 namespace TP.Controllers
@@ -14,57 +15,115 @@ namespace TP.Controllers
     public class DaysController : ControllerBase
     {
         private readonly IDaysRepository _repository;
-        private readonly IDTOService _dtoService = new DTOService();
+        private readonly IDTOService _dtoService;
         public DaysController(IDaysRepository repository, IDTOService dtoService)
         {
-            this._repository = repository;
-            this._dtoService = dtoService;
+            _repository = repository;
+            _dtoService = dtoService;
         }
 
-        [HttpGet("{workerId}")]
-        public async Task<IActionResult> getAll(Guid employeeid)
+        [HttpGet("api/GetDayByEmployeeId/{employeeId}")]
+        public async Task<IActionResult> getAll(Guid employeeId)
         {
-            List<Day> days = await _repository.GetAll(employeeid);
-            return Ok();
+            List<Day> days = await _repository.GetAll(employeeId);
+            return Ok(days);
         }
 
         //get signle by object id
-        [HttpGet("{id}")]
+        [HttpGet("api/GetDayById/{id}")]
         public async Task<IActionResult> getSingle(Guid id)
         {
-            Day day = await _repository.GetSingle(id);
-            return Ok();
+            try
+            {
+                Day day = await _repository.GetSingle(id);
+                return Ok(day);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         //get signle by worker id and date
-        [HttpGet("{workerId}/{date}")]
-        public async Task<IActionResult> getSingle(Guid employeeid, DateTime date)
+        [HttpGet("api/GetDayByDate/{employeeId}/{date}")]
+        public async Task<IActionResult> getSingle(Guid employeeId, DateTime date)
         {
-            Day day = await _repository.GetSingle(employeeid,date);
-            return Ok();
+            try
+            {
+                Day day = await _repository.GetSingle(employeeId, date);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return NotFound("Failed to get day with error: " + e.Message);
+            }
         }
 
         //count days by worker id and quarter
-        [HttpGet("{workerId}/{quarter}")]
-        public async Task<IActionResult> getDatesThisQuarter(Guid employeeid, int quarter)
+        [HttpGet("api/GetDaysInQuarter/{employeeId}/{quarter}")]
+        public async Task<IActionResult> getDatesThisQuarter(Guid employeeId, int quarter)
         {
-            int dayCount = await _repository.GetThisQuarter(employeeid,quarter);
-            return Ok();
+            try
+            {
+                int dayCount = await _repository.GetThisQuarter(employeeId, quarter);
+                return Ok(dayCount);
+            }
+            catch(Exception e)
+            {
+                // log exception
+                return NotFound("failed to get days with error: " + e.Message);
+            }
         }
-        // isveda darbuotoju id sarasa pagal subject id
-        [HttpGet("{subjectId}")]
+        // isveda darbuotoju sarasa pagal subject id
+        [HttpGet("api/GetEmployeesBySubjectId/{subjectId}")]
         public async Task<IActionResult> GetEmployeesBySubject(Guid subjectId)
         {
-            List<Guid> employeesId = await _repository.GetEmployeesBySubject(subjectId);
-            return Ok();
+            try
+            {
+                List<Employee> employees = await _repository.GetEmployeesBySubject(subjectId);
+                return Ok(_dtoService.EmployeesToDTO(employees));
+            }
+            catch (Exception e)
+            {
+                return NotFound("Failed to get employees with error: " + e.Message);
+            }
+        }
+
+        //CREATE new Day
+        [HttpPost("api/CreateDay")]
+        [Consumes("application/json")]
+        public async Task<ActionResult> CreateDay([FromBody] DayRequestModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _repository.Create(model);
+                return Ok(model);
+            }
+            catch (Exception e)
+            {
+                // log error
+                return BadRequest("Error occured: " + e.Message);
+            }
         }
 
         // DELETE by object id
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteDay/{id}")]
         public async Task<ActionResult> deleteDateAsync(Guid id)
         {
-            await _repository.Delete(id);
-            return Ok("Deleted maybe");
+            try
+            {
+                await _repository.Delete(id);
+                return Ok("Deleted day with id: " + id);
+            }
+            catch (Exception e)
+            {
+                //Log exception
+                return NotFound("Failed to delete day with error: " + e.Message);
+            }
         }
     }
 }

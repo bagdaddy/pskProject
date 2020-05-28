@@ -43,6 +43,7 @@ namespace TP
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
             services.AddScoped<ISubjectControllerService, SubjectControllerService>();
+            services.AddScoped<IDaysRepository, DaysRepository>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 

@@ -33,6 +33,10 @@ namespace TP.Data.Contexts
                 .HasOne(es => es.Subject)
                 .WithMany(s => s.EmployeesWhoLearnedIt)
                 .HasForeignKey(es => es.SubjectId);
+
+            modelBuilder.Entity<Day>()
+                .HasOne(d => d.Employee)
+                .WithMany();
         }
 
     }
