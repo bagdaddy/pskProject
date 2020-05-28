@@ -5,7 +5,7 @@ namespace TP.Models.RequestModels
 {
     public class GoalRequestModel
     {
-        public Employee Employee { get; set; }
-        public Subject Subject { get; set; }
+        public Guid EmployeeId { get; set; }
+        public Guid SubjectId { get; set; }
     }
 }

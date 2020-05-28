@@ -8,7 +8,10 @@ namespace TP.DataContracts
     public interface IGoalsRepository
     {
         Task<List<Goal>> GetAll(Guid employeeId);
+        Task<List<Goal>> GetByIdWithMembers(Guid id);
         Task<Goal> GetById(Guid id);
-        Task AddGoal(Goal goal);
+        void AddGoal(Goal goal);
+        void Remove(Goal goal);
+        Task SaveChanges();
     }
 }

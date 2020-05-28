@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
 using TP.DataContracts;
 using TP.Models.RequestModels;
+using TP.Models.ResponseModels;
 
 namespace TP.Controllers
 {
@@ -15,52 +17,64 @@ namespace TP.Controllers
     public class GoalsController:ControllerBase
     {
         private readonly IGoalsRepository _repository;
-        public GoalsController(IGoalsRepository repository)
+        private readonly IEmployeesRepository _employeeRepository;
+        private readonly ISubjectRepository _subjectRepository;
+        private readonly IMapper _mapper;
+        public GoalsController(IGoalsRepository repository, IEmployeesRepository employeesRepository, ISubjectRepository subjectRepository, IMapper mapper)
         {
-            this._repository = repository;
+            _repository = repository;
+            _employeeRepository = employeesRepository;
+            _subjectRepository = subjectRepository;
+            _mapper = mapper;
         }
-        //get all by workder id
-        [HttpGet("{workerId}")]
-        public async Task<IActionResult> getAll(Guid employeeid)
-        {
-            try
-            {
-                List<Goal> workerGoals = await _repository.GetAll(employeeid);
-                return Ok(); //papildyti kur grazinti
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
-        }
-        //get signle by object id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            Goal goal = await _repository.GetById(id);
-            return Ok();//papildyti kur grazinti
+            try
+            {
+                var goal = await _repository.GetByIdWithMembers(id);
+
+                var list = _mapper.Map<List<GoalsResponseModel>>(goal);
+
+                return Ok(list);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]
         [Consumes("application/json")]
         public async Task<IActionResult> AddGoal([FromBody] GoalRequestModel model)
         {
-            Goal goal = new Goal()
-            {
-                Id = Guid.NewGuid(),
-                Employee = model.Employee,
-                Subject = model.Subject
-            };
             try
             {
-                await _repository.AddGoal(goal);
-                return Ok(); // papildyti kur grazinti
+                var employee = await _employeeRepository.GetById(model.EmployeeId);
+
+                if (employee == null)
+                {
+                    return BadRequest("Employee does not exist");
+                }
+
+                var subject = await _subjectRepository.GetById(model.SubjectId);
+
+                if (subject == null)
+                {
+                    return BadRequest("Subject does not exist");
+                }
+
+                var goal = new Goal(model.EmployeeId, model.SubjectId);
+
+                _repository.AddGoal(goal);
+                await _repository.SaveChanges();
+
+                return Ok();
             }
             catch (Exception exception)
             {
                 return BadRequest(exception.Message);
             }
-
         }
     }
 

@@ -11,6 +11,8 @@ namespace TP.Data.EntityTypeConfiguration
         {
             builder.ToTable(nameof(Goal));
             builder.HasKey(x => x.Id);
+            builder.HasOne(x => x.Employee).WithMany(x => x.Goals).HasForeignKey(x => x.EmployeeId);
+            builder.HasOne(x => x.Subject).WithMany(x => x.Goals).HasForeignKey(x => x.SubjectId);
         }
     }
 }

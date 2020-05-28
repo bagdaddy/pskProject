@@ -18,9 +18,9 @@ namespace TP.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new GoalEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new GoalEntityTypeConfiguration());
 
             modelBuilder.Entity<EmployeeSubject>()
                 .HasKey(t => new { t.EmployeeId, t.SubjectId });

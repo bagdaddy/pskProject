@@ -20,10 +20,10 @@ namespace TP.Data
 
         public async  Task<Employee> GetById(Guid id)
         {
-            using (var appDbContext = _context)
-            {
-                return await GetEmployee(appDbContext, id);
-            }
+            //using (var appDbContext = _context)
+            //{
+                return await GetEmployee(_context, id);
+            //}
         }
 
         public async Task<List<Employee>> GetAll()
