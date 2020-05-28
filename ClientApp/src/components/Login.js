@@ -1,12 +1,26 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import auth from './Auth';
 
 const Login = props => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        let email = document.getElementById("email");
-        let password = document.getElementById("password");
+        let userEmail = document.getElementById("email").value;
+        let userPw = document.getElementById("password").value;
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: userEmail,
+                password: userPw
+            })
+        };
+
+        auth.login(requestOptions, ()=>{
+            props.history.push("/me");
+        })
     };
 
     return (

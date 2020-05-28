@@ -1,7 +1,7 @@
-
-.sidebar.right{
-    position:fixed;
-    left:70%;
+.sidebar{
+    border: 1px solid lightgray;
+    box-shadow: 1px 1px 5px lightgrey;
+    padding: 20px;
 }
 
 .link{
@@ -215,4 +215,17 @@
     font-size: 12px;
     margin-bottom: 0;
     margin-top: 5px;
+}
+
+.subjects ul{
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.subjects ul li a{
+    color: gray;
+}
+
+.text-red{
+    color: #df6767 !important;
 }
