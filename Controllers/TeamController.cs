@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
@@ -17,10 +18,12 @@ namespace TP.Controllers
     {
         private readonly ITeamRepository _teamRepository;
         private readonly ITeamControllerService _teamControllerService;
-        public TeamController(ITeamRepository teamRepository, ITeamControllerService teamControllerService)
+        private readonly IMapper _mapper;
+        public TeamController(ITeamRepository teamRepository, ITeamControllerService teamControllerService, IMapper mapper)
         {
             _teamRepository = teamRepository;
             _teamControllerService = teamControllerService;
+            _mapper = mapper;
         }
         [HttpGet("api/GetTeams")]
         public async Task<IActionResult> GetTeams()
@@ -38,7 +41,9 @@ namespace TP.Controllers
                     }
                 }
 
-                return Ok(teamListHierarchy);
+                List<TeamResponseModel> teamResponseModel = _mapper.Map<List<TeamResponseModel>>(teamListHierarchy);
+
+                return Ok(teamResponseModel);
             }
             catch(Exception e)
             {
@@ -55,7 +60,9 @@ namespace TP.Controllers
 
                 await _teamControllerService.GetAllTeams(team, list);
 
-                return Ok(list);
+                List<TeamResponseModel> teamResponseModel = _mapper.Map<List<TeamResponseModel>>(list);
+
+                return Ok(teamResponseModel);
             }
             catch(Exception e)
             {
