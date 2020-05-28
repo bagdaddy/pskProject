@@ -86,7 +86,6 @@ function getDataAsync(employeeId) {
     const [loading, setLoading] = useState(true);
 
     async function fetchData() {
-        // let employeeId = props.match.params.id;
         const employeeRes = employeeId ? await fetch("api/Employees/" + employeeId) : await fetch("api/Auth/self");
         const employee = employeeRes.ok ? await employeeRes.json() : {};
         const sRes = await fetch("api/GetSubjects");
