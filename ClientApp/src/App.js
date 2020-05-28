@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
 import Employee from './components/Employee';
 import Subjects from './components/Subjects';
 import AddSubject from './components/AddSubject';
@@ -29,7 +28,6 @@ export default class App extends Component {
         <Route path='/subjects' component={Subjects} />
         <Route path='/add-subject' component={AddSubject} />
         <Route path='/subject/:id' component={Subject} />
-
         {/*Kol kas paliekam uzkomentuota, kad nereiktu prisijungti kiekviena karta kai padarom kazkokiu pakeitimu*/ }
         {/* <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />

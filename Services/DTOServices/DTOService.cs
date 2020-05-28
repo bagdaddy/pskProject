@@ -65,27 +65,6 @@ namespace TP.Services
             };
         }
 
-        public List<TeamDTO> TeamsToDTO(List<Team> teamList)
-        {
-            return teamList.Select(team =>
-            new TeamDTO()
-            {
-                Id = team.Id,
-                teamLeader = EmployeeToDTO(team.TeamLeader),
-                teamMembers = EmployeesToDTO(team.TeamMembers)
-            }).ToList();
-        }
-
-        public TeamDTO TeamToDTO(Team team)
-        {
-            return new TeamDTO()
-            {
-                Id = team.Id,
-                teamLeader = EmployeeToDTO(team.TeamLeader),
-                teamMembers = EmployeesToDTO(team.TeamMembers)
-            };
-        }
-
         private List<SubjectWithoutParentDTO> GetSubjectListWithoutParent(List<EmployeeSubject> subjectList)
         {
             List<SubjectWithoutParentDTO> subjects = new List<SubjectWithoutParentDTO>();

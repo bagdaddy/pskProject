@@ -34,16 +34,35 @@ namespace TP.Data
             var emp3 = new Employee
             {
                 Id = Guid.Parse("5a677c6e-56e5-4cf1-9c64-157b483e8eff"),
+                BossId = emp2.Id,
                 FirstName = "Justinas",
                 LastName = "Kondroska",
                 Email = "jsutiniukas@gmail.com"
+            };
+            var emp4 = new Employee
+            {
+                Id = Guid.Parse("61f06ab5-1d19-40b3-90fa-bcd6ba20304b"),
+                BossId = emp2.Id,
+                FirstName = "Kostas",
+                LastName = "Tostas",
+                Email = "xd@gmail.com"
+            };
+            var emp5 = new Employee
+            {
+                Id = Guid.Parse("cd915686-9476-4dc9-af2f-1f4e8d6f744b"),
+                BossId = emp4.Id,
+                FirstName = "Arturas",
+                LastName = "Honduras",
+                Email = "nerasykce@gmail.com"
             };
             var employees = new Employee[]
             {
                 emp1,
                 emp2,
                 emp3,
-        new Employee
+                emp4,
+                emp5,
+            new Employee
             {
                 Id = Guid.Parse("63f4e537-cb7b-4fe0-beca-cc080e42552d"),
                 FirstName = "Spotify",
@@ -144,6 +163,20 @@ namespace TP.Data
                 new EmployeeSubject{
                     EmployeeId = Guid.Parse("63f4e537-cb7b-4fe0-beca-cc080e42552d"),
                     SubjectId = childTwo.Id
+                },
+                new EmployeeSubject
+                {
+                    EmployeeId = emp4.Id,
+                    Employee = emp4,
+                    SubjectId = parentSubject.Id,
+                    Subject = parentSubject
+                },
+                new EmployeeSubject
+                {
+                    EmployeeId = emp4.Id,
+                    Employee = emp4,
+                    SubjectId = childTwo.Id,
+                    Subject = childTwo
                 }
             };
             context.EmployeeSubjects.AddRange(employeeSubjects);

@@ -212,6 +212,7 @@
 }
 
 .successMsg{
+    display: none;
     font-size: 12px;
     margin-bottom: 0;
     margin-top: 5px;
@@ -228,4 +229,8 @@
 
 .text-red{
     color: #df6767 !important;
+}
+
+.notfound p{
+    font-size: 20px;
 }

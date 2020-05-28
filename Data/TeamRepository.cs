@@ -1,34 +1,76 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TP.Data.Contexts;
 using TP.Data.Entities;
 using TP.DataContracts;
+using TP.Models.RequestModels;
 
 namespace TP.Data
 {
     public class TeamRepository : ITeamRepository
     {
-
-        //TODO: Inject appDbContext(Factory)
-        public void delete(Guid id)
+        private readonly AppDbContext _context;
+        public TeamRepository(AppDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public List<Team> getAll()
+        public Task<List<Employee>> GetAll()
         {
-            throw new NotImplementedException();
+            var teamList = _context.Users
+                            .Include(x => x.LearnedSubjects)
+                            .ThenInclude(xx => xx.Subject)
+                            .AsNoTracking()
+                            .ToListAsync();
+
+            return teamList;
         }
 
-        public Team getById(Guid id)
+        public Task<Employee> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.Users
+                    .Include(x => x.LearnedSubjects)
+                    .ThenInclude(xx => xx.Subject)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Team updateTeam(Team request, Guid id)
+        public Task<Employee> GetByIdWithSubordinates(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.Users
+                    .Include(x => x.Subordinates)
+                    .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task UpdateTeam(UpdateTeamRequestModel requestModel)
+        {
+            Employee employee = await GetById(requestModel.Id);
+            employee.BossId = requestModel.BossId;
+
+            _context.Update(employee);
+            await _context.SaveChangesAsync();
+        }
+        public Task<List<Employee>> GetSubordinates(Guid id)
+        {
+            var subordinateList = _context.Users
+                .Include(x => x.LearnedSubjects)
+                .ThenInclude(xx => xx.Subject)
+                .Include(x => x.Subordinates)
+                .Where(x => x.BossId.HasValue && x.BossId.Value == id)
+                .AsNoTracking()
+                .ToListAsync();
+            return subordinateList;
+        }
+        public void Delete(Employee employee)
+        {
+            _context.Remove(employee);
+        }
+        public async Task SaveChanges()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

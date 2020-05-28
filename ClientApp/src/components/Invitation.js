@@ -7,7 +7,7 @@ const Invitation = (props) => {
 
     const sendEmail = React.useCallback((email) => {
         fetch('api/Emails/'+email)
-            .then(response => response.json());
+            .then(response => { console.log(response.json())});
     });
 
     const onSubmit = (e) => {

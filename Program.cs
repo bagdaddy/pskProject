@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TP.Data;
 using TP.Data.Contexts;
+using TP.Data.Entities;
+using TP.Services.DTOServices.Models;
 
 namespace TP
 {
