@@ -41,7 +41,8 @@ namespace TP.Controllers
             return Ok();//papildyti kur grazinti
         }
 
-        [HttpPost("{workerId}/{subjectId}")]
+        [HttpPost]
+        [Consumes("application/json")]
         public async Task<IActionResult> AddGoal([FromBody] GoalRequestModel model)
         {
             Goal goal = new Goal()
