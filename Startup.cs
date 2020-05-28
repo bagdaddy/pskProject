@@ -15,6 +15,7 @@ using TP.Data.Entities;
 using TP.DataContracts;
 using TP.Services;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.SqlServer.Update.Internal;
 
 namespace TP
 {
@@ -46,6 +47,7 @@ namespace TP
             services.AddScoped<ISubjectControllerService, SubjectControllerService>();
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<ITeamControllerService, TeamControllerService>();
+            services.AddScoped<IRestrictionRepository, RestrictionRepository>();
             
             services.AddAutoMapper(typeof(Startup));
 

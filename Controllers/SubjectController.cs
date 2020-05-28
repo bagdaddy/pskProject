@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -151,7 +152,11 @@ namespace TP.Controllers
 
                 return Ok();
             }
-            catch(Exception e)
+            catch (DbUpdateConcurrencyException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -182,7 +187,11 @@ namespace TP.Controllers
 
                 return Ok();
             }
-            catch(Exception e)
+            catch (DbUpdateConcurrencyException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

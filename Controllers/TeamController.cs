@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TP.Data.Entities;
 using TP.DataContracts;
 using TP.Models.RequestModels;
@@ -97,7 +98,11 @@ namespace TP.Controllers
 
                 return Ok();
             }
-            catch(Exception e)
+            catch (DbUpdateConcurrencyException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -123,7 +128,11 @@ namespace TP.Controllers
 
                 return Ok();
             }
-            catch(Exception e)
+            catch (DbUpdateConcurrencyException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
