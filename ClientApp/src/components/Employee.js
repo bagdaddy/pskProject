@@ -73,6 +73,7 @@ function Employee(props) {
         setEmployees(data.employees);
         setMyEmployees(data.myEmployees);
         setEmployee(data.employee);
+        console.log(employee);
     }, [data, loading]);
 
     async function changeLeader(event) {
@@ -126,7 +127,7 @@ function Employee(props) {
                         </div>
                         {(employees.length > 0 || employee.subjects.length > 0) &&
                             <div className="col-lg-4 col-md-4 sidebar">
-                                {employees.subjects > 0 && (
+                                {employee.subjects.length > 0 && (
                                     <div>
                                         <h5>{employee.firstName} learnt subjects: </h5>
                                         <SubjectList subjects={employee.subjects} />
