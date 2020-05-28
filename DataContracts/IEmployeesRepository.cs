@@ -14,6 +14,6 @@ namespace TP.DataContracts
         Task CreateEmployee(Employee employee);
         Task Delete(Guid employeeId);
         Task<Employee> UpdateEmployee(Guid id, UpdateEmployeeRequestModel request);
-
+        Task AddSubjectToEmployee(Guid EmployeeId, Guid SubjectId);
     }
 }
