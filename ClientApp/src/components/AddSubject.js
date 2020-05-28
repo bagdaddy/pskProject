@@ -2,9 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 const AddSubject = props => {
     const [subjects, setSubjects] = useState([]);
-    const [insertedSubject, setInsertedSubject] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [data, setData] = useState([]);
 
     const success = useRef();
     async function fetchSubjects() {
@@ -12,7 +9,6 @@ const AddSubject = props => {
         if(response.ok){
             const data = await response.json();
             setSubjects(data);
-            setLoading(false);
         }
     }
 
