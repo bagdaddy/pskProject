@@ -229,3 +229,7 @@
 .text-red{
     color: #df6767 !important;
 }
+
+.notfound p{
+    font-size: 20px;
+}
