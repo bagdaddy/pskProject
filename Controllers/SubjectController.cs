@@ -12,7 +12,6 @@ using TP.Models.ResponseModels;
 
 namespace TP.Controllers
 {
-
     public class SubjectController: ControllerBase
     {
         private readonly ISubjectRepository _subjectRepository;

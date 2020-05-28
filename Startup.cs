@@ -14,6 +14,7 @@ using TP.Data.Contexts;
 using TP.Data.Entities;
 using TP.DataContracts;
 using TP.Services;
+using AutoMapper;
 
 namespace TP
 {
@@ -43,6 +44,14 @@ namespace TP
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
             services.AddScoped<ISubjectControllerService, SubjectControllerService>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<ITeamControllerService, TeamControllerService>();
+            
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 

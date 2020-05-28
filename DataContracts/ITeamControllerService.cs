@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TP.Data.Entities;
+using TP.Services.DTOServices.Models;
 
 namespace TP.DataContracts
 {
-    interface ITeamControllerService
+    public interface ITeamControllerService
     {
-        List<Team> getAll();
-
-        Team getById(Guid id);
-
-        void delete(Guid id);
-
-        //TODO: Change Employee param to UpdateEmployeeRequest
-        Team updateEmployee(Team request, Guid id);
+        Task<List<Employee>> GetAllTeams(Employee currentEmployee, List<Employee> employeeListHierarchy);
     }
 }

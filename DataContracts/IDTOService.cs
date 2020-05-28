@@ -13,10 +13,6 @@ namespace TP.DataContracts
 
         public EmployeeDTO EmployeeToDTO(Employee employee);
 
-        public List<TeamDTO> TeamsToDTO(List<Team> teamList);
-
-        public TeamDTO TeamToDTO(Team team);
-
         public SubjectDTO SubjectToDTO(Subject subject);
 
         public List<SubjectDTO> SubjectsToDTO(List<Subject> subjectList);
