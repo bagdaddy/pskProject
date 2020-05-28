@@ -2,8 +2,6 @@
 import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
 
-sessionStorage.setItem('userId', '5a677c6e-56e5-4cf1-9c64-157b483e8eff');
-
 function Employee (props) {
     const [employee, setEmployee] = useState({});
     const [allEmployees, setEmployees] = useState([]);
