@@ -36,6 +36,22 @@ namespace TP.Controllers
 
 
 
+        [HttpPost("{id}")]
+        public async Task<IActionResult> SendById(Guid id, [FromBody]EmailRequestModel subjectRequestModel)
+        {
+            try
+            {
+                await _emailSender
+                 .SendEmailAsync(subjectRequestModel.email, "Subject", "Text Message.", "Html Message")
+                 .ConfigureAwait(false);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> SendToAdmin()
         {
