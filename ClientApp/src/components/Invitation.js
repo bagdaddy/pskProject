@@ -1,22 +1,41 @@
 import React, {useState} from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
 const Invitation = (props) => {
 
     const [email, setEmail] = useState("");
+    const [sent, setSent] = useState(false);
 
-    const sendEmail = React.useCallback((email) => {
-        fetch('api/Emails/'+email)
-            .then(response => { console.log(response.json())});
-    });
+    async function sendEmail() {
+        const res = await fetch('api/Auth/self');
+        if (true) {
+            const me = await res.json();
+            const response = await fetch('api/Emails/'+me.id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email:email })
+            })
+            if (response.ok) {
+                setSent(true);
+            } else {
+                return null;
+            }
+        }
+      }  
 
     const onSubmit = (e) => {
         e.preventDefault()
         if(email){
-            sendEmail(email);
+            sendEmail();
         }
     }
     return (
+        <div>
+            <Alert color="primary" isOpen={sent}>
+                The invitation was sent!
+            </Alert>
         <Form inline onSubmit={e => onSubmit(e)}>
             <Label>Invite an employee </Label>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -24,6 +43,7 @@ const Invitation = (props) => {
             </FormGroup>
             <Button>Submit</Button>
         </Form>
+        </div>
     );
 }
 
