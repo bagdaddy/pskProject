@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import NotFound from './dump-components/404';
+import NotFound from './dump-components/Error';
 
 const Subject = props => {
 
@@ -36,12 +36,11 @@ const Subject = props => {
                             )
                         }
                     </div>
-                </div>
-               
+                </div> 
         )
     }else{
         return(
-            <NotFound/>
+            <div></div>
         )
     }
     
