@@ -2,53 +2,60 @@ import React, { useState, useRef, useEffect } from 'react';
 import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import Loader from './dump-components/Loader';
 
+function fetchData() {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    async function fetchSubjects(){
+        const response = await fetch('api/GetAllSubjects');
+        const json = await response.json();
+        return json;
+    };
+
+    async function fetchAllEmployees() {
+        const response = await fetch('api/Employees');
+        const json = await response.json();
+        return json;
+    }
+
+    async function getDataAsync(){
+        const response = await fetch('api/Auth/self');
+        const employee = await response.json();
+        console.log(employee);
+        const employees = await fetchAllEmployees();
+        let subj = await fetchSubjects();
+        const subjects = subj.filter(subject => {
+            return employee.subjects.filter(s => {
+                return s.id === subject.id
+            }).length === 0;
+        });
+        setData({employee: employee, employees: employees, subjects: subjects});
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        getDataAsync();
+    }, []);
+
+    return [data, loading];
+}
 
 function Profile(props) {
     const [employee, setEmployee] = useState({});
     const [allEmployees, setEmployees] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [selectedSubjectId, setSelectedSubjectId] = useState("");
+    const [data, loading] = fetchData();
     
     let success = useRef();
 
-    const fetchData = React.useCallback(() => {
-        fetch('api/Auth/self')
-            .then(response => response.json())
-            .then(employeeData => {
-                setEmployee(employeeData);
-                fetch('api/GetAllSubjects')
-                    .then(response => response.json())
-                    .then(data => {
-                        let subjects = [];
-                        if (employeeData.subjects.length == 0) {
-                            subjects = data;
-                        } else {
-                            data.forEach(subject => {
-                                if (employeeData.subjects.filter(s => s.id === subject.id).length > 0) {
-                                    subjects.push(subject);
-                                }
-                            });
-                        }
-                        setSubjects(subjects);
-                    });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    });
-
-    const fetchAllEmployees = React.useCallback(() => {
-        fetch('api/Employees')
-            .then(response => response.json())
-            .then(data => setEmployees(data));
-    });
-
     useEffect(() => {
-        fetchData();
-        fetchAllEmployees();
-        // fetchSubjects();
-    }, []);
+        setEmployees(data.employees);
+        setEmployee(data.employee);
+        setSubjects(data.subjects);
+    }, [data, loading])
 
     const learnSubject = (event) => {
         event.preventDefault();
@@ -69,7 +76,7 @@ function Profile(props) {
     };
 
 
-    if (employee) {
+    if (!loading) {
         return (
             <div>
                 <div className="row">
@@ -117,7 +124,13 @@ function Profile(props) {
                 </div>
             </div>
         );
+    }else{
+        return(
+            <Loader/>
+        )
     }
 };
+
+
 
 export default Profile;
