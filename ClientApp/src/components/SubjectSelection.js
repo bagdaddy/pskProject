@@ -1,52 +1,36 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
-import subjects from './testSubjects';
 
 const SubjectSelection = forwardRef((props, ref) => {
   
-    useImperativeHandle(ref, () => ({toggle, dateSetup}));
+    useImperativeHandle(ref, () => ({toggle, daySetup}));
 
     const [modal, setModal] = useState(false);
     const [date, setDate] = useState(null);
+    const [subjects, setSubjets] = useState([]);
+    const [id, setId] = useState(null);
+
     
     const [comment, setComment] = useState("");
-    const [subjectsSelected, setSubjectsSelected] = useState([null, null, null, null]);
+    const [subjectsSelected, setSubjectsSelected] = useState([]);
     const [num, setNum] = useState(null);
 
     const now = new Date();
-
-    const createNewDate = React.useCallback(() => {
-        fetch('api/CreateNewDate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ EmployeeId: "CHANGE INTO ID", Date: date, SubjectList: subjectsSelected })
-        }).then(res => res.json()).catch(error => console.error('Error:', error));
-    });
-
-    const deleteExistingDate = React.useCallback(() => {
-        fetch("api/deleteDate/${date.id}")
-            .then(response => response.json())
-            .catch((error) => {
-                console.log(error);
-            })});
-
-    const changeExistingDate = React.useCallback(() => {
-        //post user id/date/subjects/comment
-    });
 
     const toggle = () => {
         setModal(!modal);
 
     };
-    const dateSetup = (value) =>{
-        setDate(value);
+    const daySetup = (date, subjects, id) =>{
+        setDate(date);
+        var res = subjects.filter(item1 => 
+            !props.employee.subjects.some(item2 => (item2.id === item1.id)))
+        setSubjets(res);
+        setId(id);
     } 
-
     useEffect(() => {  
         var i;
-        if(props.dates.length){
+        if(props.dates.length && date){
             for(i = 0; i<props.dates.length; ++i){
                 if(props.dates[i].date.getTime() === date.getTime()){
                     setSubjectsSelected(props.dates[i].subjects);
@@ -56,18 +40,45 @@ const SubjectSelection = forwardRef((props, ref) => {
             }
         }
         return function cleanup() {
-            setSubjectsSelected([null, null, null, null]);
+            setSubjectsSelected([]);
             setComment("");
             setNum(null);
+            setId(null)
           };
     },[date]);
+
+    async function postDay(day) {
+        const response = await fetch('api/Days/CreateNewDay/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ EmployeesId: props.employee.id, Date: day.date, SubjectList: day.subjects, Comment: day.comment })
+      })
+    }
+
+    async function deleteDay() {
+        const response = await fetch('api/Days/DeleteDay/' + id)
+        const json = await response.json();
+    } 
+
+    async function updateDay(day) {
+        const response = await fetch('api/Days/UpdateDay/', {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({Id: day.id, EmployeeId: props.employee.id, Date: day.date, SubjectList: day.subjects, Comment: day.comment })
+      })
+    }
 
     const onDeleteButtonClick = () => {
         if(subjectsSelected[0]){
             if(num){
                 let dataArray = [...props.dates];
                 dataArray.splice(num, 1)
-                props.setDates(dataArray);
+                props.setDates(dataArray)
+                deleteDay(id);
             }
             toggle();
         }
@@ -79,9 +90,12 @@ const SubjectSelection = forwardRef((props, ref) => {
                 let dataArray = [...props.dates];
                 dataArray[num].subjects = subjectsSelected;
                 dataArray[num].comment = comment;
-                props.setDates(dataArray);
+                props.setDates(dataArray); //auto-updates map, may be deletable after database
+                updateDay({id: id, date:date, subjects:subjectsTrimmed, comment:comment})
             }else{
-                props.setDates(props.dates.concat({id:16, date:date, subjects:subjectsSelected, comment:comment}));
+                var subjectsTrimmed = subjectsSelected.filter(x => x).join(', ');
+                props.setDates(props.dates.concat({id:16, date:date, subjects:subjectsSelected, comment:comment})); //auto-updates map, may be deletable after database
+                postDay({date:date, subjects:subjectsTrimmed, comment:comment})
             }
             toggle();
         }
@@ -124,7 +138,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                             onChange={event => setSubjectsSelected([event.target.value, subjectsSelected[1], subjectsSelected[2], subjectsSelected[3]])}>
                                 <option value="DEFAULT" disabled>Choose a subject ...</option>
                                 {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>{subject.title}</option>))};
+                                <option key={subject.id} value={subject.id}>{subject.name}</option>))};
                             </Input>
                         </FormGroup>
                         <FormGroup>
@@ -136,7 +150,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                             disabled={subjectsSelected[0]?0:1}>
                                 <option value="DEFAULT" disabled>Choose a subject ...</option>
                                 {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>{subject.title}</option>))};
+                                <option key={subject.id} value={subject.id}>{subject.name}</option>))};
                             </Input>
                         </FormGroup>
                         <FormGroup>
@@ -148,7 +162,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                             disabled={subjectsSelected[1]?0:1}>
                                 <option value="DEFAULT" disabled>Choose a subject ...</option>
                                 {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>{subject.title}</option>))};
+                                <option key={subject.id} value={subject.id}>{subject.name}</option>))};
                             </Input>
                         </FormGroup>
                         <FormGroup>
@@ -160,7 +174,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                             disabled={subjectsSelected[2]?0:1}>
                                 <option value="DEFAULT" disabled>Choose a subject ...</option>
                                 {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>{subject.title}</option>))};
+                                <option key={subject.id} value={subject.id}>{subject.name}</option>))};
                             </Input>
                         </FormGroup>                        
                         <FormGroup>

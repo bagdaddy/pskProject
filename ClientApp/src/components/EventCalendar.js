@@ -1,10 +1,9 @@
 import React, { Children, useRef, useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import testDays from './testDays'
-import testSubjects from './testSubjects'
-import SubjectSelection from './SubjectSelection'
-import './react-big-calendar.css'
+import testDays from './testDays';
+import SubjectSelection from './SubjectSelection';
+import './react-big-calendar.css';
 
 moment.locale('ko', {
     week: {
@@ -13,8 +12,7 @@ moment.locale('ko', {
     },
 });
 
-const localizer = momentLocalizer(moment)
-const now = new Date();
+const localizer = momentLocalizer(moment);
 
 var Holidays = require('date-holidays')
 var hd = new Holidays()
@@ -26,28 +24,39 @@ const EventCalendar = (props) => {
     const [dates, setDates] = useState([]);
     const [calendarEvents, setCalendarEvents] = useState([]);
     const [subjects, setSubjects] = useState(null);
+    const [employee, setEmployee] = useState(null);
+    const [loading, setLoading] = useState(true);
 
 
-    const fetchSubjects = React.useCallback(() => {
-        fetch("api/GetSubjects")
-            .then(response => response.json())
-            .then(data => setSubjects(data))
-            .catch((error) => {
-                console.log(error);
-            })});
+    async function fetchAllSubjects() {
+        const response = await fetch('api/GetAllSubjects/');
+        const json = await response.json();
+        setSubjects(json);
+        setLoading(false);
+      }  
 
-    const fetchDates = React.useCallback(() => {
-        fetch("api/GetDates/${employeeId}")
-            .then(response => response.json())
-            .then(data => setDates(data))
-            .catch((error) => {
-                console.log(error);
-            })});
+    async function fetchDays() {
+      const response = await fetch('api/Days/' + employee.id);
+      const days = await response.json();
+      setDates(days);
+      setLoading(false);
+    }  
 
+    async function fetchEmployee() {
+        const response = await fetch('api/Employees/' + '5a677c6e-56e5-4cf1-9c64-157b483e8eff');
+        const employee = await response.json();
+        setEmployee(employee);
+    }  
 
     useEffect(() => {  
+        fetchAllSubjects().then(result => fetchEmployee());
         setDates(testDays);
-    },[]);
+        setEvents();
+    },[loading]);      
+
+    useEffect(() => {  
+        subjects?setSubjects(subjects.sort((a, b) => a.name.localeCompare(b.name))):null;        
+    },[loading]);
 
     useEffect(() => {  
         setEvents();
@@ -67,32 +76,46 @@ const EventCalendar = (props) => {
         setCalendarEvents(calEvents)
     };
 
-
     const getSubjectName = (subjectId) =>{
-        var i;
-        for(i=0;i<testSubjects.length;++i){
-            if(testSubjects[i].id.toString() === subjectId.toString()){
-                return(testSubjects[i].title)
-            }
-        }        
+        if(subjects){
+            var i;
+            for(i=0;i<subjects.length;++i){
+                if(subjects[i].id.toString() === subjectId.toString()){
+                    return(subjects[i].name)
+                }
+            }  
+        }      
     }
 
     const handleSelect = ({ start }) => {
+        start.setHours(0,0,0,0);
+        var id;
+        var day = DayExists(start);
+        day? id=day.id : id=null;
+
         if(WorkDay(start)){
-            childRef.current.dateSetup(start)
-            childRef.current.toggle()
+            childRef.current.daySetup(start, subjects, id);
+            childRef.current.toggle();
         }
+    }
+
+    function DayExists(date){
+        return dates.find((d) => {
+            return d.date === date;
+          })
     }
 
     const childRef = useRef();
 
     return(
+        loading?
+        <div>Loading...</div>:
         <div className="rbc-calendar">
             <Calendar
             localizer={localizer}
             events={calendarEvents}
             selectable={true}
-            views={ ['month', 'agenda'] }
+            views={ ['month'] }
             startAccessor="start"
             endAccessor="end"
             onSelectSlot={handleSelect}
@@ -100,7 +123,7 @@ const EventCalendar = (props) => {
             components={{
             dateCellWrapper: ColoredDateCellWrapper
             }}/>
-            <SubjectSelection dates={dates} setDates={setDates} ref={childRef}/>
+            <SubjectSelection dates={dates} employee={employee} setDates={setDates} ref={childRef}/>
         </div>
     )
   }
