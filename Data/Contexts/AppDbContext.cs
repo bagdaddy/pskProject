@@ -11,12 +11,14 @@ namespace TP.Data.Contexts
 {
     public class AppDbContext : IdentityDbContext<Employee, Role, Guid>
     {
+        public DbSet<Goal> Goals { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<EmployeeSubject> EmployeeSubjects { get; set; }
         public AppDbContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new GoalEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
 
