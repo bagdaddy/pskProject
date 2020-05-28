@@ -1,7 +1,6 @@
 import React from 'react';
 
 const TreeLegend = props => {
-    console.log(props.ownTree);
     return (
         <div className="legend">
             <ul>
