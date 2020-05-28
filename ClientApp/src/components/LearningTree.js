@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Tree from 'react-d3-tree';
+<<<<<<< HEAD
 import Loader from './dump-components/Loader';
+=======
+>>>>>>> error-pages
 import TreeLegend from './dump-components/TreeLegend.js';
 
 const circle = {
