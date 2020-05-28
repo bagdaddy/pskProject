@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Tree from 'react-d3-tree';
-import { data } from './fakeData.js';
 import TreeLegend from './dump-components/TreeLegend.js';
 
 const circle = {
