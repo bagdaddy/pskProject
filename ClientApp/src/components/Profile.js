@@ -14,17 +14,17 @@ function fetchData() {
         return json;
     };
 
-    async function fetchAllEmployees() {
-        const response = await fetch('api/Employees');
+    async function fetchAllEmployees(id) {
+        const response = await fetch('api/GetTeams/' + id);
         const json = await response.json();
-        return json;
+        return json[0].subordinates;
     }
 
     async function getDataAsync(){
         const response = await fetch('api/Auth/self');
         const employee = await response.json();
         console.log(employee);
-        const employees = await fetchAllEmployees();
+        const employees = await fetchAllEmployees(employee.id);
         let subj = await fetchSubjects();
         const subjects = subj.filter(subject => {
             return employee.subjects.filter(s => {

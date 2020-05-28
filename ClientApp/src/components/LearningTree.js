@@ -185,10 +185,10 @@ const LearningTree = props => {
         return children;
     }
     if (!loading) {
-        if(!employee){
+        if(employee){
             return (
                 <div className="treeWrapper" style={{ width: "100%", height: "1000px" }}>
-                    <TreeLegend name={employee.name} ownTree={props.match.params.id ? false : true} />
+                    <TreeLegend name={employee.firstName} ownsTeam={employees.length > 0} ownTree={props.match.params.id ? false : true} />
                     <SubjectInfo data={displayedNode} />
                     {treeData.length > 0 && <Tree data={treeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
                         render: <NodeLabel className='myLabelComponentInSvg' />,
