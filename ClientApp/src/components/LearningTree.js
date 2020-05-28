@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Tree from 'react-d3-tree';
+import Loader from './dump-components/Loader';
 import TreeLegend from './dump-components/TreeLegend.js';
+import { NotAuthorized } from './dump-components/Error';
 
 const circle = {
     shape: 'circle',
@@ -26,7 +28,6 @@ const circleLearntByTeam = {
     }
 }
 
-const authenticatedUserId = "1";
 
 const SubjectInfo = props => {
     let subjectData = props.data;
@@ -48,7 +49,7 @@ const SubjectInfo = props => {
                 <p className="title">{subjectData.name}</p>
                 <ul className="employeeList">
                     {subjectData.attributes.employees.map(employee => (
-                        <li><a href={"/profile/" + employee.id}>{ employee.firstName } { employee.lastName }</a></li>
+                        <li><a href={"/profile/" + employee.id}>{employee.firstName} {employee.lastName}</a></li>
                     ))}
                 </ul>
             </div>
@@ -81,55 +82,71 @@ class NodeLabel extends React.PureComponent {
     }
 }
 
-const textProps = { x: -20, y: 20 };
-const LearningTree = props => {
-    const [subjects, setSubjects] = useState([]);
-    const [employees, setEmployees] = useState([]);
-    const [treeData, setTreeData] = useState([]);
-    const [displayedNode, setDisplayedNode] = useState({});
+function getDataAsync(employeeId) {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    document.body.classList.add("learning-tree");
-
-    const fetchData = React.useCallback(() => {
-        fetch("api/GetSubjects")
-            .then(response => response.json())
-            .then(data => setSubjects(data))
-            .catch((error) => {
-                console.log(error);
-            });
-    });
-
-    const fetchEmployeesData = React.useCallback(() => {
-        fetch('api/Employees')
-            .then(response => response.json())
-            .then(data => setEmployees(data));
-    });
+    async function fetchData() {
+        const employeeRes = employeeId ? await fetch("api/Employees/" + employeeId) : await fetch("api/Auth/self");
+        const employee = employeeRes.ok ? await employeeRes.json() : {};
+        const sRes = await fetch("api/GetSubjects");
+        const s = sRes.ok ? await sRes.json() : [];
+        const eRes = await fetch('api/Employees');
+        const e = eRes.ok ? await eRes.json() : [];
+        setData({ subjects: s, employees: e, employee: employee });
+        setLoading(false);
+    }
 
     useEffect(() => {
         fetchData();
-        fetchEmployeesData();        
-        setTreeData(myFakeTreeData);
     }, []);
+    return [data, loading];
+}
+
+const LearningTree = props => {
+    const [subjects, setSubjects] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [employee, setEmployee] = useState({});
+    const [treeData, setTreeData] = useState([]);
+    const [displayedNode, setDisplayedNode] = useState({});
+    const [data, loading] = getDataAsync(props.match.params.id);
+
+    document.body.classList.add("learning-tree");
+
+    useEffect(() => {
+        setEmployee(data.employee);
+        setSubjects(data.subjects);
+        setEmployees(data.employees);
+        let myTreeData = [
+            {
+                name: "Top level",
+                nodeSvgShape: circle,
+                attributes: {
+                    subjectId: "-1"
+                },
+                children: []
+            }
+        ];
+        if (!loading) {
+            console.log(subjects);
+            console.log(employees);
+            data.subjects.forEach(subject => {
+                let subjectToPush = formSubjectObj(subject);
+                myTreeData[0].children.push(subjectToPush);
+            });
+            setTreeData(myTreeData);
+        }
+    }, [data, loading]);
+
 
     const handleClick = React.useCallback((event, node) => {
         setDisplayedNode(event);
     });
 
-    let myFakeTreeData = [
-        {
-            name: "Top level",
-            nodeSvgShape: circle,
-            attributes: {
-                subjectId: "-1"
-            },
-            children: []
-        }
-    ];
-
     const getEmployeesForSubject = (subject) => {
         let employeeArr = [];
         employees.forEach(employee => {
-            if(employee.subjects.filter(function(e) { return e.id === subject.id; }).length > 0){
+            if (employee.subjects.filter(function (e) { return e.id === subject.id; }).length > 0) {
                 employeeArr.push(employee);
             }
         });
@@ -140,7 +157,7 @@ const LearningTree = props => {
         let selectedNodeSvgShape = circle;
         subject.employees = getEmployeesForSubject(subject);
         if (subject.employees.length > 0) {
-            if (subject.employees.filter(e => e.id === authenticatedUserId).length > 0) {
+            if (subject.employees.filter(e => e.id === employee.id).length > 0) {
                 selectedNodeSvgShape = circleLearntByYou;
             } else {
                 selectedNodeSvgShape = circleLearntByTeam;
@@ -167,27 +184,35 @@ const LearningTree = props => {
         });
         return children;
     }
+    if (!loading) {
+        if(!employee){
+            return (
+                <div className="treeWrapper" style={{ width: "100%", height: "1000px" }}>
+                    <TreeLegend name={employee.name} ownTree={props.match.params.id ? false : true} />
+                    <SubjectInfo data={displayedNode} />
+                    {treeData.length > 0 && <Tree data={treeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
+                        render: <NodeLabel className='myLabelComponentInSvg' />,
+                        foreignObjectWrapper: {
+                            y: 0,
+                            x: 0
+                        }
+                    }}
+                        nodeSize={{ x: 350, y: 70 }} />
+                    }
+                </div>
+            );
+        }else{
+            return(
+                <NotFound/>
+            )
+        }
+        
+    } else {
+        return (
+            <Loader />
+        )
+    }
 
-    subjects.forEach(subject => {
-        let subjectToPush = formSubjectObj(subject);
-        myFakeTreeData[0].children.push(subjectToPush);
-    });
-
-    return (
-        <div className="treeWrapper" style={{ width: "100%", height: "1000px" }}>
-            <TreeLegend />
-            <SubjectInfo data={displayedNode} />
-            {treeData.length > 0 && <Tree data={myFakeTreeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
-                render: <NodeLabel className='myLabelComponentInSvg' />,
-                foreignObjectWrapper: {
-                    y: 0,
-                    x: 0
-                }
-            }}
-                nodeSize={{ x: 350, y: 70 }} />
-            }
-        </div>
-    );
 }
 
 export default LearningTree;

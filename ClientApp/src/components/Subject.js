@@ -1,25 +1,37 @@
 import React, { useEffect, useState } from 'react';
+import Loader from './dump-components/Loader';
 import NotFound from './dump-components/Error';
 
-const Subject = props => {
-
-    const [subject, setSubject] = useState(null);
-
-    const fetchData = React.useCallback((id) => {
-        fetch("api/GetSubjects/" + id)
-            .then(response => response.json())
-            .then(data => setSubject(data[0]));
-    });
-
+function fetchSubject(id){
+    const [data, setData] = useState({});
+    const [loading, setLoading] = useState(true);
+    
+    async function fetchData(id) {
+        const res = await fetch("api/GetSubjects/" + id);
+        const json = res.ok ? await res.json() : null;
+        setLoading(false);
+        setData(json ? json[0] : null);
+    };
 
     useEffect(() => {
-        if (props.match.params.id) {
-            fetchData(props.match.params.id);
-        }
+        fetchData(id);
     }, []);
 
-    if(subject){
-        return (
+    return [data, loading];
+}
+
+function Subject(props) {
+
+    const [subject, setSubject] = useState(null);
+    const [data, loading] = fetchSubject(props.match.params.id);
+
+    useEffect(() => {
+        setSubject(data);
+    }, [data, loading])
+
+    if(!loading){
+        if(subject){
+            return (
                 <div className="row">
                     <div className="col-8">
                         <h3>{subject.name}</h3>
@@ -38,9 +50,15 @@ const Subject = props => {
                     </div>
                 </div> 
         )
+        }else{
+            return(
+                <NotFound />
+            )
+        }
+        
     }else{
         return(
-            <div></div>
+            <Loader/>
         )
     }
     
