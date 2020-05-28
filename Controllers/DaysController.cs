@@ -22,7 +22,7 @@ namespace TP.Controllers
             _dtoService = dtoService;
         }
 
-        [HttpGet("api/GetDayByEmployeeId/{employeeId}")]
+        [HttpGet("GetDayByEmployeeId/{employeeId}")]
         public async Task<IActionResult> getAll(Guid employeeId)
         {
             List<Day> days = await _repository.GetAll(employeeId);
@@ -30,7 +30,7 @@ namespace TP.Controllers
         }
 
         //get signle by object id
-        [HttpGet("api/GetDayById/{id}")]
+        [HttpGet("GetDayById/{id}")]
         public async Task<IActionResult> getSingle(Guid id)
         {
             try
@@ -45,7 +45,7 @@ namespace TP.Controllers
         }
 
         //get signle by worker id and date
-        [HttpGet("api/GetDayByDate/{employeeId}/{date}")]
+        [HttpGet("GetDayByDate/{employeeId}/{date}")]
         public async Task<IActionResult> getSingle(Guid employeeId, DateTime date)
         {
             try
@@ -60,7 +60,7 @@ namespace TP.Controllers
         }
 
         //count days by worker id and quarter
-        [HttpGet("api/GetDaysInQuarter/{employeeId}/{quarter}")]
+        [HttpGet("GetDaysInQuarter/{employeeId}/{quarter}")]
         public async Task<IActionResult> getDatesThisQuarter(Guid employeeId, int quarter)
         {
             try
@@ -75,7 +75,7 @@ namespace TP.Controllers
             }
         }
         // isveda darbuotoju sarasa pagal subject id
-        [HttpGet("api/GetEmployeesBySubjectId/{subjectId}")]
+        [HttpGet("GetEmployeesBySubjectId/{subjectId}")]
         public async Task<IActionResult> GetEmployeesBySubject(Guid subjectId)
         {
             try
@@ -90,7 +90,7 @@ namespace TP.Controllers
         }
 
         //CREATE new Day
-        [HttpPost("api/CreateDay")]
+        [HttpPost("CreateDay")]
         [Consumes("application/json")]
         public async Task<ActionResult> CreateDay([FromBody] DayRequestModel model)
         {
