@@ -3,6 +3,8 @@ import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import Loader from './dump-components/Loader';
+import getFlatListOfSubordinates from './dump-components/getSubordinates';
+
 
 function fetchData() {
     const [data, setData] = useState([]);
@@ -52,7 +54,7 @@ function Profile(props) {
     let success = useRef();
 
     useEffect(() => {
-        setEmployees(data.employees);
+        setEmployees(getFlatListOfSubordinates([], data.employees));
         setEmployee(data.employee);
         setSubjects(data.subjects);
     }, [data, loading])
@@ -74,7 +76,6 @@ function Profile(props) {
                 }
             });
     };
-
 
     if (!loading) {
         return (

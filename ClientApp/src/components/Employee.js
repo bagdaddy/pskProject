@@ -4,6 +4,8 @@ import SubjectList from './dump-components/SubjectList';
 import Loader from './dump-components/Loader';
 import { NotFound } from './dump-components/Error';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import getFlatListOfSubordinates from './dump-components/getSubordinates';
+
 
 function fetchEmployeeData(id) {
     const [data, setData] = useState({});
@@ -70,8 +72,8 @@ function Employee(props) {
     const success = useRef();
 
     useEffect(() => {
-        setEmployees(data.employees);
-        setMyEmployees(data.myEmployees);
+        setEmployees(getFlatListOfSubordinates([],data.employees));
+        setMyEmployees(getFlatListOfSubordinates([], data.myEmployees));
         setEmployee(data.employee);
         console.log(employee);
     }, [data, loading]);
