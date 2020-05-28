@@ -11,7 +11,9 @@ namespace TP.Data.Contexts
 {
     public class AppDbContext : IdentityDbContext<Employee, Role, Guid>
     {
+
         public DbSet<Day> Days { get; set; }
+        public DbSet<Goal> Goals { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<EmployeeSubject> EmployeeSubjects { get; set; }
         public AppDbContext(DbContextOptions options) : base(options) { }
@@ -21,6 +23,7 @@ namespace TP.Data.Contexts
             modelBuilder.ApplyConfiguration(new DayEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new GoalEntityTypeConfiguration());
 
             modelBuilder.Entity<EmployeeSubject>()
                 .HasKey(t => new { t.EmployeeId, t.SubjectId });

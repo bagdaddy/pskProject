@@ -48,6 +48,7 @@ namespace TP
             services.AddScoped<IDaysRepository, DaysRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<ITeamControllerService, TeamControllerService>();
+            services.AddScoped<IGoalsRepository, GoalsRepository>();
             
             services.AddAutoMapper(typeof(Startup));
 
