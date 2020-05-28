@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Tree from 'react-d3-tree';
 import Loader from './dump-components/Loader';
 import TreeLegend from './dump-components/TreeLegend.js';
-import { NotAuthorized } from './dump-components/Error';
+import { NotFound } from './dump-components/Error';
 
 const circle = {
     shape: 'circle',
