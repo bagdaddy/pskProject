@@ -22,7 +22,7 @@ namespace TP.Data
         {
             var dayList = _context.Days
                 .Where(x => x.Employee.Id == employeeid)
-                .Include(x => x.Employee)
+                .Include(x => x.SubjectList)
                 .AsNoTracking()
                 .ToListAsync();
             return await dayList;
@@ -31,8 +31,9 @@ namespace TP.Data
         public async Task<Day> GetSingle(Guid id)
         {
             return await _context.Days
+                .Include(x => x.SubjectList)
+                .Include(x => x.Employee)
                     .AsNoTracking()
-                    .Include(x => x.Employee)
                     .FirstOrDefaultAsync(x => x.Id == id);
         }
         //get signle by worker id and date
