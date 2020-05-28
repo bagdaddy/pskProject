@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import NotFound from './dump-components/404';
 import Loader from './dump-components/Loader';
-=======
 import NotFound from './dump-components/Error';
->>>>>>> error-pages
 
 function fetchSubject(id){
     const [data, setData] = useState({});
@@ -62,11 +58,7 @@ function Subject(props) {
         
     }else{
         return(
-<<<<<<< HEAD
             <Loader/>
-=======
-            <div></div>
->>>>>>> error-pages
         )
     }
     

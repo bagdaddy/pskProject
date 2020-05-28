@@ -77,9 +77,7 @@ function Employee (props) {
             );
         } else {
             return (
-                <div>
-                    <h2>Šio profilio matyti negalite</h2>
-                </div>
+                <NotFound/>
             )
         }
     }else{

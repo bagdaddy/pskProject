@@ -203,7 +203,7 @@ const LearningTree = props => {
             );
         }else{
             return(
-                <NotAuthorized/>
+                <NotFound/>
             )
         }
         
