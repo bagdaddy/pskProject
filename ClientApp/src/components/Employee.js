@@ -1,11 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
 import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
-<<<<<<< HEAD
 import Loader from './dump-components/Loader';
-=======
 import NotAuthorized from './dump-components/Error';
->>>>>>> error-pages
 
 function fetchEmployeeData(id){
     const [data, setData] = useState([]);

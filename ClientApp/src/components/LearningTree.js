@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Tree from 'react-d3-tree';
-<<<<<<< HEAD
 import Loader from './dump-components/Loader';
-=======
->>>>>>> error-pages
 import TreeLegend from './dump-components/TreeLegend.js';
+import { NotAuthorized } from './dump-components/Error';
 
 const circle = {
     shape: 'circle',
@@ -187,21 +185,28 @@ const LearningTree = props => {
         return children;
     }
     if (!loading) {
-        return (
-            <div className="treeWrapper" style={{ width: "100%", height: "1000px" }}>
-                <TreeLegend name={employee.name} ownTree={props.match.params.id ? false : true} />
-                <SubjectInfo data={displayedNode} />
-                {treeData.length > 0 && <Tree data={treeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
-                    render: <NodeLabel className='myLabelComponentInSvg' />,
-                    foreignObjectWrapper: {
-                        y: 0,
-                        x: 0
+        if(!employee){
+            return (
+                <div className="treeWrapper" style={{ width: "100%", height: "1000px" }}>
+                    <TreeLegend name={employee.name} ownTree={props.match.params.id ? false : true} />
+                    <SubjectInfo data={displayedNode} />
+                    {treeData.length > 0 && <Tree data={treeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
+                        render: <NodeLabel className='myLabelComponentInSvg' />,
+                        foreignObjectWrapper: {
+                            y: 0,
+                            x: 0
+                        }
+                    }}
+                        nodeSize={{ x: 350, y: 70 }} />
                     }
-                }}
-                    nodeSize={{ x: 350, y: 70 }} />
-                }
-            </div>
-        );
+                </div>
+            );
+        }else{
+            return(
+                <NotAuthorized/>
+            )
+        }
+        
     } else {
         return (
             <Loader />
