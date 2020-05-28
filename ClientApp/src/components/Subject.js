@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Loader from './dump-components/Loader';
-import NotFound from './dump-components/Error';
+import {NotFound} from './dump-components/Error';
 
 function fetchSubject(id){
     const [data, setData] = useState({});
@@ -9,8 +9,10 @@ function fetchSubject(id){
     async function fetchData(id) {
         const res = await fetch("api/GetSubjects/" + id);
         const json = res.ok ? await res.json() : null;
+        const emp = await fetch("api/Auth/self");
+        const empData = emp.ok ? await emp.json() : null;
         setLoading(false);
-        setData(json ? json[0] : null);
+        setData({subject : json[0], employee: empData});
     };
 
     useEffect(() => {
@@ -22,12 +24,19 @@ function fetchSubject(id){
 
 function Subject(props) {
 
+    const [employee, setEmployee] = useState(null);
     const [subject, setSubject] = useState(null);
     const [data, loading] = fetchSubject(props.match.params.id);
 
     useEffect(() => {
-        setSubject(data);
-    }, [data, loading])
+        setSubject(data.subject);
+        setEmployee(data.employee);
+        console.log(employee);
+    }, [data, loading]);
+
+    const markAsLearnt = () => {
+
+    };
 
     if(!loading){
         if(subject){
@@ -39,14 +48,8 @@ function Subject(props) {
                         <a href="/subjects">Back to subject list</a>
                     </div>
                     <div className="col-4">
-                        {
-                            subject.parentSubject &&
-                            (<div>
-                                <h3>Parent subject:</h3>
-                                <a href={"/subject/" + subject.parentSubject.id} className="link">{subject.parentSubject.name}</a>
-                            </div>
-                            )
-                        }
+                        {employee.subjects.filter(employeeSubject => employeeSubject.id === subject.id).length === 0 ? <button class="btn btn-success" onClick={markAsLearnt}>Mark subject as learnt</button> : <span>You already know this subject!</span>}
+                        
                     </div>
                 </div> 
         )
