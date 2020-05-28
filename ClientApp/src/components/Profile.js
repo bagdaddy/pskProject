@@ -8,7 +8,7 @@ function fetchData() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    async function fetchSubjects(){
+    async function fetchSubjects() {
         const response = await fetch('api/GetAllSubjects');
         const json = await response.json();
         return json;
@@ -20,7 +20,7 @@ function fetchData() {
         return json[0].subordinates;
     }
 
-    async function getDataAsync(){
+    async function getDataAsync() {
         const response = await fetch('api/Auth/self');
         const employee = await response.json();
         console.log(employee);
@@ -31,7 +31,7 @@ function fetchData() {
                 return s.id === subject.id
             }).length === 0;
         });
-        setData({employee: employee, employees: employees, subjects: subjects});
+        setData({ employee: employee, employees: employees, subjects: subjects });
         setLoading(false);
     }
 
@@ -48,7 +48,7 @@ function Profile(props) {
     const [subjects, setSubjects] = useState([]);
     const [selectedSubjectId, setSelectedSubjectId] = useState("");
     const [data, loading] = fetchData();
-    
+
     let success = useRef();
 
     useEffect(() => {
@@ -100,33 +100,28 @@ function Profile(props) {
                             </div>
                         </div>
                     </div>
-
-                    <div className="col-lg-4 col-md-4 sidebar">
-                        {employee.hasOwnProperty("team") && employee.team.length > 0 && (
-                            <div>
-                                <h3>Your team:</h3>
-                                <TeamList team={employee.team} />
-                            </div>
-                        )}
-                        {employee.hasOwnProperty("subjects") && employee.subjects.length > 0 && (
-                            <div>
-                                <h3>Your subjects: </h3>
-                                <SubjectList subjects={employee.subjects} />
-                            </div>
-                        )}
-                        {allEmployees.length > 0 && (
-                            <div>
-                                <h5>Visų darbuotojų sąrašas testavimo sumetimais: </h5>
-                                <TeamList team={allEmployees} />
-                            </div>
-                        )}
-                    </div>
+                    {(employee.subjects.length > 0 || allEmployees.length > 0) &&
+                        <div className="col-lg-4 col-md-4 sidebar">
+                            {employee.subjects.length > 0 && (
+                                <div>
+                                    <h3>You have already learned: </h3>
+                                    <SubjectList subjects={employee.subjects} />
+                                </div>
+                            )}
+                            {allEmployees.length > 0 && (
+                                <div>
+                                    <h5>Your team: </h5>
+                                    <TeamList team={allEmployees} />
+                                </div>
+                            )}
+                        </div>
+                    }
                 </div>
             </div>
         );
-    }else{
-        return(
-            <Loader/>
+    } else {
+        return (
+            <Loader />
         )
     }
 };
