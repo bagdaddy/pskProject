@@ -67,13 +67,12 @@ namespace TP.Controllers
                 {
                     return Ok(_dtoService.EmployeeToDTO(user));
                 }
-                return NotFound();
             } catch (Exception exception)
             {
                 //Log.Error(exception, "Failed to get role");
                 return StatusCode((int)HttpStatusCode.Unauthorized, "User ir not logged in.");
             }
-            
+            return Unauthorized();
         }
 
         [HttpPost("register")]

@@ -3,6 +3,7 @@
     box-shadow: 1px 1px 5px lightgrey;
     padding: 20px;
     border-radius: 5px;
+    height: fit-content;
 }
 
 .link{
@@ -179,7 +180,11 @@
 }
 
 .form-left{
-    width: 350px;
+    width: 400px;
+}
+
+.form-left textarea {
+    height: 180px;
 }
 
 .subjectsList ul{
@@ -219,19 +224,64 @@
     margin-top: 5px;
 }
 
-.subjects ul{
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.subjects ul li a{
-    color: gray;
-}
-
 .text-red{
     color: #df6767 !important;
 }
 
 .notfound p{
     font-size: 20px;
+}
+
+.employee-form{
+    width: 60%;
+    border-top: 1px solid lightgray;
+    padding-top: 15px;
+    margin-top: 50px;
+    padding-right: 100px;
+}
+
+.goals p{
+    margin-bottom: 0;
+}
+
+.sidebar .section{
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid lightgray;
+}
+
+.sidebar .section:last-child {
+    border-bottom: none;
+}
+
+.sidebar .teamList a, .sidebar .subjectList a, .subjects .subjectList a{
+    display:block;
+}
+
+.item{
+    font-size:20px;
+    color: #005bb6;
+    line-height: 1.9;
+}
+
+.item a:hover{
+    color: #0078f0;
+}
+
+.subjects .item {
+    border-bottom: 1px solid lightgray;
+}
+
+.subjects .item:last-child{
+    border-bottom: none;
+}
+
+.description{
+    white-space: pre-line;
+}
+
+.team-subjects{
+    border: 1px solid lightgray;
+    box-shadow: 1px 1px 1px;
+    border-radius: 5px;
 }

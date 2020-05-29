@@ -36,10 +36,6 @@ const AddSubject = props => {
         }
     }
 
-    useEffect(() => {
-        fetchSubjects();
-    }, []);
-
     const handleSubmit = (event) => {
         event.preventDefault();
         insertSubject();
@@ -47,7 +43,7 @@ const AddSubject = props => {
 
 
     return (
-        <div className="form-left"  >
+        <div className="form-left">
             <Form onSubmit={handleSubmit}>
                 <FormGroup>
                     <Label for="subject_name">Subject name</Label>
@@ -55,7 +51,7 @@ const AddSubject = props => {
                 </FormGroup>
                 <FormGroup>
                     <Label for="description">Description</Label>
-                    <Input type="text" id="description" name="description" placeholder="A really important subject" />
+                    <Input type="textarea" id="description" name="description" placeholder="A really important subject" />
                 </FormGroup>
                 <FormGroup>
                     <Label for="parent_subject">Parent</Label>

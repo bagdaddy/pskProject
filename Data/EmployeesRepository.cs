@@ -70,6 +70,20 @@ namespace TP.Data
             }
         }
 
+        public async Task AddSubjectToEmployee(Guid EmployeeId, Guid SubjectId)
+        {
+            var es = new EmployeeSubject
+            {
+                EmployeeId = EmployeeId,
+                SubjectId = SubjectId
+            };
+            await _context.EmployeeSubjects.AddAsync(es);
+            var goalToDelete = await _context.Goals
+                .FirstOrDefaultAsync(x => x.EmployeeId == EmployeeId && x.SubjectId == SubjectId);
+            _context.Goals.Remove(goalToDelete);
+            await _context.SaveChangesAsync();
+        
+        }
         public async Task CreateEmployee(Employee employee)
         {
             _context.Add(employee);
