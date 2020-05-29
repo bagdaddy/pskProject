@@ -44,6 +44,8 @@ namespace TP
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
             services.AddScoped<ISubjectControllerService, SubjectControllerService>();
+
+            services.AddScoped<IDaysRepository, DaysRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<ITeamControllerService, TeamControllerService>();
             services.AddScoped<IGoalsRepository, GoalsRepository>();
@@ -55,6 +57,7 @@ namespace TP
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
+
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 
