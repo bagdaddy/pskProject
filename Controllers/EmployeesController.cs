@@ -125,8 +125,11 @@ namespace TP.Controllers
         public async Task<IActionResult> CreateDefaultAdmin()
         {
             var id = Guid.Parse("61dc607e-c41c-4626-a7ee-cc0b87df9d26");
-            var checkUser = await _repository.GetById(id);
-            if (checkUser == null)
+            try
+            {
+                var checkUser = await _repository.GetById(id);
+            }
+            catch
             {
                 var defaultUser = new Employee
                 {
@@ -142,6 +145,7 @@ namespace TP.Controllers
                     return Conflict();
                 }
             }
+
             return NoContent();
         }
 
