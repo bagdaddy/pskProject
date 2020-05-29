@@ -23,7 +23,8 @@ namespace TP.Data
         {
             var dayList = _context.Days
                 .Where(x => x.Employee.Id == employeeid)
-                .Include(x => x.SubjectList)
+                .Include(x => x.DaySubjectList)
+                .ThenInclude(ds => ds.Subject)
                 .AsNoTracking()
                 .ToListAsync();
             return await dayList;
@@ -32,7 +33,8 @@ namespace TP.Data
         public async Task<Day> GetSingle(Guid id)
         {
             return await _context.Days
-                .Include(x => x.SubjectList)
+                .Include(x => x.DaySubjectList)
+                .ThenInclude(ds => ds.Subject)
                 .Include(x => x.Employee)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(x => x.Id == id);
@@ -72,8 +74,8 @@ namespace TP.Data
         {
             var employeesList = _context.Days
                 .Include(x => x.Employee)
-                .Include(x => x.SubjectList)
-                .Where(x => x.SubjectList.Any(y => y.Id == subjectId)).Select(x => x.Employee)
+                .Include(x => x.DaySubjectList)
+                .Where(x => x.DaySubjectList.Any(y => y.SubjectId == subjectId)).Select(x => x.Employee)
                 .ToListAsync();
             return await employeesList;
         }
@@ -83,12 +85,20 @@ namespace TP.Data
             Day dayToAdd = new Day
             {
                 Date = model.Date ?? DateTime.Now,
-                SubjectsId = model.SubjectList,
                 EmployeeId = model.EmployeeId,
                 Id = Guid.NewGuid()
             };
-
+            var daySubjectList = new List<DaySubject>();
+            foreach (var subject in model.SubjectList)
+            {
+                daySubjectList.Add(new DaySubject
+                {
+                    DayId = dayToAdd.Id,
+                    SubjectId = subject
+                });
+            }
             await _context.Days.AddAsync(dayToAdd);
+            await _context.DaySubjects.AddRangeAsync(daySubjectList);
             await _context.SaveChangesAsync();
         }
 

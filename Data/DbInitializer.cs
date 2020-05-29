@@ -182,27 +182,51 @@ namespace TP.Data
             context.EmployeeSubjects.AddRange(employeeSubjects);
             context.SaveChanges();
 
-            var daysSubjects = new List<Subject>();
-            daysSubjects.Add(parentSubject);
-            daysSubjects.Add(childOne);
-            var daysList = new List<Day>()
+            var daysList = new List<Day>();
+            var day1 = new Day
             {
-                new Day
+                Employee = emp1,
+                Id = Guid.NewGuid(),
+                Date = new DateTime(),
+            };
+            var day2 = new Day
+            {
+                Employee = emp2,
+                Id = Guid.NewGuid(),
+                Date = new DateTime(),
+            };
+            daysList.Add(day1);
+            daysList.Add(day2);
+            context.Days.AddRange(daysList);
+            context.SaveChanges();
+
+            var daysSubjects = new DaySubject[] {
+                new DaySubject
                 {
-                    Employee = emp1,
-                    Id = Guid.NewGuid(),
-                    Date = new DateTime(),
-                    SubjectList = daysSubjects
+                    Day = day1,
+                    Subject = parentSubject
                 },
-                new Day
+                new DaySubject
                 {
-                    Employee = emp2,
-                    Id = Guid.NewGuid(),
-                    Date = new DateTime(),
-                    SubjectList = daysSubjects
+                    Day = day1,
+                    Subject = childOne
+                },new DaySubject
+                {
+                    Day = day1,
+                    Subject = childTwo
+                },
+                new DaySubject
+                {
+                    Day = day2,
+                    Subject = parentSubject
+                },
+                new DaySubject
+                {
+                    Day = day2,
+                    Subject = childTwo
                 },
             };
-            context.Days.AddRange(daysList);
+            context.DaySubjects.AddRange(daysSubjects);
             context.SaveChanges();
         }
 

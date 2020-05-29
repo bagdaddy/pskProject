@@ -16,6 +16,7 @@ namespace TP.Data.Contexts
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<EmployeeSubject> EmployeeSubjects { get; set; }
+        public DbSet<DaySubject> DaySubjects { get; set; }
         public DbSet<Invite> Invites { get; set; }
         public AppDbContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,6 +43,18 @@ namespace TP.Data.Contexts
             modelBuilder.Entity<Day>()
                 .HasOne(d => d.Employee)
                 .WithMany();
+
+            modelBuilder.Entity<DaySubject>()
+                .HasKey(t => new { t.DayId, t.SubjectId });
+
+            modelBuilder.Entity<DaySubject>()
+                .HasOne(es => es.Day)
+                .WithMany(e => e.DaySubjectList)
+                .HasForeignKey(es => es.DayId);
+            modelBuilder.Entity<DaySubject>()
+                .HasOne(es => es.Subject)
+                .WithMany(s => s.DaySubjectList)
+                .HasForeignKey(es => es.SubjectId);
         }
 
     }
