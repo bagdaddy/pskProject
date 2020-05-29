@@ -3,6 +3,7 @@ import Tree from 'react-d3-tree';
 import Loader from './dump-components/Loader';
 import TreeLegend from './dump-components/TreeLegend.js';
 import { NotFound } from './dump-components/Error';
+import getFlatListOfSubordinates from './dump-components/getSubordinates';
 
 const circle = {
     shape: 'circle',
@@ -28,19 +29,7 @@ const circleLearntByTeam = {
     }
 }
 
-const getFlatListOfSubordinates = (children, subordinates) => {
-    if(!subordinates){
-        return [];
-    }
-    subordinates.forEach(subordinate => {
-        children.push(subordinate);
-        if (subordinate.subordinates.length > 0) {
-            getFlatListOfSubordinates(children, subordinate.subordinates);
-        }
-    });
-    console.log(children);
-    return children;
-};
+
 
 
 const SubjectInfo = props => {

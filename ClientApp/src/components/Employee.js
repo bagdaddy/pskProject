@@ -3,7 +3,9 @@ import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
 import Loader from './dump-components/Loader';
 import { NotFound } from './dump-components/Error';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
+import getFlatListOfSubordinates from './dump-components/getSubordinates';
+
 
 function fetchEmployeeData(id) {
     const [data, setData] = useState({});
@@ -14,10 +16,18 @@ function fetchEmployeeData(id) {
         const response = await fetch('api/GetTeams/' + id);
         if (response.ok) {
             const employees = await response.json();
-            console.log(employees);
             return await employees[0].subordinates;
         } else {
             return null;
+        }
+    }
+
+    async function fetchGoals(id) {
+        const response = await fetch('api/Goals/' + id);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            return [];
         }
     }
 
@@ -34,7 +44,12 @@ function fetchEmployeeData(id) {
                 return [];
             }
         }
+    }
 
+    async function fetchSubjects() {
+        const response = await fetch('api/GetAllSubjects');
+        const json = await response.json();
+        return json;
     }
 
     async function fetchData(id) {
@@ -43,10 +58,14 @@ function fetchEmployeeData(id) {
             const employeeData = await response.json();
             const employeesData = await fetchEmployees(id);
             const myEmployees = await fetchMyEmployees();
-            const set = { employee: employeeData, employees: employeesData, myEmployees: myEmployees };
-            console.log(set);
-            setData(set);
-            console.log(data);
+            const goalsData = await fetchGoals(id);
+            let subj = await fetchSubjects();
+            const subjects = subj.filter(subject => {
+                return employeeData.subjects.filter(s => {
+                    return s.id === subject.id
+                }).length === 0;
+            });
+            setData({ employee: employeeData, employees: employeesData, myEmployees: myEmployees, subjects: subjects, goals: goalsData });
             setLoading(false);
         } else {
             setLoading(false);
@@ -64,16 +83,21 @@ function Employee(props) {
     const [employee, setEmployee] = useState({});
     const [employees, setEmployees] = useState([]);
     const [myEmployees, setMyEmployees] = useState([]);
+    const [subjects, setSubjects] = useState([]);
     const [data, loading] = fetchEmployeeData(props.match.params.id);
-    const [selectedBossId, setBossId] = useState("");
+    const [selectedBossId, setBossId] = useState(null);
+    const [goals, setGoals] = useState([]);
+    const [goal, setGoal] = useState(null);
 
-    const success = useRef();
+    const changed = useRef();
+    const goalRef = useRef();
 
     useEffect(() => {
-        setEmployees(data.employees);
-        setMyEmployees(data.myEmployees);
+        setEmployees(getFlatListOfSubordinates([], data.employees));
+        setMyEmployees(getFlatListOfSubordinates([], data.myEmployees));
+        setGoals(data.goals);
         setEmployee(data.employee);
-        console.log(employee);
+        setSubjects(data.subjects);
     }, [data, loading]);
 
     async function changeLeader(event) {
@@ -87,10 +111,29 @@ function Employee(props) {
             })
         }
 
-         const response = await fetch("api/UpdateTeamMember", requestOptions);
-         if(response.ok){
-             success.current.style.display = "block";
-         }
+        const response = await fetch("api/UpdateTeamMember", requestOptions);
+        if (response.ok) {
+            changed.current.style.display = "block";
+        }
+    }
+
+    async function assignGoal(event) {
+        event.preventDefault();
+
+        const requestOptions = {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                employeeId: employee.id,
+                subjectId: goal
+            })
+        };
+
+        console.log(requestOptions);
+        const response = await fetch('api/Goals', requestOptions);
+        if (response.ok) {
+            goalRef.current.style.display = "block";
+        }
     }
 
     if (!loading) {
@@ -101,42 +144,69 @@ function Employee(props) {
                         <div className="col-8">
                             <h2>{employee.firstName} {employee.lastName}</h2>
                             <p>El. paštas: <a href={"mailto:" + employee.email}>{employee.email}</a></p>
-                            <div className="row">
-                                <div className="col-8">
-                                    <Form onSubmit={changeLeader}>
-                                        <FormGroup>
-                                            <Label for="newBoss">Select a new team for {employee.firstName}:</Label>
-                                            <Input name="newBoss" id="newBoss" type="select" onChange={(event) => setBossId(event.target.value)}>
-                                                {
-                                                    myEmployees.map(
-                                                        (myEmployee) => (
-                                                            myEmployee.id !== employee.id && <option value={myEmployee.id}>{myEmployee.firstName + " " + myEmployee.lastName}</option>
-                                                        )
+                            <div className="employee-form">
+                                <Form onSubmit={changeLeader}>
+                                    <FormGroup>
+                                        <Label for="newBoss">Select a new team for {employee.firstName}:</Label>
+                                        <Input name="newBoss" id="newBoss" required type="select" onChange={(event) => setBossId(event.target.value)}>
+                                            <option value="-1">-</option>
+                                            {
+                                                myEmployees.map(
+                                                    (myEmployee) => (
+                                                        myEmployee.id !== employee.id && <option value={myEmployee.id}>{myEmployee.firstName + " " + myEmployee.lastName}</option>
                                                     )
-                                                }
-                                            </Input>
-                                            <label ref={success} className="successMsg">Employee successfuly switched to another team.</label>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Button>Apply</Button>
-                                        </FormGroup>
-                                    </Form>
-                                </div>
-
+                                                )
+                                            }
+                                        </Input>
+                                        <FormFeedback tooltip>Please select a value</FormFeedback>
+                                        <label ref={changed} className="successMsg">Employee successfuly switched to another team.</label>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button disabled={!selectedBossId} className="btn btn-success">Apply</Button>
+                                    </FormGroup>
+                                </Form>
+                            </div>
+                            <div className="employee-form">
+                                <Form onSubmit={assignGoal}>
+                                    <FormGroup>
+                                        <Label for="goal">Select a goal: </Label>
+                                        <Input name="goal" id="goal" type="select" required onChange={(event) => setGoal(event.target.value)} >
+                                            <option value="-1">-</option>
+                                            {subjects.map(subject => (
+                                                <option value={subject.id}>{subject.name}</option>
+                                            ))}
+                                        </Input>
+                                        <label ref={goalRef} className="successMsg">Goal successfuly set for {employee.firstName}.</label>
+                                        <FormFeedback tooltip>Please select a value</FormFeedback>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button disabled={!goal} className="btn btn-success">Add</Button>
+                                    </FormGroup>
+                                </Form>
                             </div>
                         </div>
-                        {(employees.length > 0 || employee.subjects.length > 0) &&
+                        {(employees.length > 0 || employee.subjects.length > 0 || goals.length > 0) &&
                             <div className="col-lg-4 col-md-4 sidebar">
+                                {goals.length > 0 && (
+                                    <div>
+                                        <h5>Current goals: </h5>
+                                        <div className="goals">
+                                            {goals.map(goal => (
+                                                <p>{goal.subject.name}</p>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                                 {employee.subjects.length > 0 && (
                                     <div>
                                         <h5>{employee.firstName} learnt subjects: </h5>
-                                        <SubjectList subjects={employee.subjects} />
+                                        <SubjectList wrapperClass="subjectList" subjects={employee.subjects} />
                                     </div>
                                 )}
                                 {employees.length > 0 && (
                                     <div>
                                         <h5>{employee.firstName} team list:</h5>
-                                        <TeamList team={employees} />
+                                        <TeamList wrapperClass="teamList" team={employees} />
                                     </div>
                                 )}
                             </div>}
