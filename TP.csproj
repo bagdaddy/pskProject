@@ -45,6 +45,8 @@
     <Compile Remove="Migrations\20200528191901_ADDED_GOALS.Designer.cs" />
     <Compile Remove="Migrations\20200528194629_ADDED_GOALS.cs" />
     <Compile Remove="Migrations\20200528194629_ADDED_GOALS.Designer.cs" />
+    <Compile Remove="Migrations\20200528235749_ADDED_INVITE.cs" />
+    <Compile Remove="Migrations\20200528235749_ADDED_INVITE.Designer.cs" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

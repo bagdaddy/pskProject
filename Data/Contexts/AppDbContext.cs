@@ -14,6 +14,7 @@ namespace TP.Data.Contexts
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<EmployeeSubject> EmployeeSubjects { get; set; }
+        public DbSet<Invite> Invites { get; set; }
         public AppDbContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +22,7 @@ namespace TP.Data.Contexts
             modelBuilder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new GoalEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new InviteEntityTypeConfiguration());
 
             modelBuilder.Entity<EmployeeSubject>()
                 .HasKey(t => new { t.EmployeeId, t.SubjectId });
