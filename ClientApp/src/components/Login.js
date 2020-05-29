@@ -1,9 +1,11 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import auth from './Auth';
+const queryString = require('query-string');
 
 const Login = props => {
-
+    console.log(props);
+    const parsed = queryString.parse(props.location.search);
     const handleSubmit = (event) => {
         event.preventDefault();
         let userEmail = document.getElementById("email").value;
@@ -33,6 +35,8 @@ const Login = props => {
                 <FormGroup>
                     <Label for="password">Password</Label>
                     <Input type="password" name="password" id="password" />
+                {parsed.errors && <span className="error">Invalid username or password</span>}
+
                 </FormGroup>
                 <FormGroup>
                     <Button className="btn btn-success">Login</Button>

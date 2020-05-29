@@ -285,3 +285,8 @@
     box-shadow: 1px 1px 1px;
     border-radius: 5px;
 }
+
+.error{
+    color: red;
+    font-size:12px;
+}

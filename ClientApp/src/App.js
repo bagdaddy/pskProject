@@ -17,6 +17,13 @@ import Register from './components/Register';
 
 export default class App extends Component {
   static displayName = "Mokymosi dienu kalendorius";
+
+  constructor(){
+    super();
+    fetch("api​/Employees​/createDefault")
+      .then(response => {console.log(response)});
+  
+  }
   
   render () {
     return (

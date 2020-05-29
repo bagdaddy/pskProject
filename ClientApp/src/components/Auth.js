@@ -9,6 +9,8 @@ class Auth {
                 if(response.ok){
                     this.authenticated = true;
                     cb();
+                }else{
+                    window.location.href = "/login?errors=true";
                 }
             });
     }
