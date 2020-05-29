@@ -3,6 +3,7 @@
     box-shadow: 1px 1px 5px lightgrey;
     padding: 20px;
     border-radius: 5px;
+    height: fit-content;
 }
 
 .link{
@@ -234,4 +235,30 @@
 
 .notfound p{
     font-size: 20px;
+}
+
+.employee-form{
+    width: 60%;
+    border-top: 1px solid lightgray;
+    padding-top: 15px;
+    margin-top: 50px;
+    padding-right: 100px;
+}
+
+.goals p{
+    margin-bottom: 0;
+}
+
+.sidebar .section{
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid lightgray;
+}
+
+.sidebar .section:last-child {
+    border-bottom: none;
+}
+
+.sidebar .teamList a{
+    display:block;
 }
