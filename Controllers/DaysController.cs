@@ -60,12 +60,17 @@ namespace TP.Controllers
         }
 
         //count days by worker id and quarter
-        [HttpGet("GetDaysInQuarter/{employeeId}/{quarter}")]
-        public async Task<IActionResult> getDatesThisQuarter(Guid employeeId, int quarter)
+        [HttpGet("GetDaysInQuarter/{employeeId}/{year}/{quarter}/")]
+        public async Task<IActionResult> getDatesThisQuarter(Guid employeeId, int quarter, int year)
         {
             if (quarter < 1 || quarter > 4)
             {
                 return BadRequest("Quarter value must be between 1 and 4");
+            }
+            var currentYear = DateTime.Now.Year;
+            if (year < currentYear || year > currentYear + 1)
+            {
+                return BadRequest("Information is only available for current and next year");
             }
             try
             {
