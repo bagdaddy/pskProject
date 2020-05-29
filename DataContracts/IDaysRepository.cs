@@ -16,5 +16,6 @@ namespace TP.DataContracts
         Task Create(DayRequestModel model);
         Task Update(Guid id, DayRequestModel model);
         Task Delete(Guid id);
+        Task Change(Guid id, DayRequestModel model);
     }
 }

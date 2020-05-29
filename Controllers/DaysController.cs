@@ -143,7 +143,7 @@ namespace TP.Controllers
 
 
         // DELETE by object id
-        [HttpDelete("DeleteDay/{id}")]
+        [HttpGet("DeleteDay/{id}")]
         public async Task<ActionResult> deleteDateAsync(Guid id)
         {
             try

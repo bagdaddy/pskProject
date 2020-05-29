@@ -1,7 +1,6 @@
 import React, { Children, useRef, useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import testDays from './testDays';
 import SubjectSelection from './SubjectSelection';
 import CalendarDayPreview from './CalendarDayPreview';
 import {withRouter} from 'react-router-dom';
@@ -28,12 +27,11 @@ const EventCalendar = (props) => {
     const [subjects, setSubjects] = useState(null);
     const [employee, setEmployee] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    console.log(window.location.pathname);
+    const [updated, setUpdated] = useState(true);
 
     function isPersonalCalendar(){
         if(window.location.pathname === "/calendar"){
-            return(<SubjectSelection dates={dates} employee={employee} setDates={setDates} ref={childRef}/>)
+            return(<SubjectSelection dates={dates} employee={employee} setUpdated={setUpdated}  updated={updated} ref={childRef}/>)
         }else{
             return(<CalendarDayPreview dates={dates} ref={childRef}/>)
         }
@@ -47,7 +45,7 @@ const EventCalendar = (props) => {
       }  
 
     async function fetchDays() {
-      const response = await fetch('api/Days/' + employee.id);
+      const response = await fetch('api/Days/GetDayByEmployeeId/' + employee.id);
       const days = await response.json();
       setDates(days);
       setLoading(false);
@@ -59,18 +57,28 @@ const EventCalendar = (props) => {
         setEmployee(employee);
     }  
 
+
+    useEffect(() => {  
+        employee?fetchDays():null;
+    },[updated]);  
+
     useEffect(() => {  
         fetchAllSubjects().then(result => fetchEmployee());
-        setDates(testDays);
+    },[loading]);   
+    
+    useEffect(() => {  
+        employee?fetchDays():null;
         setEvents();
-    },[loading]);      
+    },[employee]);  
 
     useEffect(() => {  
         subjects?setSubjects(subjects.sort((a, b) => a.name.localeCompare(b.name))):null;        
     },[loading]);
 
     useEffect(() => {  
+        if(dates){
         setEvents();
+        }
     },[dates]);
 
     const setEvents = () => {
@@ -78,9 +86,9 @@ const EventCalendar = (props) => {
         var j;
         var calEvents = []
         for(i = 0; i<dates.length; ++i){
-            for(j=0; j<dates[i].subjects.length; ++j){
-                if(dates[i].subjects[j] != null){
-                    calEvents.push({id:1, title:getSubjectName(dates[i].subjects[j]), start:dates[i].date, end:dates[i].date})
+            for(j=0; j<dates[i].daySubjectList.length; ++j){
+                if(dates[i].daySubjectList[j] != null){
+                    calEvents.push({id:1, title:getSubjectName(dates[i].daySubjectList[j].subjectId), start:dates[i].date, end:dates[i].date})
                 }
             }
         }
@@ -99,20 +107,22 @@ const EventCalendar = (props) => {
     }
 
     const handleSelect = ({ start }) => {
-        start.setHours(0,0,0,0);
+        var curDay =new Date(moment(start).toDate().setHours(0,0,0,0));
+        console.log(curDay)
         var id;
-        var day = DayExists(start);
+        var day = DayExists(curDay);
         day? id=day.id : id=null;
 
-        if(WorkDay(start)){
-            childRef.current.daySetup(start, subjects, id);
+        if(WorkDay(curDay)){
+            childRef.current.daySetup(curDay, subjects, id);
             childRef.current.toggle();
         }
     }
 
     function DayExists(date){
         return dates.find((d) => {
-            return d.date === date;
+            var curDay =new Date(moment(d.date).toDate().setHours(0,0,0,0));
+            return curDay.getTime() === date.getTime();
           })
     }
 

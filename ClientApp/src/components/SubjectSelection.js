@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
+import moment from 'moment';
 
 const SubjectSelection = forwardRef((props, ref) => {
   
@@ -21,7 +22,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     const toggle = () => {
         setModal(!modal);
     };
-    
+
     const daySetup = (date, subjects, id) =>{
         setDate(date);
         var res = subjects.filter(item1 => 
@@ -31,10 +32,13 @@ const SubjectSelection = forwardRef((props, ref) => {
     } 
     useEffect(() => {  
         var i;
+
         if(props.dates.length && date){
             for(i = 0; i<props.dates.length; ++i){
-                if(props.dates[i].date.getTime() === date.getTime()){
-                    setSubjectsSelected(props.dates[i].subjects);
+                var curDay =new Date(moment(props.dates[i].date).toDate().setHours(0,0,0,0));
+                if(curDay.getTime() === date.getTime()){
+                    let result = props.dates[i].daySubjectList.map(a => a.subjectId);
+                    setSubjectsSelected(result);
                     setComment(props.dates[i].comment);
                     setNum(i);
                 }
@@ -54,42 +58,45 @@ const SubjectSelection = forwardRef((props, ref) => {
     },[date]);
 
     async function getDatesThisQuarter() {
-        const response = await fetch('api/Days/GetDaysInQuarter/' + props.employee?props.employee.id:1 + "/" + getQuarter(date)[1] + "/" + getQuarter(date)[0]);
+        var year = getQuarter(date)[0];
+        var quarter = getQuarter(date)[1];
+        const response = await fetch('api/Days/GetDaysThisQuarter/' + props.employee?props.employee.id:1 + "/" + year + "/" + quarter);
         const days = await response.json();
         setDaysThisQuarter(days);
       }  
 
     async function postDay(day) {
-        const response = await fetch('api/Days/CreateNewDay/', {
+        delete Array.prototype.toJSON;
+        const response = await fetch('api/Days/CreateDay/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ EmployeesId: props.employee.id, Date: day.date, SubjectList: day.subjects, Comment: day.comment })
-      })
+          body: JSON.stringify({ employeeId: props.employee.id, date: day.date, subjectList: day.subjects, comment: day.comment })
+        })
+        props.setUpdated(!props.updated); 
     }
 
     async function deleteDay() {
         const response = await fetch('api/Days/DeleteDay/' + id)
         const json = await response.json();
+        props.setUpdated(!props.updated)
     } 
 
     async function updateDay(day) {
-        const response = await fetch('api/Days/UpdateDay/', {
+        const response = await fetch('api/Days/ChangeDay/' + id, {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify({Id: day.id, EmployeeId: props.employee.id, Date: day.date, SubjectList: day.subjects, Comment: day.comment })
-      })
+        });
+        props.setUpdated(!props.updated); 
     }
 
     const onDeleteButtonClick = () => {
         if(subjectsSelected[0]){
-            if(num){
-                let dataArray = [...props.dates];
-                dataArray.splice(num, 1)
-                props.setDates(dataArray)
+            if(num != null){
                 deleteDay(id);
             }
             toggle();
@@ -98,22 +105,20 @@ const SubjectSelection = forwardRef((props, ref) => {
 
     const onSubmitButtonClick = () => {
         if(subjectsSelected[0]){
-            if(num){
-                let dataArray = [...props.dates];
-                dataArray[num].subjects = subjectsSelected;
-                dataArray[num].comment = comment;
-                props.setDates(dataArray); //auto-updates map, may be deletable after database
-                updateDay({id: id, date:date, subjects:subjectsTrimmed, comment:comment})
-            }else{
-                var subjectsTrimmed = subjectsSelected.filter(x => x).join(', ');
-                props.setDates(props.dates.concat({id:16, date:date, subjects:subjectsSelected, comment:comment})); //auto-updates map, may be deletable after database
-                postDay({date:date, subjects:subjectsTrimmed, comment:comment})
+            var filtered = subjectsSelected.filter(function (el) {
+                return el != null;
+              });
+            if(num != null){
+                updateDay({id: id, date:date, subjects:filtered, comment:comment})
+            }else{                
+                postDay({date:date, subjects:filtered, comment:comment})
             }
             toggle();
         }
     }
     
     function HasDayPassed(){
+        
         if(date? date.getTime() > now.getTime():""){
             return false
         } else{
@@ -122,14 +127,13 @@ const SubjectSelection = forwardRef((props, ref) => {
     }
 
     function IsDateDeletable(){
-        return !HasDayPassed() && num? 1:0
+        return !HasDayPassed() && num != null? 1:0
     }
 
     function IsDateAddableAndChangable(){
-        if(num){
+        if(num != null){
             return !HasDayPassed()? 1:0
         }else{
-        //+to conditions IsDateLimitPer(Quarter/Year)Reached(no)
             return !HasDayPassed() && !DoesDayHaveAdjascentDays() && !IsMaxThisQuarterReacher() 
         }
     }
@@ -148,7 +152,8 @@ const SubjectSelection = forwardRef((props, ref) => {
         var i;
         if(props.dates.length && date){
             for(i = 0; i<props.dates.length; ++i){
-                if(props.dates[i].date.getTime() === date.getTime()){
+                var curDay =new Date(moment(props.dates[i].date).toDate().setHours(0,0,0,0));
+                if(curDay.getTime() === date.getTime()){
                     return true;
                 }
             }
@@ -166,12 +171,9 @@ const SubjectSelection = forwardRef((props, ref) => {
 
     function IsMaxThisQuarterReacher() {
         var maxDays = 4;
-        console.log(daysThisQuarter)
         if(daysThisQuarter >= maxDays){
-            console.log("OVER")
             return true;
         }else{
-            console.log("UNDER")
             return false;
         }
     }
@@ -187,7 +189,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                         <FormGroup>
                             <Label for="subjectSelect">Select a subject</Label>
                             <Input 
-                            defaultValue={subjectsSelected[0]?subjectsSelected[0]:'DEFAULT'} 
+                            defaultValue={subjectsSelected[0]?subjectsSelected[0].id:'DEFAULT'} 
                             type="select" name="select" 
                             id="subjectSelect" 
                             onChange={event => setSubjectsSelected([event.target.value, subjectsSelected[1], subjectsSelected[2], subjectsSelected[3]])}>
