@@ -16,6 +16,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     const [comment, setComment] = useState("");
     const [subjectsSelected, setSubjectsSelected] = useState([]);
     const [num, setNum] = useState(null);
+    const [employeeId, setEmployeeId] = useState(null); 
 
     const now = new Date();
 
@@ -35,7 +36,7 @@ const SubjectSelection = forwardRef((props, ref) => {
 
         if(props.dates.length && date){
             for(i = 0; i<props.dates.length; ++i){
-                var curDay =new Date(moment(props.dates[i].date).toDate().setHours(0,0,0,0));
+                var curDay =new Date(moment(props.dates[i].date).toDate().setHours(4,0,0,0));
                 if(curDay.getTime() === date.getTime()){
                     let result = props.dates[i].daySubjectList.map(a => a.subjectId);
                     setSubjectsSelected(result);
@@ -45,6 +46,7 @@ const SubjectSelection = forwardRef((props, ref) => {
             }
         }
         if(props.employee){
+            setEmployeeId(props.employee.id);
             getDatesThisQuarter();
         }
 
@@ -60,12 +62,13 @@ const SubjectSelection = forwardRef((props, ref) => {
     async function getDatesThisQuarter() {
         var year = getQuarter(date)[0];
         var quarter = getQuarter(date)[1];
-        const response = await fetch('api/Days/GetDaysThisQuarter/' + props.employee?props.employee.id:1 + "/" + year + "/" + quarter);
+        const response = await fetch('api/Days/GetDaysInQuarter/' + employeeId + "/" + year + "/" + quarter);
         const days = await response.json();
         setDaysThisQuarter(days);
       }  
 
     async function postDay(day) {
+        console.log(day)
         delete Array.prototype.toJSON;
         const response = await fetch('api/Days/CreateDay/', {
           method: 'POST',
@@ -73,13 +76,17 @@ const SubjectSelection = forwardRef((props, ref) => {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify({ employeeId: props.employee.id, date: day.date, subjectList: day.subjects, comment: day.comment })
-        })
+        }).catch(function() {
+            console.log("error");
+        });
         props.setUpdated(!props.updated); 
     }
 
     async function deleteDay() {
         const response = await fetch('api/Days/DeleteDay/' + id)
-        const json = await response.json();
+        const json = await response.json().catch(function() {
+            console.log("error");
+        });;
         props.setUpdated(!props.updated)
     } 
 
@@ -90,6 +97,8 @@ const SubjectSelection = forwardRef((props, ref) => {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify({Id: day.id, EmployeeId: props.employee.id, Date: day.date, SubjectList: day.subjects, Comment: day.comment })
+        }).catch(function() {
+            console.log("error");
         });
         props.setUpdated(!props.updated); 
     }
@@ -152,7 +161,7 @@ const SubjectSelection = forwardRef((props, ref) => {
         var i;
         if(props.dates.length && date){
             for(i = 0; i<props.dates.length; ++i){
-                var curDay =new Date(moment(props.dates[i].date).toDate().setHours(0,0,0,0));
+                var curDay =new Date(moment(props.dates[i].date).toDate().setHours(4,0,0,0));
                 if(curDay.getTime() === date.getTime()){
                     return true;
                 }

@@ -107,7 +107,7 @@ const EventCalendar = (props) => {
     }
 
     const handleSelect = ({ start }) => {
-        var curDay =new Date(moment(start).toDate().setHours(0,0,0,0));
+        var curDay =new Date(moment(start).toDate().setHours(4,0,0,0));
         console.log(curDay)
         var id;
         var day = DayExists(curDay);
@@ -121,7 +121,7 @@ const EventCalendar = (props) => {
 
     function DayExists(date){
         return dates.find((d) => {
-            var curDay =new Date(moment(d.date).toDate().setHours(0,0,0,0));
+            var curDay =new Date(moment(d.date).toDate().setHours(4,0,0,0));
             return curDay.getTime() === date.getTime();
           })
     }
