@@ -3,9 +3,9 @@ import React from 'react';
 const TeamList = props => {
     if (props.team.length > 0) {
         return (
-            <div className="teamList">
+            <div className={props.wrapperClass}>
                 {props.team.map(employee => (
-                    <a href={"/employee/" + employee.id}>{employee.firstName + " " + employee.lastName}</a>
+                    <a key={employee.id} href={"/employee/" + employee.id}>{employee.firstName + " " + employee.lastName}</a>
                 ))}
             </div>
         )

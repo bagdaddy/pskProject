@@ -33,16 +33,18 @@ function fetchData() {
 
     async function getDataAsync() {
         const response = await fetch('api/Auth/self');
-        const employee = await response.json();
-        const goalsData = await fetchGoals(employee.id);
-        const employees = await fetchAllEmployees(employee.id);
+        const userData = await response.json();
+        const eResponse = await fetch('api/Employees/' + userData.id);
+        const employeeData = await eResponse.json();
+        const goalsData = await fetchGoals(employeeData.id);
+        const employees = await fetchAllEmployees(employeeData.id);
         let subj = await fetchSubjects();
         const subjects = subj.filter(subject => {
-            return employee.subjects.filter(s => {
+            return employeeData.subjects.filter(s => {
                 return s.id === subject.id
             }).length === 0;
         });
-        setData({ employee: employee, employees: employees, subjects: subjects, goals: goalsData });
+        setData({ employee: employeeData, employees: employees, subjects: subjects, goals: goalsData });
         setLoading(false);
     }
 
@@ -67,14 +69,15 @@ function Profile(props) {
     const goalRef = useRef();
 
     useEffect(() => {
-        setEmployees(getFlatListOfSubordinates([], data.employees));
+        let flatList = getFlatListOfSubordinates([], data.employees);
+        setEmployees(flatList);
         console.log(data.employees);
         setEmployee(data.employee);
         setSubjects(data.subjects);
         setGoals(data.goals);
         let subjects = [];
         if (!loading) {
-            data.employees.forEach(e => {
+            flatList.forEach(e => {
                 e.learnedSubjects.forEach(subject => {
                     if (subjects.filter(s => s.id === subject.id).length === 0) {
                         subjects.push(subject);
@@ -173,7 +176,7 @@ function Profile(props) {
                             )}
                             {employee.subjects.length > 0 && (
                                 <div className="section">
-                                    <h3>You have already learned: </h3>
+                                    <h5>You have already learned: </h5>
                                     <SubjectList wrapperClass="subjectsList" subjects={employee.subjects} />
                                 </div>
                             )}

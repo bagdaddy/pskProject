@@ -98,6 +98,7 @@ function Employee(props) {
         setGoals(data.goals);
         setEmployee(data.employee);
         setSubjects(data.subjects);
+        console.log(data.subjects);
     }, [data, loading]);
 
     async function changeLeader(event) {
@@ -129,7 +130,6 @@ function Employee(props) {
             })
         };
 
-        console.log(requestOptions);
         const response = await fetch('api/Goals', requestOptions);
         if (response.ok) {
             window.location.reload();
@@ -153,7 +153,7 @@ function Employee(props) {
                                             {
                                                 myEmployees.map(
                                                     (myEmployee) => (
-                                                        myEmployee.id !== employee.id && <option value={myEmployee.id}>{myEmployee.firstName + " " + myEmployee.lastName}</option>
+                                                        myEmployee.id !== employee.id && <option key={myEmployee.id} value={myEmployee.id}>{myEmployee.firstName + " " + myEmployee.lastName}</option>
                                                     )
                                                 )
                                             }
@@ -175,7 +175,7 @@ function Employee(props) {
                                             {subjects.map(subject => (
                                                 employee.subjects.filter(sub => sub.id === subject.id).length === 0 && 
                                                 goals.filter(goal => goal.subject.id === subject.id).length === 0 &&
-                                                <option value={subject.id}>{subject.name}</option>
+                                                <option key={subject.id} value={subject.id}>{subject.name}</option>
                                             ))}
                                         </Input>
                                         <label ref={goalRef} className="successMsg">Goal successfuly set for {employee.firstName}.</label>

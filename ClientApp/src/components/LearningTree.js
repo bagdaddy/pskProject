@@ -90,10 +90,20 @@ function getDataAsync(employeeId) {
     const [loading, setLoading] = useState(true);
 
     async function fetchData() {
-        const employeeRes = employeeId ? await fetch("api/Employees/" + employeeId) : await fetch("api/Auth/self");
+        let employeeRes = null;
+        if(employeeId){
+            employeeRes = await fetch("api/Employees/" + employeeId);
+        }else{
+            const temp = await fetch("api/Auth/self");
+            const tempRes = await temp.json();
+            employeeRes = await fetch("api/Employees/" + tempRes.id);
+        }
+
+        // const employeeRes = employeeId ? await fetch("api/Employees/" + employeeId) : await fetch("api/Auth/self");
         const employee = employeeRes.ok ? await employeeRes.json() : {};
         const sRes = await fetch("api/GetSubjects");
         const s = sRes.ok ? await sRes.json() : [];
+        console.log(s);
         const eRes = await fetch('api/GetTeams/' + employee.id);
         const e = eRes.ok ? await eRes.json() : [];
         const rez = await { subjects: s, employees: e[0].subordinates, employee: employee };
@@ -132,7 +142,6 @@ const LearningTree = props => {
             }
         ];
         if (!loading) {
-            
             subjects.forEach(subject => {
                 let subjectToPush = formSubjectObj(subject);
                 myTreeData[0].children.push(subjectToPush);
