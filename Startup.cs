@@ -128,14 +128,11 @@ namespace TP
                 app.UseHsts();
             }
 
-           /* Audit.Core.Configuration.Setup()
-    .UseDynamicAsyncProvider(config => config
-        .OnInsert(async ev => await File.WriteAllTextAsync(@"Logs\{DateTime.Now}", ev.ToJson())));
-*/
             Audit.Core.Configuration.Setup()
     .UseFileLogProvider(config => config
         .DirectoryBuilder(_ => $@"Logs\{DateTime.Now:yyyy-MM-dd}")
         .FilenameBuilder(auditEvent => $"{auditEvent.Environment.UserName}_{DateTime.Now.Ticks}.json"));
+
             //SWAGGER
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
