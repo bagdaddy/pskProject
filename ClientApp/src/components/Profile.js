@@ -136,7 +136,7 @@ function Profile(props) {
                                     <Input type="select" name="subject" id="subject" onChange={(event) => setSelectedSubjectId(event.target.value)}>
                                         <option value="-1">-</option>
                                         {subjects.map((subject) => (
-                                            employee.subjects.filter(sub => sub.id === subject.id).length === 0 && <option value={subject.id}>{subject.name}</option>
+                                            employee.subjects.filter(sub => sub.id === subject.id).length === 0 && <option key={subject.id} value={subject.id}>{subject.name}</option>
                                         ))}
                                     </Input>
                                     <label ref={success} className="successMsg">Subject successfully added.</label>
