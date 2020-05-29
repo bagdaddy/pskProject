@@ -22,14 +22,15 @@ namespace TP.Data
                 Id = Guid.Parse("b96f7695-c9d9-4b5c-849e-4219083d6220"),
                 FirstName = "Mantas",
                 LastName = "Bagdonas",
-                Email = "bagzdiuglis_admin@gmail.com"
+                Email = "bagzdiuglis@gmail.com"
             };
             var emp2 = new Employee
             {
                 Id = Guid.Parse("1c8c9ce0-2251-4ef3-ab0b-cfc7dd7a2949"),
                 FirstName = "Evaldas",
                 LastName = "Jonaitis",
-                Email = "jonasEvladaitis@gmail.com"
+                Email = "jonasEvladaitis@gmail.com",
+                BossId = emp1.Id
             };
             var emp3 = new Employee
             {
@@ -37,7 +38,7 @@ namespace TP.Data
                 BossId = emp2.Id,
                 FirstName = "Justinas",
                 LastName = "Kondroska",
-                Email = "jsutiniukas@gmail.com"
+                Email = "jsutiniukas@gmail.com",
             };
             var emp4 = new Employee
             {
@@ -67,46 +68,52 @@ namespace TP.Data
                 Id = Guid.Parse("63f4e537-cb7b-4fe0-beca-cc080e42552d"),
                 FirstName = "Spotify",
                 LastName = "Premium",
-                Email = "hellos@gmail.com"
+                Email = "hellos@gmail.com",
+                BossId = emp3.Id
             },
             new Employee
             {
                 Id = Guid.Parse("69ca4eef-df2a-4d04-87eb-c0e2f31c0708"),
-                FirstName = "Petras ntr",
-                LastName = "komandos Gardziulas",
-                Email = "bapetrasglis@gmail.com"
+                FirstName = "Petras",
+                LastName = "Gardziulas",
+                Email = "bapetrasglis@gmail.com",
+                BossId = emp3.Id
             },
             new Employee
             {
                 Id = Guid.Parse("ca595500-ac9b-4d55-a887-7ec28bad3983"),
                 FirstName = "Algis",
                 LastName = "Greitullas",
-                Email = "bapalgislis@gmail.com"
+                Email = "bapalgislis@gmail.com",
+                BossId = emp3.Id
             },
             new Employee
             {
                 Id = Guid.Parse("4cce91af-6898-4b09-9d8d-043bbdc4e654"),
                 FirstName = "Nartumanas",
                 LastName = "Karbovskis",
-                Email = "bkarbouskis@gmail.com"
+                Email = "bkarbouskis@gmail.com",
+                BossId = emp3.Id
             },
             new Employee
             {
                 Id = Guid.Parse("c85d09e8-8658-456c-8595-502076661f41"),
-                FirstName = "Lobanas",
-                LastName = "Jovalas",
-                Email = "Jobanasjovalas@gmail.com"
+                FirstName = "Martensas",
+                LastName = "Gilberto",
+                Email = "martens.gilberto@gmail.com",
+                BossId = emp3.Id
             },
             new Employee
             {
                 Id = Guid.Parse("e214ea22-5d39-4cea-bf71-3749806e7bdd"),
                 FirstName = "Zemaiciu",
                 LastName = "Blynai",
-                Email = "mm.su.grietinyte@gmail.com"
+                Email = "mm.su.grietinyte@gmail.com",
+                BossId = emp3.Id
             }
             };
-            context.Users.AddRange(employees);
-            context.SaveChanges();
+            /*context.Users.AddRange(employees);
+            context.SaveChanges();*/
 
             var parentSubject = new Subject("Programming", null, "description description text");
             var childOne = new Subject("Object oriented programming", parentSubject.Id, "description description text");
@@ -179,8 +186,8 @@ namespace TP.Data
                     Subject = childTwo
                 }
             };
-            context.EmployeeSubjects.AddRange(employeeSubjects);
-            context.SaveChanges();
+            /*context.EmployeeSubjects.AddRange(employeeSubjects);
+            context.SaveChanges();*/
 
             var daysList = new List<Day>();
             var day1 = new Day
@@ -226,8 +233,8 @@ namespace TP.Data
                     Subject = childTwo
                 },
             };
-            context.DaySubjects.AddRange(daysSubjects);
-            context.SaveChanges();
+            /*context.DaySubjects.AddRange(daysSubjects);
+            context.SaveChanges();*/
         }
 
     }
