@@ -4,7 +4,9 @@ const SubjectList = props => {
     return (
         <div className={props.wrapperClass}>
             {props.subjects.map(subject => (
-                <a href={"/subject/" + subject.id}>{subject.name}</a>
+                <div className={props.itemClass ? props.itemClass : ""}>
+                    <a href={"/subject/" + subject.id}>{subject.name}</a>
+                </div>
             ))}
         </div>
 

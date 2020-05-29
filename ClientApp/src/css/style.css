@@ -220,15 +220,6 @@
     margin-top: 5px;
 }
 
-.subjects ul{
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.subjects ul li a{
-    color: gray;
-}
-
 .text-red{
     color: #df6767 !important;
 }
@@ -259,6 +250,24 @@
     border-bottom: none;
 }
 
-.sidebar .teamList a{
+.sidebar .teamList a, .sidebar .subjectList a, .subjects .subjectList a{
     display:block;
+}
+
+.item{
+    font-size:20px;
+    color: #005bb6;
+    line-height: 1.9;
+}
+
+.item a:hover{
+    color: #0078f0;
+}
+
+.subjects .item {
+    border-bottom: 1px solid lightgray;
+}
+
+.subjects .item:last-child{
+    border-bottom: none;
 }
