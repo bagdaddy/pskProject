@@ -132,7 +132,7 @@ function Employee(props) {
         console.log(requestOptions);
         const response = await fetch('api/Goals', requestOptions);
         if (response.ok) {
-            goalRef.current.style.display = "block";
+            window.location.reload();
         }
     }
 
@@ -173,7 +173,9 @@ function Employee(props) {
                                         <Input name="goal" id="goal" type="select" required onChange={(event) => setGoal(event.target.value)} >
                                             <option value="-1">-</option>
                                             {subjects.map(subject => (
-                                                employee.subjects.filter(sub => sub.id === subject.id).length === 0 && <option value={subject.id}>{subject.name}</option>
+                                                employee.subjects.filter(sub => sub.id === subject.id).length === 0 && 
+                                                goals.filter(goal => goal.subject.id === subject.id).length === 0 &&
+                                                <option value={subject.id}>{subject.name}</option>
                                             ))}
                                         </Input>
                                         <label ref={goalRef} className="successMsg">Goal successfuly set for {employee.firstName}.</label>
@@ -199,7 +201,7 @@ function Employee(props) {
                                 )}
                                 {employee.subjects.length > 0 && (
                                     <div className="section">
-                                        <h5>{employee.firstName} learnt subjects: </h5>
+                                        <h5>{employee.firstName} knows: </h5>
                                         <SubjectList wrapperClass="subjectList" subjects={employee.subjects} />
                                     </div>
                                 )}

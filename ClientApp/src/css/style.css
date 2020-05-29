@@ -279,3 +279,9 @@
 .description{
     white-space: pre-line;
 }
+
+.team-subjects{
+    border: 1px solid lightgray;
+    box-shadow: 1px 1px 1px;
+    border-radius: 5px;
+}
