@@ -180,7 +180,11 @@
 }
 
 .form-left{
-    width: 350px;
+    width: 400px;
+}
+
+.form-left textarea {
+    height: 180px;
 }
 
 .subjectsList ul{
@@ -270,4 +274,14 @@
 
 .subjects .item:last-child{
     border-bottom: none;
+}
+
+.description{
+    white-space: pre-line;
+}
+
+.team-subjects{
+    border: 1px solid lightgray;
+    box-shadow: 1px 1px 1px;
+    border-radius: 5px;
 }
