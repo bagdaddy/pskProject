@@ -31,6 +31,8 @@ namespace TP.Data
         public Task<List<Subject>> GetAll()
         {
             var subjectList = _context.Subjects
+                   .Include(x => x.EmployeesWhoLearnedIt)
+                   .ThenInclude(e => e.Employee)
                                 .AsNoTracking()
                                 .ToListAsync();
             return subjectList;
