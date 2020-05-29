@@ -17,6 +17,7 @@ using TP.Services;
 using AutoMapper;
 using Audit;
 using System.IO;
+using Microsoft.EntityFrameworkCore.SqlServer.Update.Internal;
 
 namespace TP
 {
@@ -50,6 +51,7 @@ namespace TP
             services.AddScoped<IDaysRepository, DaysRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<ITeamControllerService, TeamControllerService>();
+            services.AddScoped<IRestrictionRepository, RestrictionRepository>();
             services.AddScoped<IGoalsRepository, GoalsRepository>();
             services.AddScoped<IInviteRepository, InviteRepository>();
             services.AddScoped<IInviteControllerService, InviteControllerService>();

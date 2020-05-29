@@ -19,6 +19,8 @@ namespace TP.Data.Entities
         public List<Goal> Goals { get; set; }
         private readonly List<Subject> _childSubjects = new List<Subject>();
         public IReadOnlyList<Subject> ChildSubjects => _childSubjects;
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
         public Subject(string name, Guid? parentSubjectId, string description)
         {
             Id = Guid.NewGuid();
