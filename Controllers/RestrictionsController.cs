@@ -25,7 +25,11 @@ namespace TP.Controllers
 
                 foreach(var employee in employees)
                 {
-                    employee.GlobalDayLimit = requestModel.GlobalDayLimit;
+                    if(!requestModel.GlobalDayLimit.HasValue)
+                    {
+                        return BadRequest("Missing global day limit value");
+                    }
+                    employee.GlobalDayLimit = requestModel.GlobalDayLimit.Value;
 
                     _restrictionRepository.Update(employee);
                 }
