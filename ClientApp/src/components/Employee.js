@@ -173,7 +173,7 @@ function Employee(props) {
                                         <Input name="goal" id="goal" type="select" required onChange={(event) => setGoal(event.target.value)} >
                                             <option value="-1">-</option>
                                             {subjects.map(subject => (
-                                                <option value={subject.id}>{subject.name}</option>
+                                                employee.subjects.filter(sub => sub.id === subject.id).length === 0 && <option value={subject.id}>{subject.name}</option>
                                             ))}
                                         </Input>
                                         <label ref={goalRef} className="successMsg">Goal successfuly set for {employee.firstName}.</label>
@@ -188,7 +188,7 @@ function Employee(props) {
                         {(employees.length > 0 || employee.subjects.length > 0 || goals.length > 0) &&
                             <div className="col-lg-4 col-md-4 sidebar">
                                 {goals.length > 0 && (
-                                    <div>
+                                    <div className="section">
                                         <h5>Current goals: </h5>
                                         <div className="goals">
                                             {goals.map(goal => (
@@ -198,13 +198,13 @@ function Employee(props) {
                                     </div>
                                 )}
                                 {employee.subjects.length > 0 && (
-                                    <div>
+                                    <div className="section">
                                         <h5>{employee.firstName} learnt subjects: </h5>
                                         <SubjectList wrapperClass="subjectList" subjects={employee.subjects} />
                                     </div>
                                 )}
                                 {employees.length > 0 && (
-                                    <div>
+                                    <div className="section">
                                         <h5>{employee.firstName} team list:</h5>
                                         <TeamList wrapperClass="teamList" team={employees} />
                                     </div>
@@ -226,11 +226,6 @@ function Employee(props) {
 
 
 };
-
-// ReactDOM.render(
-//     <Employee/>,
-//     document.getElementById("profile")
-// );
 
 export default Employee;
 

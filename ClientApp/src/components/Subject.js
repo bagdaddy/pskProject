@@ -36,7 +36,17 @@ function Subject(props) {
     }, [data, loading]);
 
     const markAsLearnt = () => {
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' }
+        };
 
+        fetch('api/Employees/AddSubject/' + subject.id, requestOptions)
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                }
+            });
     };
 
     if(!loading){
