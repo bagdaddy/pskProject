@@ -28,17 +28,17 @@ export default class App extends Component {
   render () {
     return (
       <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/logout" component={Logout} />
-        <Route path='/me' component={Profile} />
-        <Route path='/employee/:id' component={Employee} />
-        <Route path='/learningTree/:id?' component={LearningTree} />
-        <Route path='/subjects' component={Subjects} />
-        <Route path='/add-subject' component={AddSubject} />
-        <Route path='/subject/:id' component={Subject} />
-        <Route path='/edit-subject/:id' component={EditSubject} />
-        <Route path='/register/:id' component={Register} />
+        <ProtectedRoute exact path='/' component={Home} />
+        <UnauthenticatedRoute path="/login" component={Login} />
+        <UnauthenticatedRoute path="/logout" component={Logout} />
+        <ProtectedRoute path='/me' component={Profile} />
+        <ProtectedRoute path='/employee/:id' component={Employee} />
+        <ProtectedRoute path='/learningTree/:id?' component={LearningTree} />
+        <ProtectedRoute path='/subjects' component={Subjects} />
+        <ProtectedRoute path='/add-subject' component={AddSubject} />
+        <ProtectedRoute path='/subject/:id' component={Subject} />
+        <ProtectedRoute path='/edit-subject/:id' component={EditSubject} />
+        <ProtectedRoute path='/register/:id' component={Register} />
         {/*Kol kas paliekam uzkomentuota, kad nereiktu prisijungti kiekviena karta kai padarom kazkokiu pakeitimu*/ }
         {/* <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />
@@ -49,8 +49,8 @@ export default class App extends Component {
         <ProtectedRoute path='/subjects' component={Subjects} />
         <ProtectedRoute path='/add-subject' component={AddSubject} />
         <ProtectedRoute path='/subject/:id' component={Subject} /> */}
-        <Route path='/invitation' component={Invitation} />
+        <ProtectedRoute path='/invitation' component={Invitation} />
       </Layout>
     );
   }
-}
+  }
