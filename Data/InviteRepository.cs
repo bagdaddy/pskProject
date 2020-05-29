@@ -21,6 +21,11 @@ namespace TP.Data
             _context.Add(invite);
         }
 
+        public void Delete(Invite invite)
+        {
+            _context.Remove(invite);
+        }
+
         public Task<Invite> GetById(Guid id)
         {
             return _context.Invites

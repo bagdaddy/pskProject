@@ -21,12 +21,14 @@ namespace TP.Controllers
         private readonly UserManager<Employee> _userManager;
         private readonly SignInManager<Employee> _signInManager;
         private readonly IDTOService _dtoService;
+        private readonly IInviteControllerService _inviteControllerService;
 
-        public AuthController(SignInManager<Employee> signInManager, UserManager<Employee> userManager, IDTOService dtoService)
+        public AuthController(SignInManager<Employee> signInManager, UserManager<Employee> userManager, IDTOService dtoService, IInviteControllerService inviteControllerService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dtoService = dtoService;
+            _inviteControllerService = inviteControllerService;
         }
 
         [HttpPost("login")]
@@ -79,6 +81,7 @@ namespace TP.Controllers
         [Consumes("application/json")]
         public async Task<IActionResult> Register([FromBody] RegisterAccountRequest registerAccount)
         {
+            var invite = await _inviteControllerService.GetInvite(registerAccount.InviteId);
             // username = email without special symbols
             Employee user = new Employee
             {
@@ -86,6 +89,7 @@ namespace TP.Controllers
                 Email = registerAccount.Email,
                 FirstName = registerAccount.FirstName,
                 LastName = registerAccount.LastName,
+                BossId = invite.EmployeeId
             };
 
             try
@@ -98,7 +102,7 @@ namespace TP.Controllers
                     //Log.Information("Registering user was unsuccessfull");
                     return Conflict(result.Errors);
                 }
-
+                await _inviteControllerService.DeleteInvite(registerAccount.InviteId);
                 Console.WriteLine("User -> " + registerAccount.Email + "  registered successfully!");
                 //Log.Information("Registration succeeded");
                 return Ok(result.Succeeded);
