@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TP.Data.Contexts;
 using TP.Data.Entities;
 using TP.DataContracts;
+using TP.Extensions;
 using TP.Models.RequestModels;
 
 namespace TP.Data
@@ -53,9 +54,18 @@ namespace TP.Data
         //count days by worker id and quarter
         public async Task<int> GetThisQuarter(Guid employeeid, int quarter)
         {
-            var workerDaysThisQuarter = _context.Days
-                .CountAsync(x => x.Employee.Id == employeeid && GetQuarter(x.Date) == quarter);
-            return await workerDaysThisQuarter;
+            var workerDaysThisQuarter = await _context.Days
+                .Where(x => x.Employee.Id == employeeid)
+                .ToListAsync();
+            var count = 0;
+            foreach (var day in workerDaysThisQuarter)
+            {
+                if(day.Date.GetQuarter() == quarter)
+                {
+                    count += 1;
+                }
+            }
+            return count;
         }
         // isveda darbuotoju id sarasa pagal subject id
         public async Task<List<Employee>> GetEmployeesBySubject(Guid subjectId)
@@ -78,7 +88,7 @@ namespace TP.Data
                 Id = Guid.NewGuid()
             };
 
-            await _context.AddAsync(dayToAdd);
+            await _context.Days.AddAsync(dayToAdd);
             await _context.SaveChangesAsync();
         }
 

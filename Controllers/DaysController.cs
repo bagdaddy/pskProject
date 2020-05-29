@@ -63,6 +63,10 @@ namespace TP.Controllers
         [HttpGet("GetDaysInQuarter/{employeeId}/{quarter}")]
         public async Task<IActionResult> getDatesThisQuarter(Guid employeeId, int quarter)
         {
+            if (quarter < 1 || quarter > 4)
+            {
+                return BadRequest("Quarter value must be between 1 and 4");
+            }
             try
             {
                 int dayCount = await _repository.GetThisQuarter(employeeId, quarter);
