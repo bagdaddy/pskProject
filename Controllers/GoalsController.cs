@@ -29,7 +29,7 @@ namespace TP.Controllers
             _teamRepository = teamRepository;
             _teamControllerService = teamControllerService;
         }
-        [HttpGet("/api/Goal/{id}")]
+        [HttpGet("/api/Goals/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -65,7 +65,7 @@ namespace TP.Controllers
             }
         }
 
-        [HttpPost("/api/Goal")]
+        [HttpPost("/api/Goals")]
         [Consumes("application/json")]
         public async Task<IActionResult> AddGoal([FromBody] GoalRequestModel model)
         {
