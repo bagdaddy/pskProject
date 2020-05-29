@@ -134,7 +134,7 @@ namespace TP.Controllers
                 var defaultUser = new Employee
                 {
                     Id = id,
-                    UserName = "admin",
+                    UserName = "admingmailcom",
                     Email = "admin@gmail.com",
                     FirstName = "Admin",
                     LastName = "Adminer"
