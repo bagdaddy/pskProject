@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Audit.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
 using TP.DataContracts;
@@ -12,6 +13,7 @@ namespace TP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Audit]
     public class DaysController : ControllerBase
     {
         private readonly IDaysRepository _repository;

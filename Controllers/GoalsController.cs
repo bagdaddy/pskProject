@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Audit.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
@@ -14,6 +15,7 @@ namespace TP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Audit]
     public class GoalsController:ControllerBase
     {
         private readonly IGoalsRepository _repository;

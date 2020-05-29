@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Audit.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using TP.Services.DTOServices.Models;
 
 namespace TP.Controllers
 {
+    [Audit]
     public class TeamController : ControllerBase
     {
         private readonly ITeamRepository _teamRepository;
