@@ -9,6 +9,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     const [date, setDate] = useState(null);
     const [subjects, setSubjets] = useState([]);
     const [id, setId] = useState(null);
+    const [daysThisQuarter, setDaysThisQuarter] = useState(0);
 
     
     const [comment, setComment] = useState("");
@@ -39,13 +40,24 @@ const SubjectSelection = forwardRef((props, ref) => {
                 }
             }
         }
+        if(props.employee){
+            getDatesThisQuarter();
+        }
+
         return function cleanup() {
             setSubjectsSelected([]);
             setComment("");
             setNum(null);
-            setId(null)
+            setId(null);
+            setDaysThisQuarter(0);
           };
     },[date]);
+
+    async function getDatesThisQuarter() {
+        const response = await fetch('api/Days/GetDaysInQuarter/' + props.employee?props.employee.id:1 + "/" + getQuarter(date)[1] + "/" + getQuarter(date)[0]);
+        const days = await response.json();
+        setDaysThisQuarter(days);
+      }  
 
     async function postDay(day) {
         const response = await fetch('api/Days/CreateNewDay/', {
@@ -118,9 +130,52 @@ const SubjectSelection = forwardRef((props, ref) => {
             return !HasDayPassed()? 1:0
         }else{
         //+to conditions IsDateLimitPer(Quarter/Year)Reached(no)
-            return !HasDayPassed()? 1:0 
+            return !HasDayPassed() && !DoesDayHaveAdjascentDays() && !IsMaxThisQuarterReacher() 
         }
     }
+
+    function DoesDayHaveAdjascentDays(){
+        var minus = new Date(date.valueOf() - 86400000);
+        var plus = new Date(date.valueOf() + 86400000);
+        if(DoesDateExist(minus) || DoesDateExist(plus)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function DoesDateExist(date){
+        var i;
+        if(props.dates.length && date){
+            for(i = 0; i<props.dates.length; ++i){
+                if(props.dates[i].date.getTime() === date.getTime()){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    function getQuarter(d) {
+        d = d || new Date();
+        var m = Math.floor(d.getMonth() / 3)+1;
+        m -= m > 4 ? 4 : 0;
+        var y = d.getFullYear();
+        return [y,m];
+    }
+
+    function IsMaxThisQuarterReacher() {
+        var maxDays = 4;
+        console.log(daysThisQuarter)
+        if(daysThisQuarter >= maxDays){
+            console.log("OVER")
+            return true;
+        }else{
+            console.log("UNDER")
+            return false;
+        }
+    }
+
 
     return (
         <div>
