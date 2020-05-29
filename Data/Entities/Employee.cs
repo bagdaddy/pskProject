@@ -17,5 +17,6 @@ namespace TP.Data.Entities
         public List<EmployeeSubject> LearnedSubjects { get; set; }
         public List<Employee> Subordinates { get; set; } = new List<Employee>();
         public List<Goal> Goals { get; set; }
+        public List<Invite> Invites { get; set; }
     }
 }
