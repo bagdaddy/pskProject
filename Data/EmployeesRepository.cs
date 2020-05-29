@@ -78,7 +78,11 @@ namespace TP.Data
                 SubjectId = SubjectId
             };
             await _context.EmployeeSubjects.AddAsync(es);
+            var goalToDelete = await _context.Goals
+                .FirstOrDefaultAsync(x => x.EmployeeId == EmployeeId && x.SubjectId == SubjectId);
+            _context.Goals.Remove(goalToDelete);
             await _context.SaveChangesAsync();
+        
         }
         public async Task CreateEmployee(Employee employee)
         {
