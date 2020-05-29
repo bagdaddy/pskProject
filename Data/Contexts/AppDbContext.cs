@@ -11,6 +11,8 @@ namespace TP.Data.Contexts
 {
     public class AppDbContext : IdentityDbContext<Employee, Role, Guid>
     {
+
+        public DbSet<Day> Days { get; set; }
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<EmployeeSubject> EmployeeSubjects { get; set; }
@@ -19,6 +21,7 @@ namespace TP.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new DayEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new GoalEntityTypeConfiguration());
@@ -35,6 +38,10 @@ namespace TP.Data.Contexts
                 .HasOne(es => es.Subject)
                 .WithMany(s => s.EmployeesWhoLearnedIt)
                 .HasForeignKey(es => es.SubjectId);
+
+            modelBuilder.Entity<Day>()
+                .HasOne(d => d.Employee)
+                .WithMany();
         }
 
     }
