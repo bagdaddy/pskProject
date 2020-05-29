@@ -17,11 +17,12 @@ namespace TP.Controllers
     public class EmailController : ControllerBase
     {
         private readonly IEmailSender _emailSender;
+        private readonly IInviteControllerService _inviteControllerService;
 
-        public EmailController(IEmailSender emailSender)
+        public EmailController(IEmailSender emailSender, IInviteControllerService inviteControllerService)
         {
             _emailSender = emailSender;
-
+            _inviteControllerService = inviteControllerService;
         }
 
         [HttpGet("{email}")]
@@ -41,10 +42,12 @@ namespace TP.Controllers
         {
             try
             {
+                var inviteId = await _inviteControllerService.CreateInvite(id, subjectRequestModel);
+
                 await _emailSender
-                 .SendEmailAsync(subjectRequestModel.email, "Subject", "Text Message.", "Html Message")
+                 .SendEmailAsync(subjectRequestModel.email, "Subject", "Text Message.", "localhost:5000/register/" + inviteId)
                  .ConfigureAwait(false);
-                return Ok();
+                return Ok(inviteId);
             }
             catch (Exception exception)
             {

@@ -15,6 +15,7 @@ namespace TP.Data.EntityTypeConfiguration
         {
             builder.ToTable(nameof(Invite));
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Email);
             builder.HasOne(x => x.Employee).WithMany(x => x.Invites).HasForeignKey(x => x.EmployeeId);
         }
     }

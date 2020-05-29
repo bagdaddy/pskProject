@@ -12,38 +12,12 @@ namespace TP.Controllers
 {
     public class InviteController : ControllerBase
     {
-        private readonly IEmployeesRepository _employeeRepository;
         private readonly IInviteRepository _inviteRepository;
         private readonly IMapper _mapper;
-        public InviteController(IEmployeesRepository employeesRepository, IInviteRepository inviteRepository, IMapper mapper)
+        public InviteController(IInviteRepository inviteRepository, IMapper mapper)
         {
-            _employeeRepository = employeesRepository;
             _inviteRepository = inviteRepository;
             _mapper = mapper;
-        }
-        [HttpPost("api/Invite/{id}")]
-        public async Task<IActionResult> CreateInvite(Guid id)
-        {
-            try
-            {
-                var employee = _employeeRepository.GetById(id);
-
-                if(employee == null)
-                {
-                    return BadRequest("Employee does not exist");
-                }
-
-                var invite = new Invite(id);
-
-                _inviteRepository.Add(invite);
-                await _inviteRepository.SaveChanges();
-
-                return Ok(invite.Id);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
         }
         [HttpGet("api/GetInvite/{id}")]
         public async Task<IActionResult> GetInvite(Guid id)

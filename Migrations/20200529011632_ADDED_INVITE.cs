@@ -12,7 +12,8 @@ namespace TP.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    EmployeeId = table.Column<Guid>(nullable: false)
+                    EmployeeId = table.Column<Guid>(nullable: false),
+                    Email = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

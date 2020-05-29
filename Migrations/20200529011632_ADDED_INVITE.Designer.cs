@@ -10,7 +10,7 @@ using TP.Data.Contexts;
 namespace TP.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200528235749_ADDED_INVITE")]
+    [Migration("20200529011632_ADDED_INVITE")]
     partial class ADDED_INVITE
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,6 +245,9 @@ namespace TP.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uniqueidentifier");

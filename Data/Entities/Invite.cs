@@ -8,11 +8,13 @@ namespace TP.Data.Entities
     public class Invite
     {
         public Guid Id { get; set; }
-        public Guid EmployeeId {get; set;}
+        public Guid EmployeeId { get; set; }
         public Employee Employee { get; set; }
-        public Invite(Guid employeeId)
+        public string Email { get; set; }
+        public Invite(string email, Guid employeeId)
         {
             Id = new Guid();
+            Email = email;
             EmployeeId = employeeId;
         }
     }
