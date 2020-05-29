@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using TP.Data.Entities;
 using TP.DataContracts;
 
 namespace TP.Services
@@ -10,9 +11,11 @@ namespace TP.Services
     public class GoalsControllerService
     {
         private readonly IGoalsRepository _repository;
-        public GoalsControllerService(IGoalsRepository repository)
+        private readonly ITeamRepository _teamRepository;
+        public GoalsControllerService(IGoalsRepository repository, ITeamRepository teamRepository)
         {
             _repository = repository;
+            _teamRepository = teamRepository;
         }
         public async Task DeleteGoal(Guid id)
         {

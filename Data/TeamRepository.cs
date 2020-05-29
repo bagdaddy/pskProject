@@ -34,6 +34,8 @@ namespace TP.Data
             return _context.Users
                     .Include(x => x.LearnedSubjects)
                     .ThenInclude(xx => xx.Subject)
+                    .Include(x => x.Goals)
+                    .ThenInclude(xx => xx.Subject)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -57,6 +59,8 @@ namespace TP.Data
         {
             var subordinateList = _context.Users
                 .Include(x => x.LearnedSubjects)
+                .ThenInclude(xx => xx.Subject)
+                .Include(x => x.Goals)
                 .ThenInclude(xx => xx.Subject)
                 .Include(x => x.Subordinates)
                 .Where(x => x.BossId.HasValue && x.BossId.Value == id)

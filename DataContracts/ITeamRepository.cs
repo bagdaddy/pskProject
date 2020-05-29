@@ -14,6 +14,7 @@ namespace TP.DataContracts
         void Delete(Employee employee);
         Task SaveChanges();
         Task UpdateTeam(UpdateTeamRequestModel request);
+        public Task<Employee> GetByIdWithSubordinates(Guid id);
         Task<List<Employee>> GetSubordinates(Guid id);
     }
 }
