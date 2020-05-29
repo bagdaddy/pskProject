@@ -9,10 +9,12 @@ function fetchSubject(id){
     async function fetchData(id) {
         const res = await fetch("api/GetSubjects/" + id);
         const json = res.ok ? await res.json() : null;
-        const emp = await fetch("api/Auth/self");
-        const empData = emp.ok ? await emp.json() : null;
+        const user = await fetch("api/Auth/self");
+        const userData = user.ok ? await user.json() : null;
+        const employee = await fetch("api/Employees/" + userData.id);
+        const employeeData = await employee.json();
         setLoading(false);
-        setData({subject : json[0], employee: empData});
+        setData({subject : json[0], employee: employeeData});
         console.log(json[0]);
     };
 

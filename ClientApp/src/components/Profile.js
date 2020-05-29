@@ -186,10 +186,13 @@ function Profile(props) {
                                     <TeamList wrapperClass="teamList" team={allEmployees} />
                                 </div>
                             )}
-                            <div className="section">
-                                <h5>Your team has learned these subjects: </h5>
-                                <SubjectList wrapperClass="subjectList" subjects={teamSubjects}/>
-                            </div>
+                            {teamSubjects.length > 0 &&
+                                <div className="section">
+                                    <h5>Your team has learned these subjects: </h5>
+                                    <SubjectList wrapperClass="subjectList" subjects={teamSubjects} />
+                                </div>
+                            }
+
                         </div>
                     }
                 </div>

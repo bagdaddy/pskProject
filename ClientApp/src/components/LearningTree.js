@@ -162,6 +162,9 @@ const LearningTree = props => {
                 employeeArr.push(employee);
             }
         });
+        if(employee.subjects.filter(function (e) { return e.id === subject.id}).length > 0){
+            employeeArr.push(employee);
+        }
         return employeeArr;
     };
 
