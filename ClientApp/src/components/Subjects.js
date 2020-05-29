@@ -37,7 +37,7 @@ function Subjects(props) {
                 <a className="btn btn-success addSubjectBtn" href="/add-subject">Add new subject</a>
                 <div className="row">
                     <div className="col-8">
-                        {subjects && <SubjectList wrapperClass="subjectsList" subjects={subjects} />}
+                        {subjects && <SubjectList wrapperClass="subjectsList" itemClass="item" subjects={subjects} />}
                     </div>
                     <div className="col-4">
                     </div>
