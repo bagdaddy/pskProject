@@ -20,8 +20,8 @@ const SubjectSelection = forwardRef((props, ref) => {
 
     const toggle = () => {
         setModal(!modal);
-
     };
+    
     const daySetup = (date, subjects, id) =>{
         setDate(date);
         var res = subjects.filter(item1 => 

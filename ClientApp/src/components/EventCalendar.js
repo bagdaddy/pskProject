@@ -3,6 +3,8 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import testDays from './testDays';
 import SubjectSelection from './SubjectSelection';
+import CalendarDayPreview from './CalendarDayPreview';
+import {withRouter} from 'react-router-dom';
 import './react-big-calendar.css';
 
 moment.locale('ko', {
@@ -27,6 +29,15 @@ const EventCalendar = (props) => {
     const [employee, setEmployee] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    console.log(window.location.pathname);
+
+    function isPersonalCalendar(){
+        if(window.location.pathname === "/calendar"){
+            return(<SubjectSelection dates={dates} employee={employee} setDates={setDates} ref={childRef}/>)
+        }else{
+            return(<CalendarDayPreview dates={dates} ref={childRef}/>)
+        }
+    }
 
     async function fetchAllSubjects() {
         const response = await fetch('api/GetAllSubjects/');
@@ -123,7 +134,7 @@ const EventCalendar = (props) => {
             components={{
             dateCellWrapper: ColoredDateCellWrapper
             }}/>
-            <SubjectSelection dates={dates} employee={employee} setDates={setDates} ref={childRef}/>
+            {isPersonalCalendar()}
         </div>
     )
   }
@@ -146,4 +157,4 @@ function WorkDay(date){
     }
 }
 
-export default EventCalendar
+export default withRouter(EventCalendar)
