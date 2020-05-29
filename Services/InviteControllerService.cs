@@ -42,5 +42,38 @@ namespace TP.Services
                 throw e;
             }
         }
+        public async Task DeleteInvite(Guid id)
+        {
+            try
+            {
+                var invite = await _inviteRepository.GetById(id);
+
+                if (invite == null)
+                {
+                    throw new Exception("Invite does not exist");
+                }
+
+                _inviteRepository.Delete(invite);
+                await _inviteRepository.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public async Task<Invite> GetInvite(Guid id)
+        {
+            try
+            {
+                var invite = await _inviteRepository.GetById(id);
+                
+                return invite;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

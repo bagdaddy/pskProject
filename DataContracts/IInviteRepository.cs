@@ -11,5 +11,7 @@ namespace TP.DataContracts
         public void Add(Invite invite);
         Task SaveChanges();
         Task<Invite> GetById(Guid id);
+
+        void Delete(Invite invite);
     }
 }
