@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Audit.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TP.Data.Entities;
@@ -14,6 +15,7 @@ namespace TP.Controllers
 {
     [Route("api/Emails")]
     [ApiController]
+    [Audit]
     public class EmailController : ControllerBase
     {
         private readonly IEmailSender _emailSender;

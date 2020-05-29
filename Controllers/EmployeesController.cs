@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Audit.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ namespace TP.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
+    [Audit]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeesRepository _repository;
