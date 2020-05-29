@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import moment from 'moment';
 
 const CalendarDayPreview = forwardRef((props, ref) => {
 
@@ -38,7 +39,8 @@ const CalendarDayPreview = forwardRef((props, ref) => {
         var daysToAdd = [];
         if(props.dates.length && date){
             for(i = 0; i<props.dates.length; ++i){
-                if(props.dates[i].date.getTime() === date.getTime()){
+              var curDay = new Date(moment(props.dates[i].date).toDate().setHours(4,0,0,0));
+                if(curDay.getTime() === date.getTime()){
                     daysToAdd.push(props.dates[i])
                 }
             }
@@ -49,17 +51,23 @@ const CalendarDayPreview = forwardRef((props, ref) => {
           };
     },[date]);
 
+
+    function getList(){
+      if(days){
+        return( <div>
+          {days.map(day => (<li key={day.employeeId}>{fetchEmployee(day.employeeId).firstName}</li>,
+          day.daySubjectList.map(subject =>
+              <li key={subject}>{getSubjectName(subject)}</li>)))}                 
+          </div>)
+      }else{
+        return(<div>Loading...</div>)
+      }
+    }
   return (
     <div>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>{date? date.toString().substring(0, 10):""}</ModalHeader>
-        <ModalBody>
-            <div>
-            {days.map(day => (<div>{fetchEmployee(day.employeeId).name}</div>,
-            day.subjects.map(subject => /*(console.log(getSubjectName(subject))*/
-                <li key={subject}>{getSubjectName(subject)}</li>)))}                 
-            </div>
-        </ModalBody>
+        <ModalBody>{getList()}</ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>

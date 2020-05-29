@@ -27,7 +27,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     const daySetup = (date, subjects, id) =>{
         setDate(date);
         var res = subjects.filter(item1 => 
-            !props.employee.subjects.some(item2 => (item2.id === item1.id)))
+            !props.employee.subjects.some(item2 => (item2.name === item1.name)))
         setSubjets(res);
         setId(id);
     } 
@@ -68,7 +68,6 @@ const SubjectSelection = forwardRef((props, ref) => {
       }  
 
     async function postDay(day) {
-        console.log(day)
         delete Array.prototype.toJSON;
         const response = await fetch('api/Days/CreateDay/', {
           method: 'POST',

@@ -41,15 +41,24 @@ const EventCalendar = (props) => {
         const response = await fetch('api/GetAllSubjects/');
         const json = await response.json();
         setSubjects(json);
-        setLoading(false);
       }  
 
+
     async function fetchDays() {
-      const response = await fetch('api/Days/GetDayByEmployeeId/' + employee.id);
-      const days = await response.json();
-      setDates(days);
-      setLoading(false);
-    }  
+        const res = await fetch('api/Auth/self');
+        if (res.ok) {
+            const me = await res.json();
+            const response = await fetch('api/Days/GetDayByEmployeeId/' + me.id);
+            if (response.ok) {
+                const days = await response.json();
+                setDates(days);
+                setEmployee(me);
+                setLoading(false);
+            } else {
+                return [];
+            }
+        }
+    }
 
     async function fetchEmployee() {
         const response = await fetch('api/Employees/' + '5a677c6e-56e5-4cf1-9c64-157b483e8eff');
@@ -58,18 +67,16 @@ const EventCalendar = (props) => {
     }  
 
 
-    useEffect(() => {  
-        employee?fetchDays():null;
-    },[updated]);  
+    useEffect(() => { 
+        fetchAllSubjects(); 
+        fetchDays();
+    },[]);  
 
-    useEffect(() => {  
-        fetchAllSubjects().then(result => fetchEmployee());
-    },[loading]);   
     
     useEffect(() => {  
-        employee?fetchDays():null;
+        fetchDays();
         setEvents();
-    },[employee]);  
+    },[updated]);  
 
     useEffect(() => {  
         subjects?setSubjects(subjects.sort((a, b) => a.name.localeCompare(b.name))):null;        
@@ -108,7 +115,6 @@ const EventCalendar = (props) => {
 
     const handleSelect = ({ start }) => {
         var curDay =new Date(moment(start).toDate().setHours(4,0,0,0));
-        console.log(curDay)
         var id;
         var day = DayExists(curDay);
         day? id=day.id : id=null;
