@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Audit.Mvc;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using TP.Models.ResponseModels;
 
 namespace TP.Controllers
 {
+    [Audit]
     public class InviteController : ControllerBase
     {
         private readonly IInviteRepository _inviteRepository;

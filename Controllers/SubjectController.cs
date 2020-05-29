@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Audit.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using TP.Models.ResponseModels;
 
 namespace TP.Controllers
 {
+    [Audit]
     public class SubjectController: ControllerBase
     {
         private readonly ISubjectRepository _subjectRepository;

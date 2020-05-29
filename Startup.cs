@@ -15,6 +15,8 @@ using TP.Data.Entities;
 using TP.DataContracts;
 using TP.Services;
 using AutoMapper;
+using Audit;
+using System.IO;
 
 namespace TP
 {
@@ -125,6 +127,11 @@ namespace TP
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            Audit.Core.Configuration.Setup()
+    .UseFileLogProvider(config => config
+        .DirectoryBuilder(_ => $@"Logs\{DateTime.Now:yyyy-MM-dd}")
+        .FilenameBuilder(auditEvent => $"{auditEvent.Environment.UserName}_{DateTime.Now.Ticks}.json"));
 
             //SWAGGER
             // Enable middleware to serve generated Swagger as a JSON endpoint.

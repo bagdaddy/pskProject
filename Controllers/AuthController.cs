@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Audit.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,7 @@ namespace TP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Audit]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<Employee> _userManager;
