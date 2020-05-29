@@ -3,13 +3,11 @@ import React from 'react';
 const SubjectList = props => {
     return (
         <div className={props.wrapperClass}>
-            <ul>
-                {props.subjects.map(subject => (
-                    <li key={subject.id}>
-                        <a href={"/subject/" + subject.id}>{subject.name}</a>
-                    </li>
-                ))}
-            </ul>
+            {props.subjects.map(subject => (
+                <div key={subject.id} className={props.itemClass ? props.itemClass : ""}>
+                    <a href={"/subject/" + subject.id}>{subject.name}</a>
+                </div>
+            ))}
         </div>
 
     );

@@ -20,10 +20,10 @@ namespace TP.Data
 
         public async  Task<Employee> GetById(Guid id)
         {
-            using (var appDbContext = _context)
-            {
-                return await GetEmployee(appDbContext, id);
-            }
+            //using (var appDbContext = _context)
+            //{
+                return await GetEmployee(_context, id);
+            //}
         }
 
         public async Task<List<Employee>> GetAll()
@@ -70,6 +70,22 @@ namespace TP.Data
             }
         }
 
+        public async Task AddSubjectToEmployee(Guid EmployeeId, Guid SubjectId)
+        {
+            var es = new EmployeeSubject
+            {
+                EmployeeId = EmployeeId,
+                SubjectId = SubjectId
+            };
+            await _context.EmployeeSubjects.AddAsync(es);
+            var goalToDelete = await _context.Goals
+                .FirstOrDefaultAsync(x => x.EmployeeId == EmployeeId && x.SubjectId == SubjectId);
+            if (goalToDelete != null) { 
+                _context.Goals.Remove(goalToDelete);
+            }
+            await _context.SaveChangesAsync();
+        
+        }
         public async Task CreateEmployee(Employee employee)
         {
             _context.Add(employee);

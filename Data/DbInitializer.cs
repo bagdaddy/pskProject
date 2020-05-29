@@ -181,6 +181,53 @@ namespace TP.Data
             };
             context.EmployeeSubjects.AddRange(employeeSubjects);
             context.SaveChanges();
+
+            var daysList = new List<Day>();
+            var day1 = new Day
+            {
+                Employee = emp1,
+                Id = Guid.NewGuid(),
+                Date = new DateTime(),
+            };
+            var day2 = new Day
+            {
+                Employee = emp2,
+                Id = Guid.NewGuid(),
+                Date = new DateTime(),
+            };
+            daysList.Add(day1);
+            daysList.Add(day2);
+            context.Days.AddRange(daysList);
+            context.SaveChanges();
+
+            var daysSubjects = new DaySubject[] {
+                new DaySubject
+                {
+                    Day = day1,
+                    Subject = parentSubject
+                },
+                new DaySubject
+                {
+                    Day = day1,
+                    Subject = childOne
+                },new DaySubject
+                {
+                    Day = day1,
+                    Subject = childTwo
+                },
+                new DaySubject
+                {
+                    Day = day2,
+                    Subject = parentSubject
+                },
+                new DaySubject
+                {
+                    Day = day2,
+                    Subject = childTwo
+                },
+            };
+            context.DaySubjects.AddRange(daysSubjects);
+            context.SaveChanges();
         }
 
     }

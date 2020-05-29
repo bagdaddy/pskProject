@@ -63,13 +63,16 @@ namespace TP.Controllers
         {
            try {
                 var user = await _userManager.GetUserAsync(User);
-                return Ok(_dtoService.EmployeeToDTO(user));
+                if (user != null)
+                {
+                    return Ok(_dtoService.EmployeeToDTO(user));
+                }
             } catch (Exception exception)
             {
                 //Log.Error(exception, "Failed to get role");
                 return StatusCode((int)HttpStatusCode.Unauthorized, "User ir not logged in.");
             }
-            
+            return Unauthorized();
         }
 
         [HttpPost("register")]

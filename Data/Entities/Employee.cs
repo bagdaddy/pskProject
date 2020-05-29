@@ -18,6 +18,8 @@ namespace TP.Data.Entities
         public string LastName { get; set; }
         public List<EmployeeSubject> LearnedSubjects { get; set; }
         public List<Employee> Subordinates { get; set; } = new List<Employee>();
+        public List<Goal> Goals { get; set; }
+        public List<Invite> Invites { get; set; }
         [Timestamp]
         public byte[] Timestamp { get; set; }
     }

@@ -11,6 +11,7 @@ import Login from './components/Login';
 import Profile from './components/Profile';
 import Logout from './components/Logout';
 import { ProtectedRoute, UnauthenticatedRoute } from './components/routes/Routes';
+import EditSubject from './components/EditSubject';
 import Invitation from './components/Invitation';
 
 export default class App extends Component {
@@ -28,6 +29,7 @@ export default class App extends Component {
         <Route path='/subjects' component={Subjects} />
         <Route path='/add-subject' component={AddSubject} />
         <Route path='/subject/:id' component={Subject} />
+        <Route path='/edit-subject/:id' component={EditSubject} />
         {/*Kol kas paliekam uzkomentuota, kad nereiktu prisijungti kiekviena karta kai padarom kazkokiu pakeitimu*/ }
         {/* <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />

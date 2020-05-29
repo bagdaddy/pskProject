@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NotFound = props => {
+export const NotFound = props => {
     return(
         <div className="notfound">
             <h1>Oops!</h1>
@@ -9,4 +9,11 @@ const NotFound = props => {
     )
 };
 
-export default NotFound;
+export const NotAuthorized = props => {
+    return(
+        <div className="notfound">
+            <h1>Sorry...</h1>
+            <p>You are not authorized to access this page.</p>
+        </div>
+    )
+}

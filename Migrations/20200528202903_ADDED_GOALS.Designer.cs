@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP.Data.Contexts;
 
 namespace TP.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class SubjectContextModelSnapshot : ModelSnapshot
+    [Migration("20200528202903_ADDED_GOALS")]
+    partial class ADDED_GOALS
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,16 +151,10 @@ namespace TP.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("GlobalDayLimit")
-                        .HasColumnType("int");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
-
-                    b.Property<int>("LocalDayLimit")
-                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -242,25 +238,6 @@ namespace TP.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Goal");
-                });
-
-            modelBuilder.Entity("TP.Data.Entities.Invite", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("Invite");
                 });
 
             modelBuilder.Entity("TP.Data.Entities.Role", b =>
@@ -398,15 +375,6 @@ namespace TP.Migrations
                     b.HasOne("TP.Data.Entities.Subject", "Subject")
                         .WithMany("Goals")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TP.Data.Entities.Invite", b =>
-                {
-                    b.HasOne("TP.Data.Entities.Employee", "Employee")
-                        .WithMany("Invites")
-                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
