@@ -99,6 +99,27 @@ namespace TP.Controllers
             }
         }
 
+        [HttpPut("AddSubject/{id}")]
+        [Consumes("application/json")]
+        public async Task<ActionResult> AddSubjectToEmployee(Guid id)
+        {
+            try
+            {
+                var employee = await _userManager.GetUserAsync(User);
+                if (employee != null)
+                {
+                    await _repository.AddSubjectToEmployee(employee.Id, id);
+                    return Ok();
+                }
+                return Unauthorized();
+                
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         private async Task<Employee> UpdateCredentials(Employee employee, string updatedEmail)
         {
             //Update username too
