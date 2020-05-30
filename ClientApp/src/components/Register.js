@@ -49,10 +49,6 @@ const Register = props => {
     
     const handleSubmit = (event) => {
         event.preventDefault();
-        // let userEmail = document.getElementById("email").value;
-        // let firstname = document.getElementById("firstname").value;
-        // let lastname = document.getElementById("lastname").value;
-        // let userPw = document.getElementById("password").value;
 
         const requestOptions = {
             method: 'POST',

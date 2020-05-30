@@ -33,7 +33,7 @@ export class NavMenu extends Component {
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
 
-                {/* {auth.isAuthenticated() || !auth.isAuthenticated() && */}
+                {auth.isAuthenticated() &&
                   <React.Fragment>
                     <NavItem>
                       <NavLink tag={Link} className="text-dark" to="/">Calendar</NavLink>
@@ -54,12 +54,13 @@ export class NavMenu extends Component {
                       <NavLink tag={Link} className="text-dark" to="/invitation">Invite</NavLink>
                     </NavItem>
                   </React.Fragment>
-                {/* {
+                }
+                {
                   !auth.isAuthenticated() &&
                   <NavItem>
                     <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
                   </NavItem>
-                } */}
+                }
               </ul>
             </Collapse>
           </Container>
