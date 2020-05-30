@@ -48,7 +48,11 @@ const EventCalendar = (props) => {
         const res = await fetch('api/Auth/self');
         if (res.ok) {
             const me = await res.json();
-            const response = await fetch('api/Days/GetDayByEmployeeId/' + me.id);
+            var apiRequest = "";
+            window.location.pathname === "/calendar"?
+                apiRequest = 'api/Days/GetDayByEmployeeId/':
+                apiRequest = 'api/Days/GetTeamDays/'
+            const response = await fetch(apiRequest + me.id);
             if (response.ok) {
                 const days = await response.json();
                 setDates(days);
@@ -59,13 +63,6 @@ const EventCalendar = (props) => {
             }
         }
     }
-
-    async function fetchEmployee() {
-        const response = await fetch('api/Employees/' + '5a677c6e-56e5-4cf1-9c64-157b483e8eff');
-        const employee = await response.json();
-        setEmployee(employee);
-    }  
-
 
     useEffect(() => { 
         fetchAllSubjects(); 
@@ -84,7 +81,7 @@ const EventCalendar = (props) => {
 
     useEffect(() => {  
         if(dates){
-        setEvents();
+            setEvents();
         }
     },[dates]);
 

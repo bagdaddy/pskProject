@@ -11,6 +11,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     const [subjects, setSubjets] = useState([]);
     const [id, setId] = useState(null);
     const [daysThisQuarter, setDaysThisQuarter] = useState(0);
+    const [quarterRestriction, setQuarterRestriction] = useState(0);
 
     
     const [comment, setComment] = useState("");
@@ -31,6 +32,11 @@ const SubjectSelection = forwardRef((props, ref) => {
         setSubjets(res);
         setId(id);
     } 
+
+    useEffect(() => {
+        getQuarterRestrictions();
+    },[employeeId])
+
     useEffect(() => {  
         var i;
 
@@ -66,6 +72,12 @@ const SubjectSelection = forwardRef((props, ref) => {
         const days = await response.json();
         setDaysThisQuarter(days);
       }  
+
+    async function getQuarterRestrictions() {
+        const response = await fetch('/api/GetRestriction/' + employeeId);
+        const restriction = await response.json();
+        setQuarterRestriction(restriction);
+      }
 
     async function postDay(day) {
         delete Array.prototype.toJSON;
@@ -178,8 +190,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     }
 
     function IsMaxThisQuarterReacher() {
-        var maxDays = 4;
-        if(daysThisQuarter >= maxDays){
+        if(daysThisQuarter >= quarterRestriction){
             return true;
         }else{
             return false;
