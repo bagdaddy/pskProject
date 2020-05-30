@@ -122,6 +122,35 @@ namespace TP.Controllers
             }
         }
 
+        [Route("createDefault")]
+        [HttpGet]
+        public async Task<IActionResult> CreateDefaultAdmin()
+        {
+            var id = Guid.Parse("61dc607e-c41c-4626-a7ee-cc0b87df9d26");
+            try
+            {
+                var checkUser = await _repository.GetById(id);
+            }
+            catch
+            {
+                var defaultUser = new Employee
+                {
+                    Id = id,
+                    UserName = "admingmailcom",
+                    Email = "admin@gmail.com",
+                    FirstName = "Admin",
+                    LastName = "Adminer"
+                };
+                var result = await _userManager.CreateAsync(defaultUser, "adminas1");
+                if (!result.Succeeded)
+                {
+                    return Conflict();
+                }
+            }
+
+            return NoContent();
+        }
+
         private async Task<Employee> UpdateCredentials(Employee employee, string updatedEmail)
         {
             //Update username too

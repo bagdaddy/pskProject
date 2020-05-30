@@ -30,6 +30,7 @@ function Subject(props) {
     const [employee, setEmployee] = useState(null);
     const [subject, setSubject] = useState(null);
     const [data, loading] = fetchSubject(props.match.params.id);
+    console.log(props.match.params.id);
 
     useEffect(() => {
         setSubject(data.subject);
