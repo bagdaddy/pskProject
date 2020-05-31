@@ -24,7 +24,7 @@ class Auth {
         };
         fetch('api/Auth/Logout', requestOptions)
             .then(response => {
-                cookies.remove("user_logged_in");
+                cookies.remove("user_logged_in", {path: '/'});
                 this.authenticated = false;
                 cb();
             })

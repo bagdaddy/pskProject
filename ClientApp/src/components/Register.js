@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+
 import Loader from './dump-components/Loader';
 import auth from './Auth';
 
@@ -9,12 +10,15 @@ function fetchData (id){
 
     async function getDataAsync(id){
         const res = await fetch("api/GetInvite/" + id);
-        if(res.ok){
+        console.log(res);
+        if(res.status === 200){
             const json = await res.json();
             console.log(json);
             setData(json);
+        }else if(res.status === 204){
+            setData({error: "The invite ID is invalid."});
         }else{
-            setData({error: "The invite is invalid."});
+            setData({error: "There was an unexpected error."});
         }
         setLoading(false);
     }
@@ -37,9 +41,7 @@ const Register = props => {
 
     useEffect(() => {
         if(data.hasOwnProperty("error")){
-            return (
-                <div>Your invite is invalid.</div>
-            )
+            
         }else{
             setEmail(data.email);
             setInvitingEmployee(data.employee);
@@ -70,12 +72,14 @@ const Register = props => {
                         window.location.href = '/login?errors=true';
                     }
                 })
-        // auth.login(requestOptions, ()=>{
-        //     props.history.push("/me");
-        // })
     };
 
     if(!loading){
+        if(data.hasOwnProperty("error")){
+            return (
+                <div>{data.error}</div>
+            )
+        }
         return (
             <div className="login-form">
                 <Form onSubmit={handleSubmit}>

@@ -123,6 +123,7 @@ function Profile(props) {
     }
 
     if (!loading) {
+        console.log(goals);
         return (
             <div>
                 <div className="row">
@@ -151,7 +152,7 @@ function Profile(props) {
                                     <Input name="goal" id="goal" type="select" required onChange={(event) => setGoal(event.target.value)} >
                                         <option value="-1">-</option>
                                         {subjects.map(subject => (
-                                            employee.subjects.filter(sub => sub.id !== subject.id).length === 0 && <option key={subject.id} value={subject.id}>{subject.name}</option>
+                                            (employee.subjects.filter(sub => sub.id === subject.id).length === 0 && goals.filter(g => g.subject.id === subject.id).length === 0) && <option key={subject.id} value={subject.id}>{subject.name}</option>
                                         ))}
                                     </Input>
                                     <label ref={goalRef} className="successMsg">Goal successfuly set.</label>

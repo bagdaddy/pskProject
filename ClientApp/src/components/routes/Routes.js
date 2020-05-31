@@ -29,7 +29,7 @@ export const UnauthenticatedRoute = ({component: Component, ...rest}) => {
                     return <Component {...props} />
                 }else{
                     return <Redirect to={{
-                        pathname: "/login",
+                        pathname: "/",
                         state: {
                             from: props.location
                         }
