@@ -14,6 +14,7 @@ namespace TP.DataContracts
         Task<int> GetThisQuarter(Guid employeeid, int quarter);
         Task<List<Employee>> GetEmployeesBySubject(Guid subjectId);
         Task Create(DayRequestModel model);
+        Task Update(Guid id, DayRequestModel model);
         Task Delete(Guid id);
     }
 }

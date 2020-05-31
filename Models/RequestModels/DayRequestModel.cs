@@ -10,5 +10,6 @@ namespace TP.Models.RequestModels
         public Guid EmployeeId { get; set; }
         public List<Guid> SubjectList { get; set; }
         public DateTime? Date { get; set; }
+        public string Comment { get; set; }
     }
 }

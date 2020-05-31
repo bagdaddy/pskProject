@@ -11,6 +11,7 @@ namespace TP.Data.Entities
         public Guid EmployeeId { get; set; }
         public Employee Employee { get; set; }
         public DateTime Date { get; set; }
+        public string Comment { get; set; }
         [NotMapped]
         public List<DaySubject> DaySubjectList { get; set; }
 
