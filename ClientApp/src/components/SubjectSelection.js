@@ -102,7 +102,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     } 
 
     async function updateDay(day) {
-        const response = await fetch('api/Days/ChangeDay/' + id, {
+        const response = await fetch('api/Days/UpdateDay/' + id, {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',
