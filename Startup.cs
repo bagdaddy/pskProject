@@ -1,13 +1,23 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using Microsoft.OpenApi.Models;
 using TP.Data;
 using TP.Data.Contexts;
+using TP.Data.Entities;
 using TP.DataContracts;
+using TP.Services;
+using AutoMapper;
+using Audit;
+using System.IO;
+using Microsoft.EntityFrameworkCore.SqlServer.Update.Internal;
 
 namespace TP
 {
@@ -32,8 +42,78 @@ namespace TP
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddDbContext<SubjectContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SubjectContextConnectionString")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ContextConnectionString")));
+            services.AddScoped<IDTOService, DTOService>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
+            services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+            services.AddScoped<ISubjectControllerService, SubjectControllerService>();
+
+            services.AddScoped<IDaysRepository, DaysRepository>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<ITeamControllerService, TeamControllerService>();
+            services.AddScoped<IRestrictionRepository, RestrictionRepository>();
+            services.AddScoped<IGoalsRepository, GoalsRepository>();
+            services.AddScoped<IInviteRepository, InviteRepository>();
+            services.AddScoped<IInviteControllerService, InviteControllerService>();
+            
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            services.AddIdentity<Employee, Role>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                //PASSWORD SETTINGS
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+
+                //LOCKOUT SETTINGS
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                options.User.RequireUniqueEmail = true;
+            }
+            );
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings 
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                // If the LoginPath isn't set, ASP.NET Core defaults  
+                // the path to /Account/Login. 
+                options.LoginPath = "/Account/Login";
+                // If the AccessDeniedPath isn't set, ASP.NET Core defaults  
+                // the path to /Account/AccessDenied. 
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
+            services.AddHttpContextAccessor();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.AddControllers();
+            //SWAGGER
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,8 +130,26 @@ namespace TP
                 app.UseHsts();
             }
 
+            Audit.Core.Configuration.Setup()
+    .UseFileLogProvider(config => config
+        .DirectoryBuilder(_ => $@"Logs\{DateTime.Now:yyyy-MM-dd}")
+        .FilenameBuilder(auditEvent => $"{auditEvent.Environment.UserName}_{DateTime.Now.Ticks}.json"));
+
+            //SWAGGER
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = "swagger";
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>
@@ -70,6 +168,8 @@ namespace TP
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            
         }
     }
 }

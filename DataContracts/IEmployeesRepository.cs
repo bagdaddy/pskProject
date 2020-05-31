@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TP.Data.Entities;
+using TP.Models.RequestModels;
 
 namespace TP.DataContracts
 {
-    interface IEmployeesRepository
+    public interface IEmployeesRepository
     {
-        List<Employee> getAll();
-
-        Employee getById(Guid id);
-
-        void delete(Guid id);
-
-        //TODO: Change Employee param to UpdateEmployeeRequest
-        Employee updateEmployee(Employee request, Guid id);
+        Task<List<Employee>> GetAll();
+        Task<Employee> GetById(Guid id);
+        Task CreateEmployee(Employee employee);
+        Task Delete(Guid employeeId);
+        Task<Employee> UpdateEmployee(Guid id, UpdateEmployeeRequestModel request);
+        Task AddSubjectToEmployee(Guid EmployeeId, Guid SubjectId);
     }
 }

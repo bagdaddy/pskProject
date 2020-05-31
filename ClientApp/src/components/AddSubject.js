@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 const AddSubject = props => {
     const [subjects, setSubjects] = useState([]);
-    const [insertedSubject, setInsertedSubject] = useState({});
 
-    const fetchSubjects = React.useCallback(() => {
-        fetch('api/GetSubjects')
-            .then(response => response.json())
-            .then(data => setSubjects(data));
-    });
+    const success = useRef();
+    async function fetchSubjects() {
+        const response = await fetch('api/GetAllSubjects');
+        if(response.ok){
+            const data = await response.json();
+            setSubjects(data);
+        }
+    }
 
-    const insertSubject = () => {
+    useEffect(() => {
+        fetchSubjects();
+    }, []);
+    
+
+    async function insertSubject() {
         let parentSubjetcId = document.getElementById("parent").value !== "-1" ? document.getElementById("parent").value : null;
         const requestOptions = {
             method: 'POST',
@@ -21,20 +28,18 @@ const AddSubject = props => {
                 ParentSubjectId: parentSubjetcId
             })
         };
-        fetch('api/CreateSubject', requestOptions)
-            .then(response => response.text())
-            .then(data => setInsertedSubject(data));
-    };
-
-    useEffect(() => {
-        fetchSubjects();
-    }, []);
+        const res = await fetch('api/CreateSubject', requestOptions);
+        if(res.ok){
+            success.current.style.display = "block";
+        }else{
+            //TODO: prideti error handlinima
+        }
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         insertSubject();
     };
-
 
 
     return (
@@ -46,7 +51,7 @@ const AddSubject = props => {
                 </FormGroup>
                 <FormGroup>
                     <Label for="description">Description</Label>
-                    <Input type="text" id="description" name="description" placeholder="A really important subject" />
+                    <Input type="textarea" id="description" name="description" placeholder="A really important subject" />
                 </FormGroup>
                 <FormGroup>
                     <Label for="parent_subject">Parent</Label>
@@ -56,6 +61,7 @@ const AddSubject = props => {
                             <option key={subject.id} value={subject.id}>{subject.name}</option>
                         ))}
                     </Input>
+                    <label ref={success} className="successMsg">Subject successfully added.</label>
                 </FormGroup>
                 <FormGroup>
                     <Button className="btn btn-success">Add</Button>

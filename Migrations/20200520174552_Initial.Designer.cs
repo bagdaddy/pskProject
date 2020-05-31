@@ -9,7 +9,7 @@ using TP.Data.Contexts;
 
 namespace TP.Migrations
 {
-    [DbContext(typeof(SubjectContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20200520174552_Initial")]
     partial class Initial
     {

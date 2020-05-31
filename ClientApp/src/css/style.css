@@ -1,7 +1,9 @@
-
-.sidebar.right{
-    position:fixed;
-    left:70%;
+.sidebar{
+    border: 1px solid lightgray;
+    box-shadow: 1px 1px 5px lightgrey;
+    padding: 20px;
+    border-radius: 5px;
+    height: fit-content;
 }
 
 .link{
@@ -47,24 +49,28 @@
     background-color: #FFFFFF;
 } */
 
-.numOfEmployees{
-    border: 1px solid #b11010;
+.circle{
     border-radius: 50%;
     display:inline-block;
-    height: 25px;
-    width: 25px;
-    line-height:25px;
-    color: white;
+    height: 15px;
+    width: 15px;
     font-size: 10px;
     text-align: center;
 }
 
-.red{
-    background-color: #ec3f3f;
+.green{
+    border: 1px solid black;
+    background-color: #3CB043;
 }
 
 .blue{
+    border: 1px solid black;
     background-color: #2832C2;
+}
+
+.gray{
+    border: 1px solid black;
+    background-color: gray;
 }
 
 .subjectName{
@@ -97,6 +103,8 @@
     padding-left: 20px;
     display:inline-block;
 }
+
+
 
 .subjectInfo .employeeList a{
     color: #00458f;
@@ -139,6 +147,26 @@
     margin-bottom: 0 !important;
 }
 
+.legend{
+    position: absolute;
+    background-color: white;
+    display:inline-block;
+    padding: 15px;
+    padding-bottom: 0;
+    border: 1px black;
+    box-shadow: #bebebe 2px 3px 5px;
+}
+
+.legend ul{
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.legend ul span{
+    font-size: 15px;
+    vertical-align: text-top;
+    font-family: 'Calibri'; 
+}
 .login-form{
     position: absolute;
     padding: 20px;
@@ -152,5 +180,113 @@
 }
 
 .form-left{
-    width: 350px;
+    width: 400px;
+}
+
+.form-left textarea {
+    height: 180px;
+}
+
+.subjectsList ul{
+    list-style-type: none;
+    font-size: 20px;
+    padding-left: 0;
+}
+
+.subjectsList ul li a {
+    color: #7f7c7c;
+}
+
+.subjectsList ul li {
+    line-height: 2.5;
+    border-bottom: 1px solid #ede7e7;
+    padding-right: 100px;
+}
+
+.subjectsList ul {
+    display: inline-block;
+}
+
+.subjects > h1{
+    display:inline-block;
+}
+
+.addSubjectBtn {
+    font-size: 11px;
+    vertical-align: text-bottom;
+    margin-left: 20px;
+}
+
+.successMsg{
+    display: none;
+    font-size: 12px;
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+
+.text-red{
+    color: #df6767 !important;
+}
+
+.notfound p{
+    font-size: 20px;
+}
+
+.employee-form{
+    width: 60%;
+    border-top: 1px solid lightgray;
+    padding-top: 15px;
+    margin-top: 50px;
+    padding-right: 100px;
+}
+
+.goals p{
+    margin-bottom: 0;
+}
+
+.sidebar .section{
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid lightgray;
+}
+
+.sidebar .section:last-child {
+    border-bottom: none;
+}
+
+.sidebar .teamList a, .sidebar .subjectList a, .subjects .subjectList a{
+    display:block;
+}
+
+.item{
+    font-size:20px;
+    color: #005bb6;
+    line-height: 1.9;
+}
+
+.item a:hover{
+    color: #0078f0;
+}
+
+.subjects .item {
+    border-bottom: 1px solid lightgray;
+}
+
+.subjects .item:last-child{
+    border-bottom: none;
+}
+
+.description{
+    white-space: pre-line;
+}
+
+.team-subjects{
+    border: 1px solid lightgray;
+    box-shadow: 1px 1px 1px;
+    border-radius: 5px;
+}
+
+.error{
+    color: red;
+    font-size:12px;
 }
