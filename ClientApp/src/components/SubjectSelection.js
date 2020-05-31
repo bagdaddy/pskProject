@@ -198,7 +198,7 @@ const SubjectSelection = forwardRef((props, ref) => {
     }
 
     function mapSubjectSelectionOptions(val){
-        return(subjects.map(subject => (!subjectsSelected.some(item => val.id === item)?
+        return(subjects.map(subject => (!subjectsSelected.some(item => subject.id === item)?
                 <option key={subject.id} value={subject.id}>{subject.name}</option>:
                 subjectsSelected[val] === subject.id? <option key={subject.id} value={subject.id}>{subject.name}</option>: null)))
     }
