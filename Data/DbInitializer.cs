@@ -195,12 +195,14 @@ namespace TP.Data
                 Employee = emp1,
                 Id = Guid.NewGuid(),
                 Date = new DateTime(),
+                Comment = "Hello"
             };
             var day2 = new Day
             {
                 Employee = emp2,
                 Id = Guid.NewGuid(),
                 Date = new DateTime(),
+                Comment = "There"
             };
             daysList.Add(day1);
             daysList.Add(day2);

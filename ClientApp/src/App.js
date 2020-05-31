@@ -14,6 +14,7 @@ import { ProtectedRoute, UnauthenticatedRoute } from './components/routes/Routes
 import EditSubject from './components/EditSubject';
 import Invitation from './components/Invitation';
 import Register from './components/Register';
+import Calendar from './components/EventCalendar';
 
 export default class App extends Component {
   static displayName = "Mokymosi dienu kalendorius";
@@ -49,7 +50,8 @@ export default class App extends Component {
         <ProtectedRoute path='/subjects' component={Subjects} />
         <ProtectedRoute path='/add-subject' component={AddSubject} />
         <ProtectedRoute path='/subject/:id' component={Subject} /> */}
-        <ProtectedRoute path='/invitation' component={Invitation} />
+        <Route path='/invitation' component={Invitation} />
+        <Route path='/calendar' component={Calendar} />
       </Layout>
     );
   }

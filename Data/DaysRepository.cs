@@ -142,7 +142,6 @@ namespace TP.Data
             day.DaySubjectList = daySubjectList;
         }
 
-
         public async Task Delete(Guid id)
         {
             using (var appDbContext = _context)

@@ -36,7 +36,7 @@ export class NavMenu extends Component {
                 {auth.isAuthenticated() &&
                   <React.Fragment>
                     <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/">Calendar</NavLink>
+                      <NavLink tag={Link} className="text-dark" to="/calendar">Calendar</NavLink>
                     </NavItem>
                     <NavItem>
                       <NavLink tag={Link} className="text-dark" to="/me">Profile</NavLink>
