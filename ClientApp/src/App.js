@@ -17,21 +17,13 @@ import Register from './components/Register';
 import Calendar from './components/EventCalendar';
 
 export default class App extends Component {
-  static displayName = "Mokymosi dienu kalendorius";
-
-  constructor(){
-    super();
-    fetch("api​/Employees​/createDefault")
-      .then(response => {console.log(response)});
-  
-  }
   
   render () {
     return (
       <Layout>
         <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />
-        <UnauthenticatedRoute path="/logout" component={Logout} />
+        <ProtectedRoute path="/logout" component={Logout} />
         <ProtectedRoute path='/me' component={Profile} />
         <ProtectedRoute path='/employee/:id' component={Employee} />
         <ProtectedRoute path='/learningTree/:id?' component={LearningTree} />
