@@ -121,6 +121,27 @@ namespace TP.Controllers
             }
         }
 
+        [HttpPut("UpdateDay/{id}")]
+        [Consumes("application/json")]
+        public async Task<ActionResult> UpdateDay(Guid id, [FromBody] DayRequestModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _repository.Update(id, model);
+                return Ok(model);
+            }
+            catch (Exception e)
+            {
+                // log error
+                return BadRequest("Error occured: " + e.Message);
+            }
+        }
+
+
         // DELETE by object id
         [HttpDelete("DeleteDay/{id}")]
         public async Task<ActionResult> deleteDateAsync(Guid id)

@@ -86,7 +86,8 @@ namespace TP.Data
             {
                 Date = model.Date ?? DateTime.Now,
                 EmployeeId = model.EmployeeId,
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                Comment = model.Comment
             };
             var daySubjectList = new List<DaySubject>();
             foreach (var subject in model.SubjectList)
@@ -101,6 +102,46 @@ namespace TP.Data
             await _context.DaySubjects.AddRangeAsync(daySubjectList);
             await _context.SaveChangesAsync();
         }
+
+        public async Task Update(Guid id, DayRequestModel model)
+        {
+            
+                Day day = await _context.Days
+                .Include(x => x.DaySubjectList)
+                //.ThenInclude(ds => ds.Subject)
+                .FirstOrDefaultAsync(x => x.Id == id);
+                _context.Entry(day).CurrentValues.SetValues(
+                    new
+                    {
+                        Date = model.Date ?? day.Date,
+                        model.EmployeeId,
+                        Id = id,
+                        Comment = model.Comment ?? day.Comment
+                    });
+                UpdateDaySubjects(_context, model, day);
+
+                await _context.SaveChangesAsync();
+            
+        }
+
+        private void UpdateDaySubjects(AppDbContext context, DayRequestModel model, Day day)
+        {
+            List<DaySubject> daySubjectList = new List<DaySubject>();
+            if (model.SubjectList != null)
+            {
+                foreach (Guid subject in model.SubjectList)
+                {
+
+                    daySubjectList.Add(new DaySubject
+                    {
+                        DayId = day.Id,
+                        SubjectId = subject
+                    });
+                }
+            }
+            day.DaySubjectList = daySubjectList;
+        }
+
 
         public async Task Delete(Guid id)
         {
