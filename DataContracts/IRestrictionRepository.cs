@@ -10,6 +10,7 @@ namespace TP.DataContracts
     {
         Task<List<Employee>> GetAll();
         Task<Employee> GetById(Guid id);
+        Task<Employee> GetAny();
         void Update(Employee employee);
         void Delete();
         Task SaveChanges();
