@@ -30,7 +30,6 @@ export default class App extends Component {
   render () {
     return (
       <Layout>
-        <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />
         <ProtectedRoute path="/logout" component={Logout} />
         <ProtectedRoute path='/me' component={Profile} />
@@ -52,7 +51,8 @@ export default class App extends Component {
         <ProtectedRoute path='/add-subject' component={AddSubject} />
         <ProtectedRoute path='/subject/:id' component={Subject} /> */}
         <ProtectedRoute path='/invitation' component={Invitation} />
-        <ProtectedRoute path='/calendar' component={Calendar} />
+        <ProtectedRoute exact path='/' component={Calendar} />
+        <ProtectedRoute path='/team-calendar' component={Calendar} />
       </Layout>
     );
   }

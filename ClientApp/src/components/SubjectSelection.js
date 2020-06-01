@@ -213,7 +213,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                         <FormGroup>
                             <Label for="subjectSelect">Select a subject</Label>
                             <Input 
-                            defaultValue={subjectsSelected[0]?subjectsSelected[0].id:'DEFAULT'} 
+                            defaultValue={subjectsSelected[0]?subjectsSelected[0]:'DEFAULT'} 
                             type="select" name="select" 
                             id="subjectSelect" 
                             onChange={event => setSubjectsSelected([event.target.value, subjectsSelected[1], subjectsSelected[2], subjectsSelected[3]])}>

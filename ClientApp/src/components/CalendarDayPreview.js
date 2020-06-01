@@ -32,7 +32,6 @@ const CalendarDayPreview = forwardRef((props, ref) => {
         var found = subjects.find(function (element) {
             return element.id === id;
           });
-          console.log(id)
           return found? found.name:"NO SUBJECT";
     }  
 
