@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import auth from './Auth';
 
 const Invitation = (props) => {
 
@@ -7,7 +8,7 @@ const Invitation = (props) => {
     const [sent, setSent] = useState(false);
 
     async function sendEmail() {
-        const res = await fetch('api/Auth/self');
+        const res = await auth.getCurrentUser();
         if (true) {
             const me = await res.json();
             const response = await fetch('api/Emails/'+me.id, {

@@ -4,6 +4,7 @@ import SubjectList from './dump-components/SubjectList';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import Loader from './dump-components/Loader';
 import getFlatListOfSubordinates from './dump-components/getSubordinates';
+import auth from './Auth';
 
 
 function fetchData() {
@@ -32,7 +33,7 @@ function fetchData() {
     }
 
     async function getDataAsync() {
-        const response = await fetch('api/Auth/self');
+        const response = await auth.getCurrentUser();
         const userData = await response.json();
         const eResponse = await fetch('api/Employees/' + userData.id);
         const employeeData = await eResponse.json();
@@ -123,7 +124,7 @@ function Profile(props) {
     }
 
     if (!loading) {
-        console.log(goals);
+        
         return (
             <div>
                 <div className="row">
