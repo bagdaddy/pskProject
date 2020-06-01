@@ -3,7 +3,7 @@ import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
 import Loader from './dump-components/Loader';
 import { NotFound } from './dump-components/Error';
-import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, FormFeedback, FormText } from 'reactstrap';
 import getFlatListOfSubordinates from './dump-components/getSubordinates';
 
 
@@ -31,6 +31,15 @@ function fetchEmployeeData(id) {
         }
     }
 
+    async function fetchRestrictions(id){
+        const response = await fetch("api/GetRestriction/"+id);
+        if(response.ok){
+            return await response.json();
+        }else{
+            return {};
+        }
+    }
+
     async function fetchMyEmployees() {
         const res = await fetch('api/Auth/self');
         if (res.ok) {
@@ -41,7 +50,7 @@ function fetchEmployeeData(id) {
 
                 return await employees[0].subordinates;
             } else {
-                return [];
+                return 3;
             }
         }
     }
@@ -65,7 +74,8 @@ function fetchEmployeeData(id) {
                     return s.id === subject.id
                 }).length === 0;
             });
-            setData({ employee: employeeData, employees: employeesData, myEmployees: myEmployees, subjects: subjects, goals: goalsData });
+            const restrictions = await fetchRestrictions(id);
+            setData({ employee: employeeData, employees: employeesData, myEmployees: myEmployees, subjects: subjects, goals: goalsData, restrictions: restrictions });
             setLoading(false);
         } else {
             setLoading(false);
@@ -87,6 +97,7 @@ function Employee(props) {
     const [data, loading] = fetchEmployeeData(props.match.params.id);
     const [selectedBossId, setBossId] = useState(null);
     const [goals, setGoals] = useState([]);
+    const [restrictions, setRestrictions] = useState(-1);
     const [goal, setGoal] = useState(null);
 
     const changed = useRef();
@@ -98,7 +109,7 @@ function Employee(props) {
         setGoals(data.goals);
         setEmployee(data.employee);
         setSubjects(data.subjects);
-        console.log(data.subjects);
+        setRestrictions(data.restrictions);
     }, [data, loading]);
 
     async function changeLeader(event) {
@@ -138,6 +149,10 @@ function Employee(props) {
 
     if (!loading) {
         if (employee) {
+            const items = [];
+            for(let i = 0; i <= restrictions; i++){
+                items.push(<option value={i}>{i}</option>);
+            }
             return (
                 <div>
                     <div className="row">
@@ -148,7 +163,7 @@ function Employee(props) {
                                 <Form onSubmit={changeLeader}>
                                     <FormGroup>
                                         <Label for="newBoss">Select a new team for {employee.firstName}:</Label>
-                                        <Input name="newBoss" id="newBoss" required type="select" onChange={(event) => setBossId(event.target.value)}>
+                                        <Input disabled={employees.length > 0} name="newBoss" id="newBoss" required type="select" onChange={(event) => setBossId(event.target.value)}>
                                             <option value="-1">-</option>
                                             {
                                                 myEmployees.map(
@@ -159,10 +174,11 @@ function Employee(props) {
                                             }
                                         </Input>
                                         <FormFeedback tooltip>Please select a value</FormFeedback>
+                                        {employees.length > 0 && <FormText>Can't move a team leader to a different team</FormText>}
                                         <label ref={changed} className="successMsg">Employee successfuly switched to another team.</label>
                                     </FormGroup>
                                     <FormGroup>
-                                        <Button disabled={!selectedBossId} className="btn btn-success">Apply</Button>
+                                        <Button disabled={!selectedBossId || employees.length > 0} className="btn btn-success">Apply</Button>
                                     </FormGroup>
                                 </Form>
                             </div>
@@ -173,7 +189,7 @@ function Employee(props) {
                                         <Input name="goal" id="goal" type="select" required onChange={(event) => setGoal(event.target.value)} >
                                             <option value="-1">-</option>
                                             {subjects.map(subject => (
-                                                employee.subjects.filter(sub => sub.id === subject.id).length === 0 && 
+                                                employee.subjects.filter(sub => sub.id === subject.id).length === 0 &&
                                                 goals.filter(goal => goal.subject.id === subject.id).length === 0 &&
                                                 <option key={subject.id} value={subject.id}>{subject.name}</option>
                                             ))}
@@ -187,9 +203,22 @@ function Employee(props) {
                                 </Form>
                             </div>
                         </div>
-                        {(employees.length > 0 || employee.subjects.length > 0 || goals.length > 0) &&
-                            <div className="col-lg-4 col-md-4 sidebar">
-                                {goals.length > 0 && (
+                        <div className="col-lg-4 col-md-4 sidebar">
+                            <div className="section">
+                                <h5>Change restrictions</h5>
+                                <Form>
+                                    <FormGroup>
+                                        <Input type="select" name="restriction" id="restriction" className="restrictions">
+                                            {items}
+                                        </Input>
+                                    </FormGroup>
+                                    <FormGroup>
+                                            <Button className="btn btn-success">Apply</Button>
+                                    </FormGroup>
+                                </Form>
+                            </div>
+                            {
+                                goals.length > 0 && (
                                     <div className="section">
                                         <h5>Current goals: </h5>
                                         <div className="goals">
@@ -198,20 +227,21 @@ function Employee(props) {
                                             ))}
                                         </div>
                                     </div>
-                                )}
+                                )
+                            }
                                 {employee.subjects.length > 0 && (
-                                    <div className="section">
-                                        <h5>{employee.firstName} knows: </h5>
-                                        <SubjectList wrapperClass="subjectList" subjects={employee.subjects} />
-                                    </div>
-                                )}
-                                {employees.length > 0 && (
-                                    <div className="section">
-                                        <h5>{employee.firstName} team list:</h5>
-                                        <TeamList wrapperClass="teamList" team={employees} />
-                                    </div>
-                                )}
-                            </div>}
+                                <div className="section">
+                                    <h5>{employee.firstName} knows: </h5>
+                                    <SubjectList wrapperClass="subjectList" subjects={employee.subjects} />
+                                </div>
+                            )}
+                            {employees.length > 0 && (
+                                <div className="section">
+                                    <h5>{employee.firstName} team list:</h5>
+                                    <TeamList wrapperClass="teamList" team={employees} />
+                                </div>
+                            )}
+                            </div>
                     </div>
                 </div>
             );

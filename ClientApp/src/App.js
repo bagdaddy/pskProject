@@ -17,13 +17,14 @@ import Register from './components/Register';
 import Calendar from './components/EventCalendar';
 
 export default class App extends Component {
-  static displayName = "Mokymosi dienu kalendorius";
 
-  constructor(){
-    super();
-    fetch("api​/Employees​/createDefault")
-      .then(response => {console.log(response)});
-  
+  constructor(props){
+    super(props);
+
+    setTimeout(() => {
+      fetch('api/Employees/createDefault')
+        .then(response => {});
+    }, 2000);
   }
   
   render () {
@@ -31,7 +32,7 @@ export default class App extends Component {
       <Layout>
         <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />
-        <UnauthenticatedRoute path="/logout" component={Logout} />
+        <ProtectedRoute path="/logout" component={Logout} />
         <ProtectedRoute path='/me' component={Profile} />
         <ProtectedRoute path='/employee/:id' component={Employee} />
         <ProtectedRoute path='/learningTree/:id?' component={LearningTree} />
@@ -39,7 +40,7 @@ export default class App extends Component {
         <ProtectedRoute path='/add-subject' component={AddSubject} />
         <ProtectedRoute path='/subject/:id' component={Subject} />
         <ProtectedRoute path='/edit-subject/:id' component={EditSubject} />
-        <UnauthenticatedRoute path='/register/:id' component={Register} />
+        <Route path='/register/:id' component={Register} />
         {/*Kol kas paliekam uzkomentuota, kad nereiktu prisijungti kiekviena karta kai padarom kazkokiu pakeitimu*/ }
         {/* <ProtectedRoute exact path='/' component={Home} />
         <UnauthenticatedRoute path="/login" component={Login} />
@@ -50,8 +51,8 @@ export default class App extends Component {
         <ProtectedRoute path='/subjects' component={Subjects} />
         <ProtectedRoute path='/add-subject' component={AddSubject} />
         <ProtectedRoute path='/subject/:id' component={Subject} /> */}
-        <Route path='/invitation' component={Invitation} />
-        <Route path='/calendar' component={Calendar} />
+        <ProtectedRoute path='/invitation' component={Invitation} />
+        <ProtectedRoute path='/calendar' component={Calendar} />
       </Layout>
     );
   }

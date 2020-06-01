@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "@babel/runtime": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/runtime": "^7.10.2",
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-react-transform": "^3.0.0",
@@ -15,7 +15,7 @@
     "jquery": "^3.5.1",
     "moment": "^2.26.0",
     "react": "^16.13.1",
-    "react-async": "^10.0.0",
+    "react-async": "^10.0.1",
     "react-big-calendar": "^0.24.6",
     "react-d3-tree": "^1.16.1",
     "react-dom": "^16.13.1",
@@ -23,7 +23,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "^1.1.5",
     "reactstrap": "^6.5.0",
-    "rimraf": "^2.7.1"
+    "rimraf": "^2.7.1",
+    "universal-cookie": "^4.0.3"
   },
   "devDependencies": {
     "ajv": "^6.12.2",
