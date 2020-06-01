@@ -132,6 +132,24 @@ namespace TP.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpGet("api/GetGlobalRestriction")]
+        public async Task<IActionResult> GetGlobalRestriction()
+        {
+            try
+            {
+                var employee = await _restrictionRepository.GetAny();
 
+                if (employee == null)
+                {
+                    return BadRequest("Employee does not exist");
+                }
+
+                return Ok(employee.GlobalDayLimit);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

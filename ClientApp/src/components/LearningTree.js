@@ -4,6 +4,7 @@ import Loader from './dump-components/Loader';
 import TreeLegend from './dump-components/TreeLegend.js';
 import { NotFound } from './dump-components/Error';
 import getFlatListOfSubordinates from './dump-components/getSubordinates';
+import auth from './Auth';
 
 const circle = {
     shape: 'circle',
@@ -28,9 +29,6 @@ const circleLearntByTeam = {
         fill: '#2832C2',
     }
 }
-
-
-
 
 const SubjectInfo = props => {
     let subjectData = props.data;
@@ -94,12 +92,11 @@ function getDataAsync(employeeId) {
         if(employeeId){
             employeeRes = await fetch("api/Employees/" + employeeId);
         }else{
-            const temp = await fetch("api/Auth/self");
+            const temp = await auth.getCurrentUser();
             const tempRes = await temp.json();
             employeeRes = await fetch("api/Employees/" + tempRes.id);
         }
 
-        // const employeeRes = employeeId ? await fetch("api/Employees/" + employeeId) : await fetch("api/Auth/self");
         const employee = employeeRes.ok ? await employeeRes.json() : {};
         const sRes = await fetch("api/GetSubjects");
         const s = sRes.ok ? await sRes.json() : [];

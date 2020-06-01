@@ -5,6 +5,7 @@ import Loader from './dump-components/Loader';
 import { NotFound } from './dump-components/Error';
 import { Form, FormGroup, Label, Input, Button, FormFeedback, FormText } from 'reactstrap';
 import getFlatListOfSubordinates from './dump-components/getSubordinates';
+import auth from './Auth';
 
 
 function fetchEmployeeData(id) {
@@ -40,8 +41,17 @@ function fetchEmployeeData(id) {
         }
     }
 
+    async function fetchGlobalRestricitons(){
+        const response = await fetch("api/GetGlobalRestriction");
+        if(response.ok){
+            return await response.json();
+        }else{
+            return 3;
+        }
+    }
+
     async function fetchMyEmployees() {
-        const res = await fetch('api/Auth/self');
+        const res = await auth.getCurrentUser();
         if (res.ok) {
             const me = await res.json();
             const response = await fetch('api/GetTeams/' + me.id);
@@ -75,7 +85,8 @@ function fetchEmployeeData(id) {
                 }).length === 0;
             });
             const restrictions = await fetchRestrictions(id);
-            setData({ employee: employeeData, employees: employeesData, myEmployees: myEmployees, subjects: subjects, goals: goalsData, restrictions: restrictions });
+            const globalRestrictions = await fetchGlobalRestricitons();
+            setData({ employee: employeeData, employees: employeesData, myEmployees: myEmployees, subjects: subjects, goals: goalsData, restrictions: restrictions, globalRestrictions: globalRestrictions });
             setLoading(false);
         } else {
             setLoading(false);
@@ -98,6 +109,8 @@ function Employee(props) {
     const [selectedBossId, setBossId] = useState(null);
     const [goals, setGoals] = useState([]);
     const [restrictions, setRestrictions] = useState(-1);
+    const [globalRestrictions, setGlobalRestrictions] = useState(3);
+    const [localDayLimit, setLocalDayLimit] = useState(-1);
     const [goal, setGoal] = useState(null);
 
     const changed = useRef();
@@ -110,6 +123,7 @@ function Employee(props) {
         setEmployee(data.employee);
         setSubjects(data.subjects);
         setRestrictions(data.restrictions);
+        setGlobalRestrictions(data.globalRestrictions);
     }, [data, loading]);
 
     async function changeLeader(event) {
@@ -129,6 +143,27 @@ function Employee(props) {
         }
     }
 
+    function changeRestrictions(event){
+        event.preventDefault();
+        const requestOptions = {
+            method: "PUT",
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                employeeId: employee.id,
+                localDayLimit: localDayLimit
+            })
+        }
+        fetch('/api/LocalRestrict', requestOptions)
+            .then(response => {
+                if(response.ok){
+                    window.location.reload();
+                }else{
+                    window.location.href = "/employee?error=restrictions";
+                }
+            })
+            
+    }
+
     async function assignGoal(event) {
         event.preventDefault();
 
@@ -144,13 +179,15 @@ function Employee(props) {
         const response = await fetch('api/Goals', requestOptions);
         if (response.ok) {
             window.location.reload();
+        }else{
+            window.location.href = "/employee?error=goals"
         }
     }
 
     if (!loading) {
         if (employee) {
             const items = [];
-            for(let i = 0; i <= restrictions; i++){
+            for(let i = 0; i <= globalRestrictions; i++){
                 items.push(<option value={i}>{i}</option>);
             }
             return (
@@ -206,14 +243,16 @@ function Employee(props) {
                         <div className="col-lg-4 col-md-4 sidebar">
                             <div className="section">
                                 <h5>Change restrictions</h5>
-                                <Form>
+                                <Form onSubmit={changeRestrictions}>
                                     <FormGroup>
-                                        <Input type="select" name="restriction" id="restriction" className="restrictions">
+                                        <Input type="select" value={localDayLimit} name="restriction" id="restriction" className="restrictions" onChange={(event) => {setLocalDayLimit(event.target.value)}}>
+                                            <option value="-1">-</option>
                                             {items}
                                         </Input>
+                                    <FormText>Current restrictions set to {restrictions}</FormText>
                                     </FormGroup>
                                     <FormGroup>
-                                            <Button className="btn btn-success">Apply</Button>
+                                            <Button disabled={ localDayLimit === -1 }className="btn btn-success">Apply</Button>
                                     </FormGroup>
                                 </Form>
                             </div>

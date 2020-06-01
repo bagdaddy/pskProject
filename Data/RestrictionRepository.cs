@@ -29,6 +29,11 @@ namespace TP.Data
                         .ToListAsync();
             return list;
         }
+        public Task<Employee> GetAny()
+        {
+            return _context.Users
+                    .FirstOrDefaultAsync();
+        }
 
         public Task<Employee> GetById(Guid id)
         {

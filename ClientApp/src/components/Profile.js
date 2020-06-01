@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import TeamList from './dump-components/TeamList';
 import SubjectList from './dump-components/SubjectList';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, FormText } from 'reactstrap';
 import Loader from './dump-components/Loader';
 import getFlatListOfSubordinates from './dump-components/getSubordinates';
+import auth from './Auth';
 
 
 function fetchData() {
@@ -31,20 +32,30 @@ function fetchData() {
         return json[0].subordinates;
     }
 
+    async function fetchGlobalRestricitons(){
+        const response = await fetch("api/GetGlobalRestriction");
+        if(response.ok){
+            return await response.json();
+        }else{
+            return 3;
+        }
+    }
+
     async function getDataAsync() {
-        const response = await fetch('api/Auth/self');
+        const response = await auth.getCurrentUser();
         const userData = await response.json();
         const eResponse = await fetch('api/Employees/' + userData.id);
         const employeeData = await eResponse.json();
         const goalsData = await fetchGoals(employeeData.id);
         const employees = await fetchAllEmployees(employeeData.id);
+        const globalRestrictions = await fetchGlobalRestricitons();
         let subj = await fetchSubjects();
         const subjects = subj.filter(subject => {
             return employeeData.subjects.filter(s => {
                 return s.id === subject.id
             }).length === 0;
         });
-        setData({ employee: employeeData, employees: employees, subjects: subjects, goals: goalsData });
+        setData({ employee: employeeData, employees: employees, subjects: subjects, goals: goalsData, restrictions: globalRestrictions });
         setLoading(false);
     }
 
@@ -61,6 +72,8 @@ function Profile(props) {
     const [subjects, setSubjects] = useState([]);
     const [teamSubjects, setTeamSubjects] = useState([]);
     const [selectedSubjectId, setSelectedSubjectId] = useState();
+    const [currRestrictions, setCurrRestrictions] = useState(3);
+    const [newRestrictions, setNewRestrictions] = useState(0);
     const [data, loading] = fetchData();
     const [goals, setGoals] = useState([]);
     const [goal, setGoal] = useState(null);
@@ -71,10 +84,10 @@ function Profile(props) {
     useEffect(() => {
         let flatList = getFlatListOfSubordinates([], data.employees);
         setEmployees(flatList);
-        console.log(data.employees);
         setEmployee(data.employee);
         setSubjects(data.subjects);
         setGoals(data.goals);
+        setCurrRestrictions(data.restrictions);
         let subjects = [];
         if (!loading) {
             flatList.forEach(e => {
@@ -104,6 +117,30 @@ function Profile(props) {
             });
     };
 
+    function changeRestrictions(event){
+        event.preventDefault();
+        if(newRestrictions < 0){
+            document.getElementById("restriction").style.border = "1px solid red";
+            return false;
+        }
+        const requestOptions = {
+            method: "PUT",
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                globalDayLimit: newRestrictions
+            })
+        }
+        fetch('/api/GlobalRestrict', requestOptions)
+            .then(response => {
+                if(response.ok){
+                    window.location.reload();
+                }else{
+                    window.location.href = "/me?error=restrictions";
+                }
+            })
+            
+    }
+
     async function assignGoal(event) {
         event.preventDefault();
         const requestOptions = {
@@ -115,7 +152,6 @@ function Profile(props) {
             })
         };
 
-        console.log(requestOptions);
         const response = await fetch('api/Goals', requestOptions);
         if (response.ok) {
             goalRef.current.style.display = "block";
@@ -123,7 +159,7 @@ function Profile(props) {
     }
 
     if (!loading) {
-        console.log(goals);
+        console.log(employee);
         return (
             <div>
                 <div className="row">
@@ -165,6 +201,18 @@ function Profile(props) {
                     </div>
                     {(employee.subjects.length > 0 || allEmployees.length > 0 || goals.length > 0) &&
                         <div className="col-lg-4 col-md-4 sidebar">
+                            {!employee.bossId && <div className="section">
+                                <h5>Change restrictions</h5>
+                                <Form onSubmit={changeRestrictions}>
+                                    <FormGroup>
+                                        <Input type="number" value={newRestrictions} name="restriction" id="restriction" className="restrictions" onChange={(event) => {setNewRestrictions(event.target.value)}}/>
+                                    <FormText>Current global restrictions set to {currRestrictions}</FormText>
+                                    </FormGroup>
+                                    <FormGroup>
+                                            <Button disabled={ newRestrictions === -1 }className="btn btn-success">Apply</Button>
+                                    </FormGroup>
+                                </Form>
+                            </div>}
                             {goals.length > 0 && (
                                 <div className="section">
                                     <h5>Current goals: </h5>

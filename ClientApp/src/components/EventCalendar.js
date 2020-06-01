@@ -5,6 +5,7 @@ import SubjectSelection from './SubjectSelection';
 import CalendarDayPreview from './CalendarDayPreview';
 import {withRouter} from 'react-router-dom';
 import './react-big-calendar.css';
+import auth from './Auth';
 
 moment.locale('ko', {
     week: {
@@ -45,7 +46,7 @@ const EventCalendar = (props) => {
 
 
     async function fetchDays() {
-        const res = await fetch('api/Auth/self');
+        const res = await auth.getCurrentUser();
         if (res.ok) {
             const me = await res.json();
             var apiRequest = "";

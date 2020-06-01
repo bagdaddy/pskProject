@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Loader from './dump-components/Loader';
 import {NotFound} from './dump-components/Error';
+import auth from './Auth';
 
 function fetchSubject(id){
     const [data, setData] = useState({});
@@ -9,7 +10,7 @@ function fetchSubject(id){
     async function fetchData(id) {
         const res = await fetch("api/GetSubjects/" + id);
         const json = res.ok ? await res.json() : null;
-        const user = await fetch("api/Auth/self");
+        const user = await auth.getCurrentUser();
         const userData = user.ok ? await user.json() : null;
         const employee = await fetch("api/Employees/" + userData.id);
         const employeeData = await employee.json();
