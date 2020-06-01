@@ -197,6 +197,11 @@ const SubjectSelection = forwardRef((props, ref) => {
         }
     }
 
+    function mapSubjectSelectionOptions(val){
+        return(subjects.map(subject => (!subjectsSelected.some(item => subject.id === item)?
+                <option key={subject.id} value={subject.id}>{subject.name}</option>:
+                subjectsSelected[val] === subject.id? <option key={subject.id} value={subject.id}>{subject.name}</option>: null)))
+    }
 
     return (
         <div>
@@ -225,8 +230,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                             onChange={event => setSubjectsSelected([subjectsSelected[0], event.target.value, subjectsSelected[2], subjectsSelected[3]])}
                             disabled={subjectsSelected[0]?0:1}>
                                 <option value="DEFAULT" disabled>Choose a subject ...</option>
-                                {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>{subject.name}</option>))};
+                                {mapSubjectSelectionOptions(1)}
                             </Input>
                         </FormGroup>
                         <FormGroup>
@@ -237,8 +241,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                             onChange={event => setSubjectsSelected([subjectsSelected[0], subjectsSelected[1], event.target.value, subjectsSelected[3]])}
                             disabled={subjectsSelected[1]?0:1}>
                                 <option value="DEFAULT" disabled>Choose a subject ...</option>
-                                {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>{subject.name}</option>))};
+                                {mapSubjectSelectionOptions(2)}
                             </Input>
                         </FormGroup>
                         <FormGroup>
@@ -249,8 +252,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                             onChange={event => setSubjectsSelected([subjectsSelected[0], subjectsSelected[1], subjectsSelected[2], event.target.value])}
                             disabled={subjectsSelected[2]?0:1}>
                                 <option value="DEFAULT" disabled>Choose a subject ...</option>
-                                {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>{subject.name}</option>))};
+                                {mapSubjectSelectionOptions(3)}
                             </Input>
                         </FormGroup>                        
                         <FormGroup>
