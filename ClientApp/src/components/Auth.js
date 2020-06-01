@@ -33,7 +33,9 @@ class Auth {
     async getCurrentUser(){
         let userResponse = await fetch('api/Auth/self')
         if(userResponse.status === 401){
-            window.location.href = "/login";
+            this.logout(() => {
+                window.location.href = "/login";
+            })
         }
         return userResponse;
     }
