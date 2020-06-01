@@ -28,6 +28,7 @@ namespace TP.Services
             return new EmployeeDTO()
             {
                 Id = employee.Id,
+                BossId = employee.BossId,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Email = employee.Email,

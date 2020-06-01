@@ -8,6 +8,7 @@ namespace TP.Services.DTOServices.Models
     public class EmployeeDTO
     {
         public Guid Id { get; set; }
+        public Guid? BossId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
