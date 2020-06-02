@@ -58,11 +58,11 @@ function Subject(props) {
             return (
                 <div className="row">
                     <div className="col-8">
-                        <h3>{subject.name}</h3>
+                        <h2>{subject.name}</h2>
                         <div className="description">
+                            <h5>Description</h5>
                             <p>{subject.description}</p>
                         </div>
-                        <a href="/subjects">Back to subject list</a>
                     </div>
                     <div className="col-4">
                         {employee.subjects.filter(employeeSubject => employeeSubject.id === subject.id).length === 0 ? <button className="btn btn-success" onClick={markAsLearnt}>Mark subject as learnt</button> : <span>You already know this subject!</span>}

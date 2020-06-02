@@ -163,7 +163,7 @@ function Profile(props) {
         return (
             <div>
                 <div className="row">
-                    <div className="col-8">
+                    <div className="col-lg-8 col-md-8 col-sm-12">
                         <h2>{employee.firstName} {employee.lastName}</h2>
                         <p>El. paštas: <a href={"mailto:" + employee.email}>{employee.email}</a></p>
                         <div className="employee-form">

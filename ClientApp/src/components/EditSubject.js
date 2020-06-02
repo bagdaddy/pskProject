@@ -28,6 +28,7 @@ const EditSubject = props => {
     const [description, setDescription] = useState("");
 
     const success = useRef();
+    const error = useRef();
 
     useEffect(() => {
         setSubject(data);
@@ -37,6 +38,8 @@ const EditSubject = props => {
     
 
     async function updateSubject() {
+        success.current.style.display = "none";
+        error.current.style.display = "none";
         let valid = true;
 
         if(subjectName === ""){
@@ -59,9 +62,10 @@ const EditSubject = props => {
         console.log(requestOptions);
         const res = await fetch('api/UpdateSubject', requestOptions);
         if(res.ok){
-            success.current.style.display = "block";
+            props.history.push("/subject/" + subject.id);
         }else{
             //TODO: prideti error handlinima
+            error.current.style.display = "block";
         }
     }
 
@@ -83,6 +87,7 @@ const EditSubject = props => {
                         <Label for="description">Description</Label>
                         <Input type="textarea" id="description" name="description" placeholder="A really important subject" value={description} onChange={(event) => setDescription(event.target.value)}/>
                         <label ref={success} className="successMsg">Subject successfully updated.</label>
+                        <label ref={error} className="errorMsg">There was something wrong when saving the changes. Try later?</label>
                     </FormGroup>
                     <FormGroup>
                         <Button className="btn btn-success">Add</Button>
