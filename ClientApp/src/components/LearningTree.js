@@ -50,7 +50,7 @@ const SubjectInfo = props => {
                 <p className="title">{subjectData.name}</p>
                 <ul className="employeeList">
                     {subjectData.attributes.employees.map(employee => (
-                        <li><a href={"/employee/" + employee.id}>{employee.firstName} {employee.lastName}</a></li>
+                        <li><a onClick={() => props.history.push("/employee/" + employee.id)}>{employee.firstName} {employee.lastName}</a></li>
                     ))}
                 </ul>
             </div>
@@ -201,7 +201,7 @@ const LearningTree = props => {
             return (
                 <div className="treeWrapper" style={{ width: "100%", height: "1000px" }}>
                     <TreeLegend name={employee.firstName} ownsTeam={employees.length > 0} ownTree={props.match.params.id ? false : true} />
-                    <SubjectInfo data={displayedNode} />
+                    <SubjectInfo history={props.history} data={displayedNode} />
                     {treeData.length > 0 && <Tree data={treeData} collapsible={false} onClick={handleClick} allowForeignObjects transitionDuration={0} nodeLabelComponent={{
                         render: <NodeLabel className='myLabelComponentInSvg' />,
                         foreignObjectWrapper: {

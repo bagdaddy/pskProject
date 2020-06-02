@@ -191,7 +191,7 @@ function Employee(props) {
                 items.push(<option value={i}>{i}</option>);
             }
             return (
-                <div>
+                <div className="profile">
                     <div className="row">
                         <div className="col-8">
                             <h2>{employee.firstName} {employee.lastName}</h2>
@@ -256,6 +256,9 @@ function Employee(props) {
                                     </FormGroup>
                                 </Form>
                             </div>
+                            <div className="section">
+                                <Button className="btn btn-info" onClick={() => props.history.push("/learningTree/" + employee.id)}>Checkout {employee.firstName} learning tree</Button>
+                            </div>
                             {
                                 goals.length > 0 && (
                                     <div className="section">
@@ -271,13 +274,13 @@ function Employee(props) {
                                 {employee.subjects.length > 0 && (
                                 <div className="section">
                                     <h5>{employee.firstName} knows: </h5>
-                                    <SubjectList wrapperClass="subjectList" subjects={employee.subjects} />
+                                    <SubjectList history={props.history} wrapperClass="subjectList" subjects={employee.subjects} />
                                 </div>
                             )}
                             {employees.length > 0 && (
                                 <div className="section">
                                     <h5>{employee.firstName} team list:</h5>
-                                    <TeamList wrapperClass="teamList" team={employees} />
+                                    <TeamList history={props.history} wrapperClass="teamList" team={employees} />
                                 </div>
                             )}
                             </div>

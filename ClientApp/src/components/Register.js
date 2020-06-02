@@ -51,7 +51,30 @@ const Register = props => {
     
     const handleSubmit = (event) => {
         event.preventDefault();
+        let valid = true;
+        if(email === ""){
+            valid = false;
+            document.getElementById("email").style.border = "1px solid red";
+        }
 
+        if(firstname === ""){
+            valid = false;
+            document.getElementById("firstname").style.border = "1px solid red";
+        }
+
+        if(lastname === ""){
+            valid = false;
+            document.getElementById("lastname").style.border = "1px solid red";
+        }
+
+        if(password === ""){
+            valid = false;
+            document.getElementById("password").style.border = "1px solid red";
+        }
+
+        if(!valid){
+            return false;
+        }
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

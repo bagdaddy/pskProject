@@ -161,9 +161,9 @@ function Profile(props) {
     if (!loading) {
         console.log(employee);
         return (
-            <div>
+            <div className="page">
                 <div className="row">
-                    <div className="col-8">
+                    <div className="col-lg-8 col-md-8 col-sm-12">
                         <h2>{employee.firstName} {employee.lastName}</h2>
                         <p>El. paštas: <a href={"mailto:" + employee.email}>{employee.email}</a></p>
                         <div className="employee-form">
@@ -205,7 +205,7 @@ function Profile(props) {
                                 <h5>Change restrictions</h5>
                                 <Form onSubmit={changeRestrictions}>
                                     <FormGroup>
-                                        <Input type="number" value={newRestrictions} name="restriction" id="restriction" className="restrictions" onChange={(event) => {setNewRestrictions(event.target.value)}}/>
+                                        <Input type="number" value={newRestrictions} name="restriction" id="restriction" className="restrictions" onChange={(event) => {setNewRestrictions(event.target.value)}} min="0"/>
                                     <FormText>Current global restrictions set to {currRestrictions}</FormText>
                                     </FormGroup>
                                     <FormGroup>
@@ -218,7 +218,7 @@ function Profile(props) {
                                     <h5>Current goals: </h5>
                                     <div className="goals">
                                         {goals.map(goal => (
-                                            <a href={"/subject/" + goal.subject.id}>{goal.subject.name}</a>
+                                            <a onClick={() => props.history.push("/subject/" + goal.subject.id)}>{goal.subject.name}</a>
                                         ))}
                                     </div>
                                 </div>
@@ -226,19 +226,19 @@ function Profile(props) {
                             {employee.subjects.length > 0 && (
                                 <div className="section">
                                     <h5>You have already learned: </h5>
-                                    <SubjectList wrapperClass="subjectsList" subjects={employee.subjects} />
+                                    <SubjectList history={props.history} wrapperClass="subjectsList" subjects={employee.subjects} />
                                 </div>
                             )}
                             {allEmployees.length > 0 && (
                                 <div className="section">
                                     <h5>Your team: </h5>
-                                    <TeamList wrapperClass="teamList" team={allEmployees} />
+                                    <TeamList history={props.history} wrapperClass="teamList" team={allEmployees} />
                                 </div>
                             )}
                             {teamSubjects.length > 0 &&
                                 <div className="section">
                                     <h5>Your team has learned these subjects: </h5>
-                                    <SubjectList wrapperClass="subjectList" subjects={teamSubjects} />
+                                    <SubjectList history={props.history} wrapperClass="subjectList" subjects={teamSubjects} />
                                 </div>
                             }
 

@@ -246,7 +246,7 @@
 
 .sidebar .section{
     margin-bottom: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
     border-bottom: 1px solid lightgray;
 }
 
@@ -278,6 +278,8 @@
 
 .description{
     white-space: pre-line;
+    display: inline-block;
+    padding: 20px 20px 20px 0;
 }
 
 .team-subjects{
@@ -293,4 +295,36 @@
 
 .restrictions{
     margin-top: 15px;
+}
+
+.errorMsg{
+    display: none;
+    font-size: 12px;
+    margin-bottom: 0;
+    margin-top: 5px;
+    color:red;
+}
+
+@media(max-width: 770px){
+    .employee-form{
+        width: 100%;
+    }
+
+    .sidebar{
+        margin-top: 50px;
+    }
+}
+
+a:not([href]){
+    color: #007bff;
+}
+
+a:not([href]):hover{
+    cursor: pointer;
+    color: #0099bc;
+    text-decoration: underline;
+}
+
+.page{
+    margin-top: 20px;
 }
