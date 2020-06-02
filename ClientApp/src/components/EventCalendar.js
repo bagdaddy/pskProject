@@ -31,7 +31,7 @@ const EventCalendar = (props) => {
     const [updated, setUpdated] = useState(true);
 
     function isPersonalCalendar(){
-        if(window.location.pathname === "/calendar"){
+        if(window.location.pathname === "/"){
             return(<SubjectSelection dates={dates} employee={employee} setUpdated={setUpdated}  updated={updated} ref={childRef}/>)
         }else{
             return(<CalendarDayPreview dates={dates} ref={childRef}/>)
@@ -50,17 +50,37 @@ const EventCalendar = (props) => {
         if (res.ok) {
             const me = await res.json();
             var apiRequest = "";
-            window.location.pathname === "/calendar"?
-                apiRequest = 'api/Days/GetDayByEmployeeId/':
-                apiRequest = 'api/Days/GetTeamDays/'
-            const response = await fetch(apiRequest + me.id);
-            if (response.ok) {
-                const days = await response.json();
-                setDates(days);
-                setEmployee(me);
-                setLoading(false);
-            } else {
-                return [];
+            if(window.location.pathname === "/"){
+                const response = await fetch('api/Days/GetDayByEmployeeId/' + me.id);
+                if (response.ok) {
+                    const days = await response.json();
+                    setDates(days);
+                    setEmployee(me);
+                    setLoading(false);
+                } else {
+                    return [];
+                }
+            }else{
+                const response = await fetch('api/GetTeams/' + me.id);
+                if (response.ok) {
+                    const teams = await response.json();
+                    var days = []
+                    var arr3 = []
+                    var i;
+                    if(teams[0].subordinates && teams[0].subordinates.length !== 0){
+                        for(i = 0; i<teams[0].subordinates.length; ++i){
+                            const daysResponse = await fetch('api/Days/GetDayByEmployeeId/' + teams[0].subordinates[i].id)
+                            days=arr3
+                            const json = await daysResponse.json()
+                            arr3 = [...days, ...json]
+                        }
+                    }
+                    arr3!==[]?setDates(arr3):null;
+                    setEmployee(me);
+                    arr3!==[]?setLoading(false):null;
+                } else {
+                    return [];
+                }
             }
         }
     }
@@ -81,7 +101,7 @@ const EventCalendar = (props) => {
     },[loading]);
 
     useEffect(() => {  
-        if(dates){
+        if(dates.length !== 0){
             setEvents();
         }
     },[dates]);
@@ -90,13 +110,14 @@ const EventCalendar = (props) => {
         var i;
         var j;
         var calEvents = []
-        for(i = 0; i<dates.length; ++i){
+        if(dates!==[])
+        {for(i = 0; i<dates.length; ++i){
             for(j=0; j<dates[i].daySubjectList.length; ++j){
                 if(dates[i].daySubjectList[j] != null){
                     calEvents.push({id:1, title:getSubjectName(dates[i].daySubjectList[j].subjectId), start:dates[i].date, end:dates[i].date})
                 }
             }
-        }
+        }}
         setCalendarEvents(calEvents)
     };
 
