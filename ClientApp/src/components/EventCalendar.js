@@ -67,9 +67,9 @@ const EventCalendar = (props) => {
                     var days = []
                     var arr3 = []
                     var i;
-                    if(teams){
-                        for(i = 0; i<teams.length; ++i){
-                            const daysResponse = await fetch('api/Days/GetDayByEmployeeId/' + teams[i].id)
+                    if(teams[0].subordinates && teams[0].subordinates.length !== 0){
+                        for(i = 0; i<teams[0].subordinates.length; ++i){
+                            const daysResponse = await fetch('api/Days/GetDayByEmployeeId/' + teams[0].subordinates[i].id)
                             days=arr3
                             const json = await daysResponse.json()
                             arr3 = [...days, ...json]
@@ -102,7 +102,6 @@ const EventCalendar = (props) => {
 
     useEffect(() => {  
         if(dates.length !== 0){
-            console.log(dates)
             setEvents();
         }
     },[dates]);
