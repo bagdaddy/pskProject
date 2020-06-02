@@ -9,8 +9,6 @@ function fetchSubject(id){
     async function fetchData(id) {
         const res = await fetch("api/GetSubjects/" + id);
         const json = res.ok ? await res.json() : null;
-        // const emp = await fetch("api/Auth/self");
-        // const empData = emp.ok ? await emp.json() : null;
         setLoading(false);
         setData(json[0]);
         console.log(json[0]);
@@ -23,7 +21,7 @@ function fetchSubject(id){
     return [data, loading];
 }
 
-const AddSubject = props => {
+const EditSubject = props => {
     const [subject, setSubject] = useState([]);
     const [data, loading] = fetchSubject(props.match.params.id);
     const [subjectName, setSubjectName] = useState("");
@@ -39,6 +37,16 @@ const AddSubject = props => {
     
 
     async function updateSubject() {
+        let valid = true;
+
+        if(subjectName === ""){
+            valid = false;
+            document.getElementById("subject_name").style.border = "1px solid red";
+        }
+
+        if(!valid){
+            return false;
+        }
         const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -92,4 +100,4 @@ const AddSubject = props => {
     
 };
 
-export default AddSubject;
+export default EditSubject;

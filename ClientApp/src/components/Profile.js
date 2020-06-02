@@ -205,7 +205,7 @@ function Profile(props) {
                                 <h5>Change restrictions</h5>
                                 <Form onSubmit={changeRestrictions}>
                                     <FormGroup>
-                                        <Input type="number" value={newRestrictions} name="restriction" id="restriction" className="restrictions" onChange={(event) => {setNewRestrictions(event.target.value)}}/>
+                                        <Input type="number" value={newRestrictions} name="restriction" id="restriction" className="restrictions" onChange={(event) => {setNewRestrictions(event.target.value)}} min="0"/>
                                     <FormText>Current global restrictions set to {currRestrictions}</FormText>
                                     </FormGroup>
                                     <FormGroup>
