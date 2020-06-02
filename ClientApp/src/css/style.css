@@ -246,7 +246,7 @@
 
 .sidebar .section{
     margin-bottom: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
     border-bottom: 1px solid lightgray;
 }
 
@@ -313,4 +313,14 @@
     .sidebar{
         margin-top: 50px;
     }
+}
+
+a:not([href]){
+    color: #007bff;
+}
+
+a:not([href]):hover{
+    cursor: pointer;
+    color: #0099bc;
+    text-decoration: underline;
 }

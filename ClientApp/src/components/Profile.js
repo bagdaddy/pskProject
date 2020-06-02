@@ -218,7 +218,7 @@ function Profile(props) {
                                     <h5>Current goals: </h5>
                                     <div className="goals">
                                         {goals.map(goal => (
-                                            <a href={"/subject/" + goal.subject.id}>{goal.subject.name}</a>
+                                            <a onClick={() => props.history.push("/subject/" + goal.subject.id)}>{goal.subject.name}</a>
                                         ))}
                                     </div>
                                 </div>
@@ -226,19 +226,19 @@ function Profile(props) {
                             {employee.subjects.length > 0 && (
                                 <div className="section">
                                     <h5>You have already learned: </h5>
-                                    <SubjectList wrapperClass="subjectsList" subjects={employee.subjects} />
+                                    <SubjectList history={props.history} wrapperClass="subjectsList" subjects={employee.subjects} />
                                 </div>
                             )}
                             {allEmployees.length > 0 && (
                                 <div className="section">
                                     <h5>Your team: </h5>
-                                    <TeamList wrapperClass="teamList" team={allEmployees} />
+                                    <TeamList history={props.history} wrapperClass="teamList" team={allEmployees} />
                                 </div>
                             )}
                             {teamSubjects.length > 0 &&
                                 <div className="section">
                                     <h5>Your team has learned these subjects: </h5>
-                                    <SubjectList wrapperClass="subjectList" subjects={teamSubjects} />
+                                    <SubjectList history={props.history} wrapperClass="subjectList" subjects={teamSubjects} />
                                 </div>
                             }
 
