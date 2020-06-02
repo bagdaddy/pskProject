@@ -191,7 +191,7 @@ function Employee(props) {
                 items.push(<option value={i}>{i}</option>);
             }
             return (
-                <div>
+                <div className="profile">
                     <div className="row">
                         <div className="col-8">
                             <h2>{employee.firstName} {employee.lastName}</h2>

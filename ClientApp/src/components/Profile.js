@@ -161,7 +161,7 @@ function Profile(props) {
     if (!loading) {
         console.log(employee);
         return (
-            <div>
+            <div className="page">
                 <div className="row">
                     <div className="col-lg-8 col-md-8 col-sm-12">
                         <h2>{employee.firstName} {employee.lastName}</h2>

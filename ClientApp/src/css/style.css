@@ -324,3 +324,7 @@ a:not([href]):hover{
     color: #0099bc;
     text-decoration: underline;
 }
+
+.page{
+    margin-top: 20px;
+}
