@@ -36,32 +36,32 @@ export class NavMenu extends Component {
                 {auth.isAuthenticated() &&
                   <React.Fragment>
                     <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/">Calendar</NavLink>
+                      <NavLink tag={Link} className="text-dark" to="/" onClick={() => document.body.classList.remove("learning-tree")}>Calendar</NavLink>
                     </NavItem>
                     <NavItem>
                       <NavLink tag={Link} className="text-dark" to="/team-calendar">Team Calendar</NavLink>
                     </NavItem>
                     <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/me">Profile</NavLink>
+                      <NavLink tag={Link} className="text-dark" to="/me" onClick={() => document.body.classList.remove("learning-tree")}>Profile</NavLink>
                     </NavItem>
                     <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/subjects">Subjects</NavLink>
+                      <NavLink tag={Link} className="text-dark" to="/subjects" onClick={() => document.body.classList.remove("learning-tree")}>Subjects</NavLink>
                     </NavItem>
                     <NavItem>
                       <NavLink tag={Link} className="text-dark" to="/learningTree">Your learning</NavLink>
                     </NavItem>
                     <NavItem>
-                      <NavLink tag={Link} className="text-red" to="/logout">Log out</NavLink>
+                      <NavLink tag={Link} className="text-red" to="/logout" onClick={() => document.body.classList.remove("learning-tree")}>Log out</NavLink>
                     </NavItem>
                     <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/invitation">Invite</NavLink>
+                      <NavLink tag={Link} className="text-dark" to="/invitation" onClick={() => document.body.classList.remove("learning-tree")}>Invite</NavLink>
                     </NavItem>
                   </React.Fragment>
                 }
                 {
                   !auth.isAuthenticated() &&
                   <NavItem>
-                    <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+                    <NavLink tag={Link} className="text-dark" to="/login" onClick={() => document.body.classList.remove("learning-tree")}>Login</NavLink>
                   </NavItem>
                 }
               </ul>
