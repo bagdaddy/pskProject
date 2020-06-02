@@ -36,7 +36,10 @@ export class NavMenu extends Component {
                 {auth.isAuthenticated() &&
                   <React.Fragment>
                     <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/calendar" onClick={() => document.body.classList.remove("learning-tree")}>Calendar</NavLink>
+                      <NavLink tag={Link} className="text-dark" to="/" onClick={() => document.body.classList.remove("learning-tree")}>Calendar</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink tag={Link} className="text-dark" to="/team-calendar">Team Calendar</NavLink>
                     </NavItem>
                     <NavItem>
                       <NavLink tag={Link} className="text-dark" to="/me" onClick={() => document.body.classList.remove("learning-tree")}>Profile</NavLink>

@@ -32,7 +32,6 @@ const CalendarDayPreview = forwardRef((props, ref) => {
         var found = subjects.find(function (element) {
             return element.id === id;
           });
-          console.log(id)
           return found? found.name:"NO SUBJECT";
     }  
 
@@ -67,7 +66,7 @@ const CalendarDayPreview = forwardRef((props, ref) => {
       <ul>
         {days.map((day, index) => (
           <ul key={index}>
-            <h4>List {getEmployee(day.employeeId)?getEmployee(day.employeeId).firstName:"ss"}</h4>
+            <h4>{getEmployee(day.employeeId)?getEmployee(day.employeeId).firstName:"MISSING NAME"} {getEmployee(day.employeeId)?getEmployee(day.employeeId).lastName:"MISSING NAME"}</h4>
             {day.daySubjectList.map(item => (
               <li key={item}>
                 <div>{getSubjectName(item.subject.id)}</div>
