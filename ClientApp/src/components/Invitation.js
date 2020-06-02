@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import { Button, Form, FormGroup, Label, Input, Alert, Col } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import auth from './Auth';
-import '../css/style.css'
 
 const Invitation = (props) => {
 
