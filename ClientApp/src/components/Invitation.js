@@ -45,10 +45,10 @@ const Invitation = (props) => {
         <Alert color="secondary" isOpen={sending}>
             Sending...
         </Alert>
-        <Form inline onSubmit={e => onSubmit(e)}>
-            <Label>Invite an employee </Label>
+        <Label size="lg">Invite an employee </Label>
+        <Form inline onSubmit={e => onSubmit(e)} className="inviteForm">
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                <Input type="email" name="email" id="Email" placeholder="something@idk.cool" onChange={e => setEmail(e.target.value)}/>
+                <Input type="email" name="email" id="Email" placeholder="adress@email.domain" onChange={e => setEmail(e.target.value)}/>
             </FormGroup>
             <Button disabled={sending}>Submit</Button>
         </Form>
