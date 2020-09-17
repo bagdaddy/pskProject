@@ -16,12 +16,16 @@ export class NavMenu extends Component {
     };
   }
 
+  async componentDidMount(){
+    const isTeamLead = await auth.isTeamLeader();
+    this.setState({isTeamLead: isTeamLead})
+  }
+
   toggleNavbar() {
     this.setState({
       collapsed: !this.state.collapsed
     });
   }
-
   render() {
 
     return (
@@ -50,6 +54,11 @@ export class NavMenu extends Component {
                     <NavItem>
                       <NavLink tag={Link} className="text-dark" to="/learningTree">Your learning</NavLink>
                     </NavItem>
+                    {this.state.isTeamLead &&
+                    <NavItem>
+                      <NavLink tag={Link} className="text-dark" to="/team">Your Team</NavLink>
+                    </NavItem>
+                    }
                     <NavItem>
                       <NavLink tag={Link} className="text-red" to="/logout" onClick={() => document.body.classList.remove("learning-tree")}>Log out</NavLink>
                     </NavItem>

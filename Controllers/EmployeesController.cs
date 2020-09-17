@@ -151,6 +151,29 @@ namespace TP.Controllers
             return NoContent();
         }
 
+        [Route("{employeeId}/setRole")]
+        [HttpPut]
+        [Consumes("application/json")]
+        public async Task<ActionResult<EmployeeDTO>> SetRole([FromBody] UserRoleRequestModel userRoleRequestModel, Guid employeeId)
+        {
+            try
+            {
+                if (userRoleRequestModel.Id.HasValue)
+                {
+                    var employee = await _repository.GetById(employeeId);
+                    employee.UserRoleId = userRoleRequestModel.Id;
+                    await _repository.UpdateEmployee(employee);
+                    await _repository.SaveChanges();
+                    return _dtoService.EmployeeToDTO(employee);
+                }
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return Ok();
+            
+        }
+
         private async Task<Employee> UpdateCredentials(Employee employee, string updatedEmail)
         {
             //Update username too

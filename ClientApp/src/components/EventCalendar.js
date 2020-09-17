@@ -152,7 +152,7 @@ const EventCalendar = (props) => {
     }
 
     const childRef = useRef();
-
+    console.log(dates);
     return(
         loading?
         <div>Loading...</div>:

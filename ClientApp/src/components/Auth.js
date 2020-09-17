@@ -40,6 +40,23 @@ class Auth {
         return userResponse;
     }
 
+    async isTeamLeader(){
+        let userResponse = await fetch('api/Auth/self');
+        if(userResponse.status === 401){
+            return false;
+        }
+        let userData = await userResponse.json();
+        let teamResponse = await fetch('api/GetTeams/' + userData.id);
+        if(teamResponse.ok){
+            let teamData = await teamResponse.json();
+            if(await teamData[0].subordinates !== undefined){
+                return teamData[0].subordinates.length > 0;
+            }else{
+                return false;
+            }
+        }
+    }
+
     isAuthenticated() {
         let cookie = cookies.get("user_logged_in");
         if(cookie){

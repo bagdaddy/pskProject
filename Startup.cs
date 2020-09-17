@@ -53,6 +53,7 @@ namespace TP
             services.AddScoped<ITeamControllerService, TeamControllerService>();
             services.AddScoped<IRestrictionRepository, RestrictionRepository>();
             services.AddScoped<IGoalsRepository, GoalsRepository>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
             services.AddScoped<IInviteRepository, InviteRepository>();
             services.AddScoped<IInviteControllerService, InviteControllerService>();
             

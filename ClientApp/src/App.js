@@ -15,7 +15,8 @@ import EditSubject from './components/EditSubject';
 import Invitation from './components/Invitation';
 import Register from './components/Register';
 import Calendar from './components/EventCalendar';
-
+import Team from './components/Team';
+import auth from './components/Auth';
 export default class App extends Component {
 
   constructor(props){
@@ -25,6 +26,12 @@ export default class App extends Component {
       fetch('api/Employees/createDefault')
         .then(response => {});
     }, 2000);
+  }
+
+  async componentDidMount(){
+    console.log("test");
+    const isTeamLead = await auth.isTeamLeader();
+    this.setState({isTeamLead: isTeamLead})
   }
   
   render () {
@@ -39,6 +46,9 @@ export default class App extends Component {
         <ProtectedRoute path='/add-subject' component={AddSubject} />
         <ProtectedRoute path='/subject/:id' component={Subject} />
         <ProtectedRoute path='/edit-subject/:id' component={EditSubject} />
+        {this.state && this.state.isTeamLead && 
+          <ProtectedRoute path='/team' component={Team} />        
+        }
         <Route path='/register/:id' component={Register} />
         {/*Kol kas paliekam uzkomentuota, kad nereiktu prisijungti kiekviena karta kai padarom kazkokiu pakeitimu*/ }
         {/* <ProtectedRoute exact path='/' component={Home} />

@@ -39,5 +39,20 @@ namespace TP.Services
 
             return employeeListHierarchy;
         }
+
+        public async Task<List<Employee>> GetTeam(Guid employeeId)
+        {
+            try
+            {
+                var team = await _teamRepository.GetById(employeeId);
+                var list = new List<Employee>();
+
+                return await this.GetAllTeams(team, list);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

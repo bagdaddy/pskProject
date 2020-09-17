@@ -20,6 +20,7 @@ namespace TP.Models.Profiles
                 .ForMember(dest =>
                     dest.Name,
                     opt => opt.MapFrom(src => src.Subject.Name));
+            CreateMap<UserRole, UserRoleResponseModel>();
         }
     }
 }

@@ -254,7 +254,7 @@
     border-bottom: none;
 }
 
-.sidebar .teamList a, .sidebar .subjectList a, .subjects .subjectList a{
+.sidebar .teamList a, .sidebar .subjectList a, .subjects .subjectList a, .employeeList .teamList a{
     display:block;
 }
 
@@ -328,3 +328,9 @@ a:not([href]):hover{
 .page{
     margin-top: 20px;
 }
+
+.role-list{
+    padding-top: 5px;
+    border-top: 1px solid lightgray;
+}
+

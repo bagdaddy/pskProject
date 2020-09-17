@@ -59,7 +59,6 @@ const EditSubject = props => {
                 id: subject.id
             })
         };
-        console.log(requestOptions);
         const res = await fetch('api/UpdateSubject', requestOptions);
         if(res.ok){
             props.history.push("/subject/" + subject.id);

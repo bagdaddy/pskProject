@@ -41,13 +41,24 @@ function fetchData() {
         }
     }
 
+    async function fetchRoles(){
+        const response = await fetch('api/UserRole/getAll');
+        if(response.ok){
+            return await response.json();
+        }else{
+            return [];
+        }
+    }
+
     async function getDataAsync() {
         const response = await auth.getCurrentUser();
         const userData = await response.json();
         const eResponse = await fetch('api/Employees/' + userData.id);
         const employeeData = await eResponse.json();
+        console.log(employeeData);
         const goalsData = await fetchGoals(employeeData.id);
         const employees = await fetchAllEmployees(employeeData.id);
+        const roles = await fetchRoles();
         const globalRestrictions = await fetchGlobalRestricitons();
         let subj = await fetchSubjects();
         const subjects = subj.filter(subject => {
@@ -55,7 +66,7 @@ function fetchData() {
                 return s.id === subject.id
             }).length === 0;
         });
-        setData({ employee: employeeData, employees: employees, subjects: subjects, goals: goalsData, restrictions: globalRestrictions });
+        setData({ employee: employeeData, employees: employees, subjects: subjects, goals: goalsData, restrictions: globalRestrictions, roles: roles });
         setLoading(false);
     }
 
@@ -77,9 +88,12 @@ function Profile(props) {
     const [data, loading] = fetchData();
     const [goals, setGoals] = useState([]);
     const [goal, setGoal] = useState(null);
+    const [roles, setRoles] = useState([]);
+    const [role, setRole] = useState(null);
 
     let success = useRef();
     const goalRef = useRef();
+    const roleRef = useRef();
 
     useEffect(() => {
         let flatList = getFlatListOfSubordinates([], data.employees);
@@ -88,6 +102,7 @@ function Profile(props) {
         setSubjects(data.subjects);
         setGoals(data.goals);
         setCurrRestrictions(data.restrictions);
+        setRoles(data.roles);
         let subjects = [];
         if (!loading) {
             flatList.forEach(e => {
@@ -158,18 +173,33 @@ function Profile(props) {
         }
     }
 
+    async function setDiffRole(event){
+        event.preventDefault();
+        const requestOptions = {
+            method: "PUT",
+            headers: {'Content-Type' : 'application/json'},
+            body: JSON.stringify({
+                id: role
+            })
+        };
+        const response = await fetch('api/Employees/' + employee.id + '/setRole', requestOptions);
+        if(response.ok){
+            roleRef.current.style.display = "block";
+        }else{
+            alert("Couldn't set a different role. Try again later?")
+        }
+    }
     if (!loading) {
-        console.log(employee);
         return (
             <div className="page">
                 <div className="row">
                     <div className="col-lg-8 col-md-8 col-sm-12">
                         <h2>{employee.firstName} {employee.lastName}</h2>
-                        <p>El. paštas: <a href={"mailto:" + employee.email}>{employee.email}</a></p>
+                        <p>{roles.filter(role => role.id === employee.userRoleId).length > 0 && roles.filter(role => role.id === employee.userRoleId)[0].name}</p>
                         <div className="employee-form">
                             <Form onSubmit={learnSubject}>
                                 <FormGroup onSubmit={learnSubject}>
-                                    <Label for="subject">Selet a subject you've learnt: </Label>
+                                    <Label for="subject">Select a subject you've learnt: </Label>
                                     <Input type="select" name="subject" id="subject" onChange={(event) => setSelectedSubjectId(event.target.value)}>
                                         <option value="-1">-</option>
                                         {subjects.map((subject) => (
@@ -198,6 +228,26 @@ function Profile(props) {
                                 </FormGroup>
                             </Form>
                         </div>
+                        {roles.length > 0 && employee.bossId == null && 
+                        <div className="employee-form">
+                            <Form onSubmit={setDiffRole}>
+                            <FormGroup>
+                                    <Label for="role">Set a different role for yourself: </Label>
+                                    <Input name="role" id="role" type="select" required onChange={(event) => setRole(event.target.value)} >
+                                        <option value="-1">-</option>
+                                        {roles.map(role => (
+                                            (role.id !== employee.userRoleId && <option key={role.id} value={role.id}>{role.name}</option>
+                                        )))}
+                                    </Input>
+                                    <label ref={roleRef} className="successMsg">Role successfuly set.</label>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Button disabled={!role} className="btn btn-success">Select</Button>
+                                </FormGroup>
+                            </Form>
+                        </div>
+                        }
+                        
                     </div>
                     {(employee.subjects.length > 0 || allEmployees.length > 0 || goals.length > 0) &&
                         <div className="col-lg-4 col-md-4 sidebar">
@@ -232,7 +282,7 @@ function Profile(props) {
                             {allEmployees.length > 0 && (
                                 <div className="section">
                                     <h5>Your team: </h5>
-                                    <TeamList history={props.history} wrapperClass="teamList" team={allEmployees} />
+                                    <TeamList history={props.history} wrapperClass="teamList" team={allEmployees} currentUser={null}/>
                                 </div>
                             )}
                             {teamSubjects.length > 0 &&

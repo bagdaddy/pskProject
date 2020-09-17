@@ -34,7 +34,7 @@ const Login = props => {
         };
 
         auth.login(requestOptions, ()=>{
-            props.history.push("/me");
+            window.location.href = "/me"
         })
     };
 

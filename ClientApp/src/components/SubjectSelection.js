@@ -3,15 +3,14 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form,
 import moment from 'moment';
 
 const SubjectSelection = forwardRef((props, ref) => {
-  
-    useImperativeHandle(ref, () => ({toggle, daySetup}));
 
     const [modal, setModal] = useState(false);
     const [date, setDate] = useState(null);
     const [subjects, setSubjets] = useState([]);
-    const [id, setId] = useState(null);
+    const [id, setId] = useState(1);
     const [daysThisQuarter, setDaysThisQuarter] = useState(0);
     const [quarterRestriction, setQuarterRestriction] = useState(0);
+    useImperativeHandle(ref, () => ({toggle, daySetup}));
 
     
     const [comment, setComment] = useState("");
@@ -21,16 +20,28 @@ const SubjectSelection = forwardRef((props, ref) => {
 
     const now = new Date();
 
+    const cleanup = () => {
+        console.log("cleanup");
+        setSubjectsSelected([]);
+        setComment("");
+        setNum(null);
+        setId(null);
+        setDaysThisQuarter(0);
+    }
+
     const toggle = () => {
+        if(modal){
+            cleanup();
+        }
         setModal(!modal);
     };
 
-    const daySetup = (date, subjects, id) =>{
+    const daySetup = (date, subjects, dayId) =>{
         setDate(date);
         var res = subjects.filter(item1 => 
             !props.employee.subjects.some(item2 => (item2.name === item1.name)))
         setSubjets(res);
-        setId(id);
+        setId(dayId);
     } 
 
     useEffect(() => {
@@ -39,7 +50,6 @@ const SubjectSelection = forwardRef((props, ref) => {
 
     useEffect(() => {  
         var i;
-
         if(props.dates.length && date){
             for(i = 0; i<props.dates.length; ++i){
                 var curDay =new Date(moment(props.dates[i].date).toDate().setHours(4,0,0,0));
@@ -55,28 +65,26 @@ const SubjectSelection = forwardRef((props, ref) => {
             setEmployeeId(props.employee.id);
             getDatesThisQuarter();
         }
+        console.log("id " + id);
 
-        return function cleanup() {
-            setSubjectsSelected([]);
-            setComment("");
-            setNum(null);
-            setId(null);
-            setDaysThisQuarter(0);
-          };
     },[date]);
 
     async function getDatesThisQuarter() {
-        var year = getQuarter(date)[0];
-        var quarter = getQuarter(date)[1];
-        const response = await fetch('api/Days/GetDaysInQuarter/' + employeeId + "/" + year + "/" + quarter);
-        const days = await response.json();
-        setDaysThisQuarter(days);
+        if(employeeId){
+            var year = getQuarter(date)[0];
+            var quarter = getQuarter(date)[1];
+            const response = await fetch('api/Days/GetDaysInQuarter/' + employeeId + "/" + year + "/" + quarter);
+            const days = await response.json();
+            setDaysThisQuarter(days);
+        }
       }  
 
     async function getQuarterRestrictions() {
-        const response = await fetch('/api/GetRestriction/' + employeeId);
-        const restriction = await response.json();
-        setQuarterRestriction(restriction);
+        if(employeeId){
+            const response = await fetch('/api/GetRestriction/' + employeeId);
+            const restriction = await response.json();
+            setQuarterRestriction(restriction);
+        }
       }
 
     async function postDay(day) {
@@ -95,10 +103,11 @@ const SubjectSelection = forwardRef((props, ref) => {
 
     async function deleteDay() {
         const response = await fetch('api/Days/DeleteDay/' + id)
-        const json = await response.json().catch(function() {
-            console.log("error");
-        });;
-        props.setUpdated(!props.updated)
+        if(response.ok){
+            window.location.reload();
+        }else{
+            alert("Unable to delete selected day. Please try again later");
+        }
     } 
 
     async function updateDay(day) {
@@ -200,9 +209,8 @@ const SubjectSelection = forwardRef((props, ref) => {
     function mapSubjectSelectionOptions(val){
         return(subjects.map(subject => (!subjectsSelected.some(item => subject.id === item)?
                 <option key={subject.id} value={subject.id}>{subject.name}</option>:
-                subjectsSelected[val] === subject.id? <option key={subject.id} value={subject.id}>{subject.name}</option>: null)))
+                subjectsSelected[val] === subject.id? <option key={subject.id} value={subject.id} selected="true">{subject.name}</option>: null)))
     }
-
     return (
         <div>
             <Modal isOpen={modal} toggle={toggle}>
@@ -219,7 +227,7 @@ const SubjectSelection = forwardRef((props, ref) => {
                             onChange={event => setSubjectsSelected([event.target.value, subjectsSelected[1], subjectsSelected[2], subjectsSelected[3]])}>
                                 <option value="DEFAULT" disabled>Choose a subject ...</option>
                                 {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>{subject.name}</option>))};
+                                <option key={subject.id} value={subject.id} selected={subjectsSelected[0] && subjectsSelected[0] == subject.id}>{subject.name}</option>))};
                             </Input>
                         </FormGroup>
                         <FormGroup>
