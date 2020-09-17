@@ -5,7 +5,9 @@ const TeamList = props => {
         return (
             <div className={props.wrapperClass}>
                 {props.team.map(employee => (
-                    <a key={employee.id} onClick={() => props.history.push("/employee/" + employee.id)}>{employee.firstName + " " + employee.lastName}</a>
+                    props.currentUser == employee.id ? 
+                    <a key={employee.id} onClick={() => props.history.push("/me")}>{employee.firstName + " " + employee.lastName}</a>
+                    : <a key={employee.id} onClick={() => props.history.push("/employee/" + employee.id)}>{employee.firstName + " " + employee.lastName}</a>
                 ))}
             </div>
         )

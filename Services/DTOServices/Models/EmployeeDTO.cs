@@ -13,5 +13,6 @@ namespace TP.Services.DTOServices.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public List<SubjectWithoutParentDTO> Subjects { get; set; }
+        public Guid? UserRoleId { get; set; }
     }
 }

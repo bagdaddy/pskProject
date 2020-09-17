@@ -18,6 +18,8 @@ namespace TP.Data.Contexts
         public DbSet<EmployeeSubject> EmployeeSubjects { get; set; }
         public DbSet<DaySubject> DaySubjects { get; set; }
         public DbSet<Invite> Invites { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public AppDbContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,10 +29,10 @@ namespace TP.Data.Contexts
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new GoalEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new InviteEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserRoleEntityTypeConfiguration());
 
             modelBuilder.Entity<EmployeeSubject>()
                 .HasKey(t => new { t.EmployeeId, t.SubjectId });
-
             modelBuilder.Entity<EmployeeSubject>()
                 .HasOne(es => es.Employee)
                 .WithMany(e => e.LearnedSubjects)
@@ -39,6 +41,13 @@ namespace TP.Data.Contexts
                 .HasOne(es => es.Subject)
                 .WithMany(s => s.EmployeesWhoLearnedIt)
                 .HasForeignKey(es => es.SubjectId);
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.UserRole)
+                .WithMany(ur => ur.EmployeeList)
+                .HasForeignKey(e => e.UserRoleId);
+            modelBuilder.Entity<UserRole>()
+                .HasIndex(ur => ur.Name)
+                .IsUnique();
 
             modelBuilder.Entity<Day>()
                 .HasOne(d => d.Employee)

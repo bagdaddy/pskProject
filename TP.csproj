@@ -37,8 +37,21 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="Backup1\**" />
+    <Content Remove="Backup2\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="Backup1\**" />
+    <None Remove="Backup2\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Backup1\**" />
+    <Compile Remove="Backup2\**" />
+    <EmbeddedResource Remove="Backup1\**" />
+    <EmbeddedResource Remove="Backup2\**" />
+    <TypeScriptCompile Remove="Backup1\**" />
+    <TypeScriptCompile Remove="Backup2\**" />
   </ItemGroup>
 
   <ItemGroup>

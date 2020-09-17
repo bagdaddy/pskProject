@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TP.Data.Contexts;
 using TP.Data.Entities;
 using TP.DataContracts;
+using TP.Migrations;
 using TP.Models.RequestModels;
 
 namespace TP.Data
@@ -86,9 +87,18 @@ namespace TP.Data
             await _context.SaveChangesAsync();
         
         }
+        public async Task UpdateEmployee(Employee employee)
+        {
+            _context.Employees.Update(employee);
+        }
         public async Task CreateEmployee(Employee employee)
         {
             _context.Add(employee);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SaveChanges()
+        {
             await _context.SaveChangesAsync();
         }
 

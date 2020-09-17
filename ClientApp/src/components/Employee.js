@@ -71,6 +71,15 @@ function fetchEmployeeData(id) {
         return json;
     }
 
+    async function fetchRoles(){
+        const response = await fetch('api/UserRole/getAll');
+        if(response.ok){
+            return await response.json();
+        }else{
+            return [];
+        }
+    }
+
     async function fetchData(id) {
         const response = await fetch('api/Employees/' + id);
         if (response.ok) {
@@ -79,6 +88,7 @@ function fetchEmployeeData(id) {
             const myEmployees = await fetchMyEmployees();
             const goalsData = await fetchGoals(id);
             let subj = await fetchSubjects();
+            const roles = await fetchRoles();
             const subjects = subj.filter(subject => {
                 return employeeData.subjects.filter(s => {
                     return s.id === subject.id
@@ -86,7 +96,7 @@ function fetchEmployeeData(id) {
             });
             const restrictions = await fetchRestrictions(id);
             const globalRestrictions = await fetchGlobalRestricitons();
-            setData({ employee: employeeData, employees: employeesData, myEmployees: myEmployees, subjects: subjects, goals: goalsData, restrictions: restrictions, globalRestrictions: globalRestrictions });
+            setData({ employee: employeeData, employees: employeesData, myEmployees: myEmployees, subjects: subjects, goals: goalsData, restrictions: restrictions, globalRestrictions: globalRestrictions, roles: roles });
             setLoading(false);
         } else {
             setLoading(false);
@@ -112,9 +122,12 @@ function Employee(props) {
     const [globalRestrictions, setGlobalRestrictions] = useState(3);
     const [localDayLimit, setLocalDayLimit] = useState(-1);
     const [goal, setGoal] = useState(null);
+    const [roles, setRoles] = useState([]);
+    const [role, setRole] = useState(null);
 
     const changed = useRef();
     const goalRef = useRef();
+    const roleRef = useRef();
 
     useEffect(() => {
         setEmployees(getFlatListOfSubordinates([], data.employees));
@@ -124,6 +137,7 @@ function Employee(props) {
         setSubjects(data.subjects);
         setRestrictions(data.restrictions);
         setGlobalRestrictions(data.globalRestrictions);
+        setRoles(data.roles);
     }, [data, loading]);
 
     async function changeLeader(event) {
@@ -184,6 +198,23 @@ function Employee(props) {
         }
     }
 
+    async function setDiffRole(event){
+        event.preventDefault();
+        const requestOptions = {
+            method: "PUT",
+            headers: {'Content-Type' : 'application/json'},
+            body: JSON.stringify({
+                id: role
+            })
+        };
+        const response = await fetch('api/Employees/' + employee.id + '/setRole', requestOptions);
+        if(response.ok){
+            window.location.reload();
+        }else{
+            //errors
+        }
+    }
+
     if (!loading) {
         if (employee) {
             const items = [];
@@ -195,7 +226,7 @@ function Employee(props) {
                     <div className="row">
                         <div className="col-8">
                             <h2>{employee.firstName} {employee.lastName}</h2>
-                            <p>El. paštas: <a href={"mailto:" + employee.email}>{employee.email}</a></p>
+                            <p>{roles.filter(role => role.id === employee.userRoleId).length > 0 && roles.filter(role => role.id === employee.userRoleId)[0].name}</p>
                             <div className="employee-form">
                                 <Form onSubmit={changeLeader}>
                                     <FormGroup>
@@ -239,7 +270,27 @@ function Employee(props) {
                                     </FormGroup>
                                 </Form>
                             </div>
+                            {roles.length > 0 && 
+                        <div className="employee-form">
+                            <Form onSubmit={setDiffRole}>
+                            <FormGroup>
+                                    <Label for="role">Set a different role for {employee.firstName}: </Label>
+                                    <Input name="role" id="role" type="select" required onChange={(event) => setRole(event.target.value)} >
+                                        <option value="-1">-</option>
+                                        {roles.map(role => (
+                                            (role.id !== employee.userRoleId && <option key={role.id} value={role.id}>{role.name}</option>
+                                        )))}
+                                    </Input>
+                                    <label ref={roleRef} className="successMsg">Role successfuly set.</label>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Button disabled={!role} className="btn btn-success">Select</Button>
+                                </FormGroup>
+                            </Form>
                         </div>
+                        }
+                        </div>
+                        
                         <div className="col-lg-4 col-md-4 sidebar">
                             <div className="section">
                                 <h5>Change restrictions</h5>
@@ -280,7 +331,7 @@ function Employee(props) {
                             {employees.length > 0 && (
                                 <div className="section">
                                     <h5>{employee.firstName} team list:</h5>
-                                    <TeamList history={props.history} wrapperClass="teamList" team={employees} />
+                                    <TeamList history={props.history} wrapperClass="teamList" team={employees} currentUser={null} />
                                 </div>
                             )}
                             </div>

@@ -19,7 +19,8 @@ namespace TP.Services
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Email = employee.Email,
-                Subjects = GetSubjectListWithoutParent(employee.LearnedSubjects)
+                Subjects = GetSubjectListWithoutParent(employee.LearnedSubjects),
+                UserRoleId = employee.UserRoleId
             }).ToList();
         }
 
@@ -32,7 +33,8 @@ namespace TP.Services
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Email = employee.Email,
-                Subjects = GetSubjectListWithoutParent(employee.LearnedSubjects)
+                Subjects = GetSubjectListWithoutParent(employee.LearnedSubjects),
+                UserRoleId = employee.UserRoleId
             };
         }
 
