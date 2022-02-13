@@ -27,7 +27,7 @@
     "universal-cookie": "^4.0.3"
   },
   "devDependencies": {
-    "ajv": "^6.12.2",
+    "ajv": "^6.12.3",
     "babel-eslint": "^7.2.3",
     "cross-env": "^5.2.1",
     "eslint": "^4.1.1",
